@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&family=Roboto:wght@900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+main {
+    display: flex;
+    width: 90%;
+    margin: 0 auto;
+}
+
+/* styling for input section */
+.input-section > h3 {
+    color: #045c84;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.input-section {
+    width: 30%;
+    border: 3px solid #045c84;
+    border-radius: 20px;
+    padding: 35px;
+    margin: 25px;
+    height: 40%;
+}
+
+.input-section > form > .input {
+    margin: 15px 0px;
+}
+
+.input-section > form > .input > input, .input-section > form > .input > select {
+    font-size: 16px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dddfe2;
+    border-radius: 10px;
+}
+
+.input-section > form > .input > input:focus, .input-section > form > .input > select:focus {
+    outline: 1px solid #045c84;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+.input-section > form > .input > input:focus::placeholder {
+    color: #dddfe2;
+}
+
+.input-section > form > .input-complete {
+    display: flex;
+    align-items: center;
+    margin: 15px 0px;
+}
+
+.input-section > form > .input-complete > input {
+    height: 15px;
+    width: 15px;
+    margin: 0px 7px;
+    color: #045c84;
+}
+
+.input-section > form > button {
+    font-size: 16px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #719ECE;
+    border: 2px solid #719ECE;
+    color: white;
+    cursor: pointer;
+}
+
+.input-section > form > button:hover {
+    border: 2px solid #719ECE;
+    background-color: white;
+    color: #719ECE;
+    cursor: pointer;
+}
+
+/* styling for booklist section */
+.book-list-section {
+    width: 70%;
+    border-radius: 20px;
+    padding: 50px;
+    margin: 25px;
+}
+
+#searchBook {
+    box-shadow: 0 2px 5px 1px rgb(64 60 67 / 16%);
+    border-radius: 24px;
+    padding: 10px;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+#searchBook:hover {
+    outline: 1px solid #045c84;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+#searchBook > input {
+    border: 1px solid transparent;
+    font-size: 16px;
+    width: 90%;
+}
+
+#searchBook > input:focus {
+    outline: 1px solid transparent;
+}
+
+#searchBook > input:focus::placeholder {
+    color: #dddfe2;
+}
+
+/* Removing input background colour for Chrome autocomplete */
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    transition: background-color 5000s ease-in-out 0s;
+} */
+
+#searchBook > button {
+    border: 1px solid transparent;
+    background-color: transparent;
+    width: 10%;
+}
+
+#searchBook > button:hover {
+    cursor: pointer;
+}
+
+#searchBook > button > img {
+    vertical-align: middle;
+    filter: invert(16%) sepia(100%) saturate(2687%) hue-rotate(183deg) brightness(55%) contrast(97%);
+}
