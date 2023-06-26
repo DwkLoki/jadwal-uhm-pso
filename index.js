@@ -65,19 +65,45 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     // console.log(pengampu.length);
 
-    // Perform PSO iterations
-    for (let iteration = 0; iteration < iterasiMaksimal; iteration++) {
+    // // Perform PSO iterations
+    // for (let iteration = 0; iteration < iterasiMaksimal; iteration++) {
+    //     // Evaluate fitness for each particle and update global best position
+    //     swarm.forEach(particle => {
+    //         // Calculate fitness based on defined criteria and update personal best position
+    //         const fitness = calculateFitness(swarm);
+    //         if (!particle.bestFitness || fitness < particle.bestFitness) {
+    //             particle.bestFitness = fitness;
+    //             particle.bestPosition = { ...particle.position };
+    //         }
+    //         // Update global best position if necessary
+    //         if (!globalBestPosition || fitness < globalBestPosition) {
+    //             globalBestPosition = { ...particle.position };
+    //         }
+    //     });
+
+    //     // Update particle velocities and positions
+    //     swarm.forEach(particle => {
+    //         particle.updateVelocity(globalBestPosition, w, c1, c2);
+    //     });
+    // }
+
+    // Perform PSO iterations until fitness reaches 0
+    // let iteration = 0;
+    let fitness = calculateFitness(swarm);
+
+    while (fitness > 0) {
         // Evaluate fitness for each particle and update global best position
         swarm.forEach(particle => {
             // Calculate fitness based on defined criteria and update personal best position
-            const fitness = calculateFitness(swarm);
-            if (!particle.bestFitness || fitness < particle.bestFitness) {
-                particle.bestFitness = fitness;
+            const particleFitness = calculateFitness(swarm);
+                if (!particle.bestFitness || particleFitness < particle.bestFitness) {
+                particle.bestFitness = particleFitness;
                 particle.bestPosition = { ...particle.position };
             }
             // Update global best position if necessary
-            if (!globalBestPosition || fitness < globalBestPosition) {
+            if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
                 globalBestPosition = { ...particle.position };
+                globalBestPositionFitness = particleFitness;
             }
         });
 
@@ -85,16 +111,19 @@ document.addEventListener("DOMContentLoaded", function() {
         swarm.forEach(particle => {
             particle.updateVelocity(globalBestPosition, w, c1, c2);
         });
+
+        // iteration++;
+        fitness = calculateFitness(swarm);
     }
+    
+    console.log("Final fitness:", fitness);
 
     // menampilkan hasil pembuatan jadwal
     swarm.forEach(particle => {
         const convertPositionResult = convertPositionToData(particle.position);
-        console.log(convertPositionResult);
+        const finalSwarm = {...convertPositionResult, ...particle.pengampu};
+        console.log(finalSwarm);
     });
-    // Contoh penggunaan fungsi convertPositionToData
-    // const particle = swarm[0]; // Ambil particle pertama dari swarm sebagai contoh
-    // const particleData = convertPositionToData(particle.position); // hasil konversi disimpan di sini
     
     console.log(swarm);
     // console.log(particleData);
