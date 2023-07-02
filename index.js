@@ -3,7 +3,7 @@ const localStoragePengampu = "PENGAMPU_KEY";
 // Definisikan slot waktu, hari dan ruangan yang tersedia
 let slotWaktu = ["08:00-10:00", "10:00-12:00", "13:00-15:00", "15:00-17:00", "17:00-19:00", "19:00-21:00"];
 let hariTersedia = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
-let slotRuangan = ["Ruangan 1", "Ruangan 2", "Ruangan 3", "Ruangan 4", "Ruangan 5", "Ruangan 6", "Ruangan 7", "Ruangan 8", "Ruangan 9", "Ruangan 10", "Ruangan 11",];
+let slotRuangan = ["205", "101", "305", "306", "402", "403", "404", "FHIS 01", "Pasca Lt.1", "Lab 1", "Lab 2"];
 
 // Particle Class
 class Particle {
@@ -52,9 +52,9 @@ document.addEventListener("DOMContentLoaded", function() {
     let globalBestPosition = null;
     let jumlahPartikel = pengampu.length;
     let iterasiMaksimal = 100;
-    let c1 = 1.5;
-    let c2 = 1.5;
-    let w = 0.5;
+    let c1 = 2;
+    let c2 = 2;
+    let w = 0.9;
 
     // Initialize the swarm with particles
     const swarm = [];
@@ -239,9 +239,25 @@ function calculateFitness(particle) {
 
 // Fungsi untuk mengkonversi nilai posisi menjadi data yang sesuai
 function convertPositionToData(position) {
-    const room = slotRuangan[position.room - 1];
-    const time = slotWaktu[position.time - 1];
-    const day = hariTersedia[position.day - 1];
+    let roomIndex = (position.room - 1) % slotRuangan.length;
+    let timeIndex = (position.time - 1) % slotWaktu.length;
+    let dayIndex = (position.day - 1) % hariTersedia.length;
+
+    if (roomIndex < 0) {
+        roomIndex += slotRuangan.length;
+    }
+
+    if (timeIndex < 0) {
+        timeIndex += slotWaktu.length;
+    }
+
+    if (dayIndex < 0) {
+        dayIndex += hariTersedia.length;
+    }
+
+    const room = slotRuangan[roomIndex];
+    const time = slotWaktu[timeIndex];
+    const day = hariTersedia[dayIndex];
 
     return { room, time, day };
 }
