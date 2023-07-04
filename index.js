@@ -1,5 +1,5 @@
 const pengampu = [];
-const localStoragePengampu = "PENGAMPU_KEY";
+const localStoragePengampu = "PENGAMPU_GENAP";
 // Definisikan slot waktu, hari dan ruangan yang tersedia
 let slotWaktu = ["08:00-10:00", "10:00-12:00", "13:00-15:00", "15:00-17:00", "17:00-19:00", "19:00-21:00"];
 let hariTersedia = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
@@ -48,36 +48,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Main aplication
 
-    // Definisikan parameter PSO
-    let globalBestPosition = null;
-    let jumlahPartikel = pengampu.length;
-    let iterasiMaksimal = 100;
-    let c1 = 2;
-    let c2 = 2;
-    let w = 0.9;
+    // // Definisikan parameter PSO
+    // let globalBestPosition = null;
+    // let jumlahPartikel = pengampu.length;
+    // let iterasiMaksimal = 100;
+    // let c1 = 2;
+    // let c2 = 2;
+    // let w = 0.9;
 
-    // Initialize the swarm with particles
-    const swarm = [];
-    for (let i = 0; i < jumlahPartikel; i++) {
-        const particle = new Particle(pengampu[i]);
-        particle.initialize(pengampu);
-        swarm.push(particle);
-    }
-    // console.log(pengampu.length);
+    // // Initialize the swarm with particles
+    // const swarm = [];
+    // for (let i = 0; i < jumlahPartikel; i++) {
+    //     const particle = new Particle(pengampu[i]);
+    //     particle.initialize(pengampu);
+    //     swarm.push(particle);
+    // }
 
-    // // Perform PSO iterations
-    // for (let iteration = 0; iteration < iterasiMaksimal; iteration++) {
+    // // Perform PSO iterations until fitness reaches 0
+    // // let iteration = 0;
+    // let fitness = calculateFitness(swarm);
+
+    // while (fitness > 0) {
     //     // Evaluate fitness for each particle and update global best position
     //     swarm.forEach(particle => {
     //         // Calculate fitness based on defined criteria and update personal best position
-    //         const fitness = calculateFitness(swarm);
-    //         if (!particle.bestFitness || fitness < particle.bestFitness) {
-    //             particle.bestFitness = fitness;
+    //         const particleFitness = calculateFitness(swarm);
+    //             if (!particle.bestFitness || particleFitness < particle.bestFitness) {
+    //             particle.bestFitness = particleFitness;
     //             particle.bestPosition = { ...particle.position };
     //         }
     //         // Update global best position if necessary
-    //         if (!globalBestPosition || fitness < globalBestPosition) {
+    //         if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
     //             globalBestPosition = { ...particle.position };
+    //             globalBestPositionFitness = particleFitness;
     //         }
     //     });
 
@@ -85,48 +88,21 @@ document.addEventListener("DOMContentLoaded", function() {
     //     swarm.forEach(particle => {
     //         particle.updateVelocity(globalBestPosition, w, c1, c2);
     //     });
+
+    //     // iteration++;
+    //     fitness = calculateFitness(swarm);
     // }
-
-    // Perform PSO iterations until fitness reaches 0
-    // let iteration = 0;
-    let fitness = calculateFitness(swarm);
-
-    while (fitness > 0) {
-        // Evaluate fitness for each particle and update global best position
-        swarm.forEach(particle => {
-            // Calculate fitness based on defined criteria and update personal best position
-            const particleFitness = calculateFitness(swarm);
-                if (!particle.bestFitness || particleFitness < particle.bestFitness) {
-                particle.bestFitness = particleFitness;
-                particle.bestPosition = { ...particle.position };
-            }
-            // Update global best position if necessary
-            if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
-                globalBestPosition = { ...particle.position };
-                globalBestPositionFitness = particleFitness;
-            }
-        });
-
-        // Update particle velocities and positions
-        swarm.forEach(particle => {
-            particle.updateVelocity(globalBestPosition, w, c1, c2);
-        });
-
-        // iteration++;
-        fitness = calculateFitness(swarm);
-    }
     
-    console.log("Final fitness:", fitness);
+    // console.log("Final fitness:", fitness);
 
-    // menampilkan hasil pembuatan jadwal
-    swarm.forEach(particle => {
-        const convertPositionResult = convertPositionToData(particle.position);
-        const finalSwarm = {...convertPositionResult, ...particle.pengampu};
-        console.log(finalSwarm);
-    });
+    // // menampilkan hasil pembuatan jadwal
+    // swarm.forEach(particle => {
+    //     const convertPositionResult = convertPositionToData(particle.position);
+    //     const finalSwarm = {...convertPositionResult, ...particle.pengampu};
+    //     console.log(finalSwarm);
+    // });
     
-    console.log(swarm);
-    // console.log(particleData);
+    // console.log(swarm);
 });
 
 // handle submit
@@ -136,17 +112,24 @@ inputPengampuForm.addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent form submission
 
     // Retrieve form values
+    const pengampuId = +new Date();
+
     let courseName = document.getElementById("inputCourseName").value;
     let lecturerName = document.getElementById("inputLecturerName").value;
     let className = document.getElementById("inputClassName").value;
-    let academicYear = document.getElementById("inputAcademicYear").value;
+    let jenisMatkul = document.getElementById("inputJenisMatkul").value;
+    let kategoriKelas = document.getElementById("inputKategoriKelas").value;
+    let fakultas = document.getElementById("inputFakultas").value;
 
-    const pengampuObject = generatePengampuObject(courseName, lecturerName, className, academicYear);
+    const pengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas);
 
     document.getElementById("inputCourseName").value = null;
     document.getElementById("inputLecturerName").value = null;
     document.getElementById("inputClassName").value = null;
-    document.getElementById("inputAcademicYear").value = '';
+    document.getElementById("inputJenisMatkul").value = '';
+    document.getElementById("inputKategoriKelas").value = '';
+    document.getElementById("inputFakultas").value = '';
+
 
     pengampu.push(pengampuObject);
     saveDataPengampu();
@@ -157,19 +140,145 @@ inputPengampuForm.addEventListener("submit", function(event) {
     // Perform further processing, such as sending the data to the server
     
     // For demonstration purposes, log the form data to the console
-    // console.log(pengampu);
+    console.log(pengampu);
     // console.log(pengampu.length);
+
+    // menampilkan semua data pada array pengampu dalam bentuk baris tabel
+    const tabelDaftarPengampu = document.querySelector("tbody");
+    tabelDaftarPengampu.innerHTML = '';
+
+    for (const pengampuItem of pengampu) {
+        const newPengampuElement = generatePengampuElement(pengampuItem);
+        tabelDaftarPengampu.append(newPengampuElement);
+    }
+
+    // for (let i = 0; i < pengampu.length; i++) {
+    //     const dataPengampu = document.createElement("tr");
+    //     dataPengampu.innerHTML = 
+    //     `
+    //         <td scope="row">${i + 1}</td>
+    //         <td>${pengampu[i].courseName}</td>
+    //         <td>${pengampu[i].lecturerName}</td>
+    //         <td>${pengampu[i].className}</td>
+    //         <td>
+    //             <div class="action-btn">
+    //                 <button class="edit-btn">
+    //                     <i class="bi bi-pencil-square"></i>
+    //                 </button>
+    //                 <button class="delete-btn">
+    //                     <i class="bi bi-trash"></i>
+    //                 </button>
+    //             </div>
+    //         </td>
+    //     `
+
+    //     tabelDaftarPengampu.append(dataPengampu);
+    // }
 });
+
+// handle delete dan edit button
+// const deletePengampuBtn = document.querySelector(".delete-btn");
+// deletePengampuBtn.addEventListener("click", function() {
+//     console.log("hallo");
+// })
+
+// handle submit
+// const inputPengampuForm = document.getElementById("inputPengampu");
+
+// inputPengampuForm.addEventListener("submit", function(event) {
+//     event.preventDefault(); // Prevent form submission
+
+//     // Retrieve form values
+//     const pengampuId = +new Date();
+
+//     let courseName = document.getElementById("inputCourseName").value;
+//     let lecturerName = document.getElementById("inputLecturerName").value;
+//     let className = document.getElementById("inputClassName").value;
+//     let jenisMatkul = document.getElementById("inputJenisMatkul").value;
+//     let kategoriKelas = document.getElementById("inputKategoriKelas").value;
+//     let fakultas = document.getElementById("inputFakultas").value;
+
+//     const pengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas);
+
+//     document.getElementById("inputCourseName").value = null;
+//     document.getElementById("inputLecturerName").value = null;
+//     document.getElementById("inputClassName").value = null;
+//     document.getElementById("inputJenisMatkul").value = '';
+//     document.getElementById("inputKategoriKelas").value = '';
+//     document.getElementById("inputFakultas").value = '';
+
+
+//     pengampu.push(pengampuObject);
+//     saveDataPengampu();
+
+//     // Perform validation if needed
+    
+    
+//     // Perform further processing, such as sending the data to the server
+    
+//     // For demonstration purposes, log the form data to the console
+//     console.log(pengampu);
+//     // console.log(pengampu.length);
+// });
 
 
 // define all function here
-function generatePengampuObject(courseName, lecturerName, className, academicYear) {
+function generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
     return {
+        pengampuId,
         courseName,
         lecturerName,
         className,
-        academicYear
+        jenisMatkul,
+        kategoriKelas,
+        fakultas
     }
+}
+
+function generatePengampuElement(pengampuObject) {
+    const logoEditBtn = document.createElement("i");
+    logoEditBtn.classList.add("bi", "bi-pencil-square");
+
+    const logoDeleteBtn = document.createElement("i");
+    logoDeleteBtn.classList.add("bi", "bi-trash");
+
+    const editBtn = document.createElement("button");
+    editBtn.classList.add("edit-btn");
+    editBtn.append(logoEditBtn);
+    editBtn.addEventListener("click", function() {
+        console.log("berhasil edit");
+    })
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.append(logoDeleteBtn);
+    deleteBtn.addEventListener("click", function() {
+        console.log("berhasil hapus");
+    })
+
+    const btnContainer = document.createElement("div");
+    btnContainer.classList.add("action-btn");
+    btnContainer.append(editBtn, deleteBtn);
+
+    const dataKolomAksi = document.createElement("td");
+    dataKolomAksi.append(btnContainer);
+
+    const dataKolomKelas = document.createElement("td");
+    dataKolomKelas.innerText = pengampuObject.className;
+
+    const dataKolomDosen = document.createElement("td");
+    dataKolomDosen.innerText = pengampuObject.lecturerName;
+
+    const dataKolomMatkul = document.createElement("td");
+    dataKolomMatkul.innerText = pengampuObject.courseName;
+
+    const dataKolomNomor = document.createElement("td");
+    dataKolomNomor.innerText = "1";
+
+    const dataPengampuElement = document.createElement("tr");
+    dataPengampuElement.append(dataKolomNomor, dataKolomMatkul, dataKolomDosen, dataKolomKelas, dataKolomAksi);
+
+    return dataPengampuElement;
 }
 
 function saveDataPengampu() {
@@ -188,18 +297,44 @@ function loadDataFromStorage() {
         }
     }
 
+    // menampilkan semua data pada array pengampu dalam bentuk baris tabel
+    const tabelDaftarPengampu = document.querySelector("tbody");
+    tabelDaftarPengampu.innerHTML = '';
+
+    for (const pengampuItem of pengampu) {
+        const newPengampuElement = generatePengampuElement(pengampuItem);
+        tabelDaftarPengampu.append(newPengampuElement);
+    }
+
     // const inCompleteBookshelfList = document.getElementById("incompleteBookshelfList");
     // const completeBookshelfList = document.getElementById("completeBookshelfList");
     // inCompleteBookshelfList.innerHTML = "";
     // completeBookshelfList.innerHTML = "";
-    
-    // for(let bookItem of books){
-    //     const bookElement = generateBookElement(bookItem);
-    //     if (bookItem.isCompleted === true) {
-    //         completeBookshelfList.append(bookElement);
-    //     } else {
-    //         inCompleteBookshelfList.append(bookElement);
-    //     }  
+
+    // const tabelDaftarPengampu = document.querySelector("tbody");
+    // tabelDaftarPengampu.innerHTML = '';
+
+    // for (let i = 0; i < pengampu.length; i++) {
+    //     const dataPengampu = document.createElement("tr");
+    //     dataPengampu.innerHTML = 
+    //     `
+    //         <td scope="row">${i + 1}</td>
+    //         <td>${pengampu[i].courseName}</td>
+    //         <td>${pengampu[i].lecturerName}</td>
+    //         <td>${pengampu[i].className}</td>
+    //         <td>
+    //             <div class="action-btn">
+    //                 <button class="edit-btn">
+    //                     <i class="bi bi-pencil-square"></i>
+    //                 </button>
+    //                 <button class="delete-btn">
+    //                     <i class="bi bi-trash"></i>
+    //                 </button>
+    //             </div>
+    //         </td>
+    //     `
+
+    //     tabelDaftarPengampu.append(dataPengampu);
     // }
 }
 
@@ -261,17 +396,3 @@ function convertPositionToData(position) {
 
     return { room, time, day };
 }
-
-// // Fungsi untuk mengkonversi nilai posisi menjadi data yang sesuai
-// function convertPositionToData(position) {
-//   const room = slotRuangan[position.room - 1];
-//   const time = slotWaktu[position.time - 1];
-//   const day = hariTersedia[position.day - 1];
-
-//   return { room, time, day };
-// }
-
-// // Contoh penggunaan fungsi convertPositionToData
-// const particle = swarm[0]; // Ambil particle pertama dari swarm sebagai contoh
-// const particleData = convertPositionToData(particle.position); // hasil konversi disimpan di sini
-// console.log(particleData);

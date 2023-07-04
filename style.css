@@ -9,7 +9,7 @@
 
 main {
     display: flex;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -83,15 +83,15 @@ main {
     cursor: pointer;
 }
 
-/* styling for booklist section */
-.book-list-section {
+/* styling for pengampu section */
+.pengampu-list-section {
     width: 70%;
     border-radius: 20px;
-    padding: 50px;
+    padding: 50px 20px;
     margin: 25px;
 }
 
-#searchBook {
+#searchPengampu {
     box-shadow: 0 2px 5px 1px rgb(64 60 67 / 16%);
     border-radius: 24px;
     padding: 10px;
@@ -99,22 +99,22 @@ main {
     display: flex;
 }
 
-#searchBook:hover {
+#searchPengampu:hover {
     outline: 1px solid #045c84;
     box-shadow: 0 0 10px #719ECE;
 }
 
-#searchBook > input {
+#searchPengampu > input {
     border: 1px solid transparent;
     font-size: 16px;
     width: 90%;
 }
 
-#searchBook > input:focus {
+#searchPengampu > input:focus {
     outline: 1px solid transparent;
 }
 
-#searchBook > input:focus::placeholder {
+#searchPengampu > input:focus::placeholder {
     color: #dddfe2;
 }
 
@@ -126,17 +126,42 @@ input:-webkit-autofill:active{
     transition: background-color 5000s ease-in-out 0s;
 } */
 
-#searchBook > button {
+#searchPengampu > button {
     border: 1px solid transparent;
     background-color: transparent;
     width: 10%;
 }
 
-#searchBook > button:hover {
+#searchPengampu > button:hover {
     cursor: pointer;
 }
 
-#searchBook > button > img {
+#searchPengampu > button > img {
     vertical-align: middle;
     filter: invert(16%) sepia(100%) saturate(2687%) hue-rotate(183deg) brightness(55%) contrast(97%);
+}
+
+/* .action-btn {
+    display: flex;
+} */
+
+.edit-btn {
+    padding: 2px;
+    border-radius: 10px;
+    background-color: #fee748;
+    border: none;
+    /* max-height: 35px; */
+    min-height: 30px;
+    min-width: 30px;
+    margin-right: 5px;
+}
+
+.delete-btn {
+    padding: 2px;
+    border-radius: 10px;
+    background-color: #a7c0ff;
+    border: none;
+    /* max-height: 35px; */
+    min-height: 30px;
+    min-width: 30px;
 }

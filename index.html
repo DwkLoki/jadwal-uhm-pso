@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penjadwalan Perkuliahan UHM</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous" defer></script>
@@ -13,51 +14,52 @@
 </head>
 <body>
     <main>
-        <section class="book-list-section">
+        <section class="pengampu-list-section">
             <div class="search-bar">
-                <form id="searchBook" autocomplete="off">
+                <form id="searchPengampu" autocomplete="off">
                     <button id="searchSubmit" type="submit">
                         <img src="assets/search-icon.svg" alt="search-icon">
                     </button>
-                    <input id="searchBookInput" type="text" placeholder="Cari Judul Buku...">
+                    <input id="searchPengampuInput" type="text" placeholder="Cari Judul Buku...">
                 </form>
             </div>
 
             <div class="tabel-daftar-pengampu">
-                <table class="table">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                            <td scope="col">No</td>
+                            <td scope="col">Nama Mata Kuliah</td>
+                            <td scope="col">Nama Dosen</td>
+                            <td scope="col">Kelas</td>
+                            <td scope="col">Aksii</td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                        <!-- <tr>
+                            <td scope="row">1</td>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
                         </tr>
                         <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
+                            <td scope="row">2</td>
+                            <td>Jacob</td>
+                            <td>tdornton</td>
+                            <td>@fat</td>
                         </tr>
                         <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                        </tr>
+                            <td scope="row">3</td>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
         </section>
 
         <section class="input-section">
-            <h3>Masukkan Data Pengampu</h3>
+            <h3>Masukkan Data Perkuliahan</h3>
             <form id="inputPengampu" autocomplete="off">
                 <div class="input">
                     <input id="inputCourseName" type="text" placeholder="Mata Kuliah" required>
@@ -69,38 +71,30 @@
                     <input id="inputClassName" type="text" placeholder="Kelas" required>
                 </div>
                 <div class="input">
-                    <select id="inputAcademicYear" required>
-                        <option value="" selected disabled hidden>Tahun Akademik</option>
-                        <option value="2022-2023">2022-2023</option>
-                        <option value="2023-2024">2023-2024</option>
+                    <select id="inputJenisMatkul" required>
+                        <option value="" selected disabled hidden>Jenis Matkul</option>
+                        <option value="teori">Teori</option>
+                        <option value="praktikum">Praktikum</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <select id="inputKategoriKelas" required>
+                        <option value="" selected disabled hidden>Kategori Kelas</option>
+                        <option value="reguler">Reguler</option>
+                        <option value="malam">Malam</option>
+                        <option value="ekstensi">Ekstensi</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <select id="inputFakultas" required>
+                        <option value="" selected disabled hidden>Fakultas</option>
+                        <option value="ilkom">Ilmu Komputer</option>
+                        <option value="hukum">Hukum dan Ilmu Sosial</option>
                     </select>
                 </div>
                 <button id="pengampuSubmitBtn" type="submit">Simpan Data Pengampu</button>
             </form>
         </section>
     </main>
-    <!-- <main>
-        <form id="inputPengampu">
-            <h3>Masukan data pengampu/jadwal perkuliahan</h3>
-            <label for="course_name">Mata Kuliah:</label>
-            <input type="text" id="course_name" name="course_name" required><br><br>
-            
-            <label for="lecturer_name">Dosen:</label>
-            <input type="text" id="lecturer_name" name="lecturer_name" required><br><br>
-            
-            <label for="class_name">Kelas:</label>
-            <input type="text" id="class_name" name="class_name" required><br><br>
-            
-            <label for="academic_year">Academic Year:</label>
-            <select id="academic_year" name="academic_year" required>
-                <option value="2022-2023">2022-2023</option>
-                <option value="2023-2024">2023-2024</option>
-                Add more academic years as needed
-            </select><br><br>
-            
-            <button type="submit">Submit</button>
-            <input type="submit">
-        </form>
-    </main> -->
 </body>
 </html>
