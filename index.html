@@ -96,5 +96,62 @@
             </form>
         </section>
     </main>
+
+    <!-- Button trigger modal -->
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+    </button> -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">Ubah Data Perkuliahan</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPengampu" autocomplete="off">
+                        <div class="input">
+                            <input id="editCourseName" type="text" placeholder="Mata Kuliah" required>
+                        </div>
+                        <div class="input">
+                            <input id="editLecturerName" type="text" placeholder="Dosen" required>
+                        </div>
+                        <div class="input">
+                            <input id="editClassName" type="text" placeholder="Kelas" required>
+                        </div>
+                        <div class="input">
+                            <select id="editJenisMatkul" required>
+                                <option value="" selected disabled hidden>Jenis Matkul</option>
+                                <option value="teori">Teori</option>
+                                <option value="praktikum">Praktikum</option>
+                            </select>
+                        </div>
+                        <div class="input">
+                            <select id="editKategoriKelas" required>
+                                <option value="" selected disabled hidden>Kategori Kelas</option>
+                                <option value="reguler">Reguler</option>
+                                <option value="malam">Malam</option>
+                                <option value="ekstensi">Ekstensi</option>
+                            </select>
+                        </div>
+                        <div class="input">
+                            <select id="editFakultas" required>
+                                <option value="" selected disabled hidden>Fakultas</option>
+                                <option value="ilkom">Ilmu Komputer</option>
+                                <option value="hukum">Hukum dan Ilmu Sosial</option>
+                            </select>
+                        </div>
+                        <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button> -->
+                    <button type="button" id="pengampuEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

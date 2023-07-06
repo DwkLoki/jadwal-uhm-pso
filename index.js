@@ -151,76 +151,7 @@ inputPengampuForm.addEventListener("submit", function(event) {
         const newPengampuElement = generatePengampuElement(pengampuItem);
         tabelDaftarPengampu.append(newPengampuElement);
     }
-
-    // for (let i = 0; i < pengampu.length; i++) {
-    //     const dataPengampu = document.createElement("tr");
-    //     dataPengampu.innerHTML = 
-    //     `
-    //         <td scope="row">${i + 1}</td>
-    //         <td>${pengampu[i].courseName}</td>
-    //         <td>${pengampu[i].lecturerName}</td>
-    //         <td>${pengampu[i].className}</td>
-    //         <td>
-    //             <div class="action-btn">
-    //                 <button class="edit-btn">
-    //                     <i class="bi bi-pencil-square"></i>
-    //                 </button>
-    //                 <button class="delete-btn">
-    //                     <i class="bi bi-trash"></i>
-    //                 </button>
-    //             </div>
-    //         </td>
-    //     `
-
-    //     tabelDaftarPengampu.append(dataPengampu);
-    // }
 });
-
-// handle delete dan edit button
-// const deletePengampuBtn = document.querySelector(".delete-btn");
-// deletePengampuBtn.addEventListener("click", function() {
-//     console.log("hallo");
-// })
-
-// handle submit
-// const inputPengampuForm = document.getElementById("inputPengampu");
-
-// inputPengampuForm.addEventListener("submit", function(event) {
-//     event.preventDefault(); // Prevent form submission
-
-//     // Retrieve form values
-//     const pengampuId = +new Date();
-
-//     let courseName = document.getElementById("inputCourseName").value;
-//     let lecturerName = document.getElementById("inputLecturerName").value;
-//     let className = document.getElementById("inputClassName").value;
-//     let jenisMatkul = document.getElementById("inputJenisMatkul").value;
-//     let kategoriKelas = document.getElementById("inputKategoriKelas").value;
-//     let fakultas = document.getElementById("inputFakultas").value;
-
-//     const pengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas);
-
-//     document.getElementById("inputCourseName").value = null;
-//     document.getElementById("inputLecturerName").value = null;
-//     document.getElementById("inputClassName").value = null;
-//     document.getElementById("inputJenisMatkul").value = '';
-//     document.getElementById("inputKategoriKelas").value = '';
-//     document.getElementById("inputFakultas").value = '';
-
-
-//     pengampu.push(pengampuObject);
-//     saveDataPengampu();
-
-//     // Perform validation if needed
-    
-    
-//     // Perform further processing, such as sending the data to the server
-    
-//     // For demonstration purposes, log the form data to the console
-//     console.log(pengampu);
-//     // console.log(pengampu.length);
-// });
-
 
 // define all function here
 function generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
@@ -244,16 +175,72 @@ function generatePengampuElement(pengampuObject) {
 
     const editBtn = document.createElement("button");
     editBtn.classList.add("edit-btn");
+    editBtn.setAttribute("type", "button");
+    editBtn.setAttribute("data-bs-toggle", "modal");
+    editBtn.setAttribute("data-bs-target", "#editModal");
     editBtn.append(logoEditBtn);
-    editBtn.addEventListener("click", function() {
-        console.log("berhasil edit");
+    editBtn.addEventListener("click", function(e) {
+        handleEditButton(pengampuObject.pengampuId);
     })
+    // editBtn.addEventListener("click", function(e) {
+    //     const selectedPengampu = pengampu.indexOf(pengampuObject);
+
+    //     document.getElementById("editCourseName").value = pengampu[selectedPengampu].courseName;
+    //     document.getElementById("editLecturerName").value = pengampu[selectedPengampu].lecturerName;
+    //     document.getElementById("editClassName").value = pengampu[selectedPengampu].className;
+    //     document.getElementById("editJenisMatkul").value = pengampu[selectedPengampu].jenisMatkul;
+    //     document.getElementById("editKategoriKelas").value = pengampu[selectedPengampu].kategoriKelas;
+    //     document.getElementById("editFakultas").value = pengampu[selectedPengampu].fakultas;
+        
+    //     // handle submit data yang diedit
+    //     const editPengampuForm = document.getElementById("pengampuEditBtn");
+        
+    //     editPengampuForm.addEventListener("click", function() {
+            
+    //         const pengampuId = pengampu[selectedPengampu].pengampuId;
+    //         let courseName = document.getElementById("editCourseName").value;
+    //         let lecturerName = document.getElementById("editLecturerName").value;
+    //         let className = document.getElementById("editClassName").value;
+    //         let jenisMatkul = document.getElementById("editJenisMatkul").value;
+    //         let kategoriKelas = document.getElementById("editKategoriKelas").value;
+    //         let fakultas = document.getElementById("editFakultas").value;
+
+    //         const editPengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas);
+
+    //         pengampu.splice(selectedPengampu, 1, editPengampuObject)
+
+    //         // saveDataPengampu();
+            
+    //         // update semua data pada array pengampu dalam bentuk baris tabel
+    //         const tabelDaftarPengampu = document.querySelector("tbody");
+    //         tabelDaftarPengampu.innerHTML = '';
+            
+    //         for (const pengampuItem of pengampu) {
+    //             const newPengampuElement = generatePengampuElement(pengampuItem);
+    //             tabelDaftarPengampu.append(newPengampuElement);
+    //         }
+            
+    //         saveDataPengampu();
+    //         console.log(pengampu);
+    //     });
+    // })
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
     deleteBtn.append(logoDeleteBtn);
     deleteBtn.addEventListener("click", function() {
-        console.log("berhasil hapus");
+        const selectedPengampu = pengampu.indexOf(pengampuObject);
+        pengampu.splice(selectedPengampu, 1);
+
+        const tabelDaftarPengampu = document.querySelector("tbody");
+        tabelDaftarPengampu.innerHTML = '';
+
+        for (const pengampuItem of pengampu) {
+            const newPengampuElement = generatePengampuElement(pengampuItem);
+            tabelDaftarPengampu.append(newPengampuElement);
+        }
+
+        saveDataPengampu();
     })
 
     const btnContainer = document.createElement("div");
@@ -273,7 +260,7 @@ function generatePengampuElement(pengampuObject) {
     dataKolomMatkul.innerText = pengampuObject.courseName;
 
     const dataKolomNomor = document.createElement("td");
-    dataKolomNomor.innerText = "1";
+    dataKolomNomor.innerText = pengampu.indexOf(pengampuObject) + 1; //mendapatkan indeks sebuah array
 
     const dataPengampuElement = document.createElement("tr");
     dataPengampuElement.append(dataKolomNomor, dataKolomMatkul, dataKolomDosen, dataKolomKelas, dataKolomAksi);
@@ -305,38 +292,113 @@ function loadDataFromStorage() {
         const newPengampuElement = generatePengampuElement(pengampuItem);
         tabelDaftarPengampu.append(newPengampuElement);
     }
-
-    // const inCompleteBookshelfList = document.getElementById("incompleteBookshelfList");
-    // const completeBookshelfList = document.getElementById("completeBookshelfList");
-    // inCompleteBookshelfList.innerHTML = "";
-    // completeBookshelfList.innerHTML = "";
-
-    // const tabelDaftarPengampu = document.querySelector("tbody");
-    // tabelDaftarPengampu.innerHTML = '';
-
-    // for (let i = 0; i < pengampu.length; i++) {
-    //     const dataPengampu = document.createElement("tr");
-    //     dataPengampu.innerHTML = 
-    //     `
-    //         <td scope="row">${i + 1}</td>
-    //         <td>${pengampu[i].courseName}</td>
-    //         <td>${pengampu[i].lecturerName}</td>
-    //         <td>${pengampu[i].className}</td>
-    //         <td>
-    //             <div class="action-btn">
-    //                 <button class="edit-btn">
-    //                     <i class="bi bi-pencil-square"></i>
-    //                 </button>
-    //                 <button class="delete-btn">
-    //                     <i class="bi bi-trash"></i>
-    //                 </button>
-    //             </div>
-    //         </td>
-    //     `
-
-    //     tabelDaftarPengampu.append(dataPengampu);
-    // }
 }
+
+// handle edit button pengampu
+function handleEditButton(pengampuId) {
+    const selectedPengampu = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
+    if (selectedPengampu) {
+        // Set modal form values
+        // document.getElementById("editPengampuId").value = selectedPengampu.pengampuId;\
+        document.getElementById("editCourseName").value = selectedPengampu.courseName;
+        document.getElementById("editLecturerName").value = selectedPengampu.lecturerName;
+        document.getElementById("editClassName").value = selectedPengampu.className;
+        document.getElementById("editJenisMatkul").value = selectedPengampu.jenisMatkul;
+        document.getElementById("editKategoriKelas").value = selectedPengampu.kategoriKelas;
+        document.getElementById("editFakultas").value = selectedPengampu.fakultas;
+    }
+    
+    // handle edit form submit event
+    const editPengampuForm = document.getElementById("pengampuEditBtn");
+    
+    editPengampuForm.addEventListener("click", function(event) {
+        event.preventDefault(); // Prevent form submission
+        
+        // Retrieve form values
+        // const pengampuId = document.getElementById("editPengampuId").value;
+        const pengampuId = selectedPengampu.pengampuId;
+        const courseName = document.getElementById("editCourseName").value;
+        const lecturerName = document.getElementById("editLecturerName").value;
+        const className = document.getElementById("editClassName").value;
+        const jenisMatkul = document.getElementById("editJenisMatkul").value;
+        const kategoriKelas = document.getElementById("editKategoriKelas").value;
+        const fakultas = document.getElementById("editFakultas").value;
+
+        // Find the pengampu object in the array
+        const selectedPengampu = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
+        if (selectedPengampu) {
+            // Update the pengampu object with new values
+            selectedPengampu.courseName = courseName;
+            selectedPengampu.lecturerName = lecturerName;
+            selectedPengampu.className = className;
+            selectedPengampu.jenisMatkul = jenisMatkul;
+            selectedPengampu.kategoriKelas = kategoriKelas;
+            selectedPengampu.fakultas = fakultas;
+
+            // Save the updated pengampu array to local storage
+            saveDataPengampu();
+
+            // Clear the form values
+            editPengampuForm.reset();
+
+            // Update the table with the updated pengampu data
+            const tabelDaftarPengampu = document.querySelector("tbody");
+            tabelDaftarPengampu.innerHTML = '';
+            
+            for (const pengampuItem of pengampu) {
+                const newPengampuElement = generatePengampuElement(pengampuItem);
+                tabelDaftarPengampu.append(newPengampuElement);
+            }
+            
+            console.log(pengampu);
+        }
+    });
+}
+
+// // handle edit form submit event
+// const editPengampuForm = document.getElementById("pengampuEditBtn");
+
+// editPengampuForm.addEventListener("click", function(event) {
+//   event.preventDefault(); // Prevent form submission
+
+//   // Retrieve form values
+//   // const pengampuId = document.getElementById("editPengampuId").value;
+//   const courseName = document.getElementById("editCourseName").value;
+//   const lecturerName = document.getElementById("editLecturerName").value;
+//   const className = document.getElementById("editClassName").value;
+//   const jenisMatkul = document.getElementById("editJenisMatkul").value;
+//   const kategoriKelas = document.getElementById("editKategoriKelas").value;
+//   const fakultas = document.getElementById("editFakultas").value;
+
+//   // Find the pengampu object in the array
+//   const selectedPengampu = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
+//   if (selectedPengampu) {
+//         // Update the pengampu object with new values
+//         selectedPengampu.courseName = courseName;
+//         selectedPengampu.lecturerName = lecturerName;
+//         selectedPengampu.className = className;
+//         selectedPengampu.jenisMatkul = jenisMatkul;
+//         selectedPengampu.kategoriKelas = kategoriKelas;
+//         selectedPengampu.fakultas = fakultas;
+
+//         // Save the updated pengampu array to local storage
+//         saveDataPengampu();
+
+//         // Clear the form values
+//         editPengampuForm.reset();
+
+//         // Update the table with the updated pengampu data
+//         const tabelDaftarPengampu = document.querySelector("tbody");
+//         tabelDaftarPengampu.innerHTML = '';
+        
+//         for (const pengampuItem of pengampu) {
+//             const newPengampuElement = generatePengampuElement(pengampuItem);
+//             tabelDaftarPengampu.append(newPengampuElement);
+//         }
+        
+//         console.log(pengampu);
+//     }
+// });
 
 // fungsi untuk menghitung nilai fitness
 function calculateFitness(particle) {
