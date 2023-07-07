@@ -182,48 +182,6 @@ function generatePengampuElement(pengampuObject) {
     editBtn.addEventListener("click", function(e) {
         handleEditButton(pengampuObject.pengampuId);
     })
-    // editBtn.addEventListener("click", function(e) {
-    //     const selectedPengampu = pengampu.indexOf(pengampuObject);
-
-    //     document.getElementById("editCourseName").value = pengampu[selectedPengampu].courseName;
-    //     document.getElementById("editLecturerName").value = pengampu[selectedPengampu].lecturerName;
-    //     document.getElementById("editClassName").value = pengampu[selectedPengampu].className;
-    //     document.getElementById("editJenisMatkul").value = pengampu[selectedPengampu].jenisMatkul;
-    //     document.getElementById("editKategoriKelas").value = pengampu[selectedPengampu].kategoriKelas;
-    //     document.getElementById("editFakultas").value = pengampu[selectedPengampu].fakultas;
-        
-    //     // handle submit data yang diedit
-    //     const editPengampuForm = document.getElementById("pengampuEditBtn");
-        
-    //     editPengampuForm.addEventListener("click", function() {
-            
-    //         const pengampuId = pengampu[selectedPengampu].pengampuId;
-    //         let courseName = document.getElementById("editCourseName").value;
-    //         let lecturerName = document.getElementById("editLecturerName").value;
-    //         let className = document.getElementById("editClassName").value;
-    //         let jenisMatkul = document.getElementById("editJenisMatkul").value;
-    //         let kategoriKelas = document.getElementById("editKategoriKelas").value;
-    //         let fakultas = document.getElementById("editFakultas").value;
-
-    //         const editPengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas);
-
-    //         pengampu.splice(selectedPengampu, 1, editPengampuObject)
-
-    //         // saveDataPengampu();
-            
-    //         // update semua data pada array pengampu dalam bentuk baris tabel
-    //         const tabelDaftarPengampu = document.querySelector("tbody");
-    //         tabelDaftarPengampu.innerHTML = '';
-            
-    //         for (const pengampuItem of pengampu) {
-    //             const newPengampuElement = generatePengampuElement(pengampuItem);
-    //             tabelDaftarPengampu.append(newPengampuElement);
-    //         }
-            
-    //         saveDataPengampu();
-    //         console.log(pengampu);
-    //     });
-    // })
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
@@ -297,108 +255,63 @@ function loadDataFromStorage() {
 // handle edit button pengampu
 function handleEditButton(pengampuId) {
     const selectedPengampu = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
-    if (selectedPengampu) {
-        // Set modal form values
-        // document.getElementById("editPengampuId").value = selectedPengampu.pengampuId;\
-        document.getElementById("editCourseName").value = selectedPengampu.courseName;
-        document.getElementById("editLecturerName").value = selectedPengampu.lecturerName;
-        document.getElementById("editClassName").value = selectedPengampu.className;
-        document.getElementById("editJenisMatkul").value = selectedPengampu.jenisMatkul;
-        document.getElementById("editKategoriKelas").value = selectedPengampu.kategoriKelas;
-        document.getElementById("editFakultas").value = selectedPengampu.fakultas;
-    }
-    
+
+    // Set modal form values
+    document.getElementById("editCourseName").value = selectedPengampu.courseName;
+    document.getElementById("editLecturerName").value = selectedPengampu.lecturerName;
+    document.getElementById("editClassName").value = selectedPengampu.className;
+    document.getElementById("editJenisMatkul").value = selectedPengampu.jenisMatkul;
+    document.getElementById("editKategoriKelas").value = selectedPengampu.kategoriKelas;
+    document.getElementById("editFakultas").value = selectedPengampu.fakultas;
+
     // handle edit form submit event
-    const editPengampuForm = document.getElementById("pengampuEditBtn");
-    
-    editPengampuForm.addEventListener("click", function(event) {
+    const editPengampuForm = document.getElementById("editPengampu");
+
+    editPengampuForm.addEventListener("submit", function(event) {
         event.preventDefault(); // Prevent form submission
-        
+
         // Retrieve form values
-        // const pengampuId = document.getElementById("editPengampuId").value;
-        const pengampuId = selectedPengampu.pengampuId;
-        const courseName = document.getElementById("editCourseName").value;
-        const lecturerName = document.getElementById("editLecturerName").value;
-        const className = document.getElementById("editClassName").value;
-        const jenisMatkul = document.getElementById("editJenisMatkul").value;
-        const kategoriKelas = document.getElementById("editKategoriKelas").value;
-        const fakultas = document.getElementById("editFakultas").value;
+        const newCourseName = document.getElementById("editCourseName").value;
+        const newLecturerName = document.getElementById("editLecturerName").value;
+        const newClassName = document.getElementById("editClassName").value;
+        const newJenisMatkul = document.getElementById("editJenisMatkul").value;
+        const newKategoriKelas = document.getElementById("editKategoriKelas").value;
+        const newFakultas = document.getElementById("editFakultas").value;
+
+        // Update the copied pengampu object with new values
+        selectedPengampu.courseName = newCourseName;
+        selectedPengampu.lecturerName = newLecturerName;
+        selectedPengampu.className = newClassName;
+        selectedPengampu.jenisMatkul = newJenisMatkul;
+        selectedPengampu.kategoriKelas = newKategoriKelas;
+        selectedPengampu.fakultas = newFakultas;
 
         // Find the pengampu object in the array
-        const selectedPengampu = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
-        if (selectedPengampu) {
-            // Update the pengampu object with new values
-            selectedPengampu.courseName = courseName;
-            selectedPengampu.lecturerName = lecturerName;
-            selectedPengampu.className = className;
-            selectedPengampu.jenisMatkul = jenisMatkul;
-            selectedPengampu.kategoriKelas = kategoriKelas;
-            selectedPengampu.fakultas = fakultas;
+        const selectedPengampuAgain = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
+        // console.log(selectedPengampuAgain.pengampuId);
+        // Update the pengampu object with new values
+        // selectedPengampuAgain.pengampuId = pengampuId
+        selectedPengampuAgain.courseName = newCourseName;
+        selectedPengampuAgain.lecturerName = newLecturerName;
+        selectedPengampuAgain.className = newClassName;
+        selectedPengampuAgain.jenisMatkul = newJenisMatkul;
+        selectedPengampuAgain.kategoriKelas = newKategoriKelas;
+        selectedPengampuAgain.fakultas = newFakultas;
 
-            // Save the updated pengampu array to local storage
-            saveDataPengampu();
+        // Save the updated pengampu array to local storage
+        saveDataPengampu();
 
-            // Clear the form values
-            editPengampuForm.reset();
-
-            // Update the table with the updated pengampu data
-            const tabelDaftarPengampu = document.querySelector("tbody");
-            tabelDaftarPengampu.innerHTML = '';
-            
-            for (const pengampuItem of pengampu) {
-                const newPengampuElement = generatePengampuElement(pengampuItem);
-                tabelDaftarPengampu.append(newPengampuElement);
-            }
-            
-            console.log(pengampu);
+        // Update the table with the updated pengampu data
+        const tabelDaftarPengampu = document.querySelector("tbody");
+        tabelDaftarPengampu.innerHTML = '';
+        
+        for (const pengampuItem of pengampu) {
+            const newPengampuElement = generatePengampuElement(pengampuItem);
+            tabelDaftarPengampu.append(newPengampuElement);
         }
+        // return false;
     });
 }
-
-// // handle edit form submit event
-// const editPengampuForm = document.getElementById("pengampuEditBtn");
-
-// editPengampuForm.addEventListener("click", function(event) {
-//   event.preventDefault(); // Prevent form submission
-
-//   // Retrieve form values
-//   // const pengampuId = document.getElementById("editPengampuId").value;
-//   const courseName = document.getElementById("editCourseName").value;
-//   const lecturerName = document.getElementById("editLecturerName").value;
-//   const className = document.getElementById("editClassName").value;
-//   const jenisMatkul = document.getElementById("editJenisMatkul").value;
-//   const kategoriKelas = document.getElementById("editKategoriKelas").value;
-//   const fakultas = document.getElementById("editFakultas").value;
-
-//   // Find the pengampu object in the array
-//   const selectedPengampu = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
-//   if (selectedPengampu) {
-//         // Update the pengampu object with new values
-//         selectedPengampu.courseName = courseName;
-//         selectedPengampu.lecturerName = lecturerName;
-//         selectedPengampu.className = className;
-//         selectedPengampu.jenisMatkul = jenisMatkul;
-//         selectedPengampu.kategoriKelas = kategoriKelas;
-//         selectedPengampu.fakultas = fakultas;
-
-//         // Save the updated pengampu array to local storage
-//         saveDataPengampu();
-
-//         // Clear the form values
-//         editPengampuForm.reset();
-
-//         // Update the table with the updated pengampu data
-//         const tabelDaftarPengampu = document.querySelector("tbody");
-//         tabelDaftarPengampu.innerHTML = '';
-        
-//         for (const pengampuItem of pengampu) {
-//             const newPengampuElement = generatePengampuElement(pengampuItem);
-//             tabelDaftarPengampu.append(newPengampuElement);
-//         }
-        
-//         console.log(pengampu);
-//     }
-// });
 
 // fungsi untuk menghitung nilai fitness
 function calculateFitness(particle) {
