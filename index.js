@@ -7,47 +7,106 @@ let slotRuangan = ["205", "101", "305", "306", "402", "403", "404", "FHIS 01", "
 
 // Particle Class
 class Particle {
-  constructor(pengampu) {
-    this.pengampu = pengampu;
-    // this.fitness = 0;
-    this.position = {}; // Current particle position
-    this.velocity = {}; // Current particle velocity
-    this.bestPosition = {}; // Personal best position achieved by the particle
-  }
+    constructor(pengampu) {
+        this.pengampu = pengampu;
+        // this.fitness = 0;
+        this.position = {}; // Current particle position
+        this.velocity = {}; // Current particle velocity
+        this.bestPosition = {}; // Personal best position achieved by the particle
+    }
 
-  // Initialization of the particle's position and velocity
-  initialize(pengampu) {
-    // Initialize the position and velocity for each course
-    pengampu.forEach(ajar => {
-        const randomDay = 1 + Math.floor(Math.random() * (7 - 1));
-        const randomRoom = 1 + Math.floor(Math.random() * (11 - 1));
-        const randomTime = 1 + Math.floor(Math.random() * (6 - 1));
+    // Initialization of the particle's position and velocity
+    //   initialize(pengampu) {
+    //     // Initialize the position and velocity for each course
+    //     pengampu.forEach(ajar => {
+    //         const randomDay = 1 + Math.floor(Math.random() * (7 - 1));
+    //         const randomRoom = 1 + Math.floor(Math.random() * (11 - 1));
+    //         const randomTime = 1 + Math.floor(Math.random() * (6 - 1));
+    //         this.position = { room: randomRoom, time: randomTime, day: randomDay };
+    //         this.velocity = { room: randomRoom, time: randomTime, day: randomDay };
+    //         this.bestPosition = { room: randomRoom, time: randomTime, day: randomDay };
+    //     });
+    //   }
+
+    initialize(pengampu) {
+        let randomDay, randomRoom, randomTime;
+        
+        // Randomly select day, time and room
+        if (pengampu.kategoriKelas === "reguler") {
+            randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
+            randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
+
+            if (pengampu.jenisMatkul === "teori"){
+                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+            } else if (pengampu.jenisMatkul === "praktikum") {
+                randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+            }
+
+        } else if (pengampu.kategoriKelas === "malam") {
+            randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
+            randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
+
+            if (pengampu.jenisMatkul === "teori"){
+                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+            } else if (pengampu.jenisMatkul === "praktikum") {
+                randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+            }
+
+        } else if (pengampu.kategoriKelas === "ekstensi") {
+            randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
+            randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
+        
+            if (pengampu.jenisMatkul === "teori"){
+                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+
+                while (randomRoom === 9) {
+                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 9
+                }
+
+            } else if (pengampu.jenisMatkul === "praktikum") {
+                randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+            }
+        }
+
+        // } else if (pengampu.fakultas === "hukum") {
+        //     randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
+        //     randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
+        //     randomRoom = 8; // Set to "FHIS 01"
+        // }
+
+        // Menentukan room, time dan day matkul hukum
+        if (pengampu.fakultas === "hukum") {
+            randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
+            randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
+            randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
+        }
+        
+        // Assign position and velocity
         this.position = { room: randomRoom, time: randomTime, day: randomDay };
         this.velocity = { room: randomRoom, time: randomTime, day: randomDay };
         this.bestPosition = { room: randomRoom, time: randomTime, day: randomDay };
-    });
-  }
-
-  // Update the particle's velocity and position
-  updateVelocity(globalBestPosition, w, c1, c2) {
-    for (const key in this.velocity) {
-        this.velocity[key] = Math.floor(
-            w * this.velocity[key] +
-            Math.random() * c1 * (this.bestPosition[key] - this.position[key]) +
-            Math.random() * c2 * (globalBestPosition[key] - this.position[key])
-        )
-
-        this.position[key] = this.velocity[key] + this.position[key]
     }
-  }
+
+    // Update the particle's velocity and position
+    updateVelocity(globalBestPosition, w, c1, c2) {
+        for (const key in this.velocity) {
+            this.velocity[key] = Math.floor(
+                w * this.velocity[key] +
+                Math.random() * c1 * (this.bestPosition[key] - this.position[key]) +
+                Math.random() * c2 * (globalBestPosition[key] - this.position[key])
+            )
+
+            this.position[key] = this.velocity[key] + this.position[key]
+        }
+    }
 }
 
 // load data setiap kali DOM sudah dimuat
 document.addEventListener("DOMContentLoaded", function() {
     loadDataFromStorage();
 
-    // const prosesJadwalBtn = document.querySelector("section .proses-jadwal-btn");
-    // prosesJadwalBtn.addEventListener("click", function() {
+    const prosesJadwalBtn = document.querySelector("section .proses-jadwal-btn");
+    prosesJadwalBtn.addEventListener("click", function() {
         // Main aplication
 
         // Definisikan parameter PSO
@@ -62,53 +121,40 @@ document.addEventListener("DOMContentLoaded", function() {
         const swarm = [];
         for (let i = 0; i < jumlahPartikel; i++) {
             const particle = new Particle(pengampu[i]);
-            particle.initialize(pengampu);
+            particle.initialize(pengampu[i]);
             swarm.push(particle);
         }
-
-        // ini tambahan kode, bisa dihapus nanti (eksperimen)
-        // Define initial and final values for w
-        const initialW = 1.0; // Initial inertia weight
-        const finalW = 0.4; // Final inertia weight
-        const maxIterations = 50000; // Total number of iterations
-        let currentIteration = 0; // Current iteration
         
         // Perform PSO iterations until fitness reaches 0
-        // let iteration = 0;
-        let fitness = calculateFitness(swarm);
-        // let w = initialW;
+        // let iteration = 0; // kalo mau pake maxiterasi, aktifkan baris kode ini
+        // let fitness = calculateFitness(swarm);
 
-        while (fitness > 0 && currentIteration < maxIterations) {
-            // Evaluate fitness for each particle and update global best position
-            swarm.forEach(particle => {
-                // Calculate fitness based on defined criteria and update personal best position
-                const particleFitness = calculateFitness(swarm);
-                if (!particle.bestFitness || particleFitness < particle.bestFitness) {
-                    particle.bestFitness = particleFitness;
-                    particle.bestPosition = { ...particle.position };
-                }
-                // Update global best position if necessary
-                if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
-                    globalBestPosition = { ...particle.position };
-                    globalBestPositionFitness = particleFitness;
-                }
-            });
+        // while (fitness > 0) {
+        //     // Evaluate fitness for each particle and update global best position
+        //     swarm.forEach(particle => {
+        //         // Calculate fitness based on defined criteria and update personal best position
+        //         const particleFitness = calculateFitness(swarm);
+        //         if (!particle.bestFitness || particleFitness < particle.bestFitness) {
+        //             particle.bestFitness = particleFitness;
+        //             particle.bestPosition = { ...particle.position };
+        //         }
+        //         // Update global best position if necessary
+        //         if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
+        //             globalBestPosition = { ...particle.position };
+        //             globalBestPositionFitness = particleFitness;
+        //         }
+        //     });
 
-            // Update particle velocities and positions
-            swarm.forEach(particle => {
-                particle.updateVelocity(globalBestPosition, w, c1, c2);
-            });
+        //     // Update particle velocities and positions
+        //     swarm.forEach(particle => {
+        //         particle.updateVelocity(globalBestPosition, w, c1, c2);
+        //     });
 
-            // Update inertia weight (w) based on current iteration
-            const progress = currentIteration / maxIterations;
-            w = 1 - (1 - 0.4) * progress;
-
-            // iteration++;
-            fitness = calculateFitness(swarm);
-            currentIteration++;
-        }
+        //     // iteration++;
+        //     fitness = calculateFitness(swarm);
+        // }
         
-        console.log("Final fitness:", fitness);
+        // console.log("Final fitness:", fitness);
 
         // menampilkan hasil pembuatan jadwal
         swarm.forEach(particle => {
@@ -118,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         
         console.log(swarm);
-    // })
+    })
 });
 
 // handle submit
@@ -330,171 +376,171 @@ function handleEditButton(pengampuId) {
 }
 
 // fungsi untuk menghitung nilai fitness
-// function calculateFitness(particle) {
-//     let fitness = 0;
-
-//     for (let i = 0; i < particle.length; i++) {
-//         const currentParticle = particle[i];
-
-//         // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
-//         const currentTime = currentParticle.position.time;
-//         const currentDay = currentParticle.position.day;
-//         const currentRoom = currentParticle.position.room;
-
-//         for (let j = i + 1; j < particle.length; j++) {
-//             const otherParticle = particle[j];
-
-//             // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
-//             const otherTime = otherParticle.position.time;
-//             const otherDay = otherParticle.position.day;
-//             const otherRoom = otherParticle.position.room;
-
-//             // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
-//             if (
-//                 currentTime === otherTime &&
-//                 currentDay === otherDay &&
-//                 currentRoom === otherRoom
-//             ) {
-//                 fitness++; // Menambahkan fitness jika terdapat jadwal yang bentrok
-//             }
-//         }
-//     }
-
-//     return fitness;
-// }
-
 function calculateFitness(particle) {
-  let fitness = 0;
+    let fitness = 0;
 
-  for (let i = 0; i < particle.length; i++) {
-    const currentParticle = particle[i];
+    for (let i = 0; i < particle.length; i++) {
+        const currentParticle = particle[i];
 
-    // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
-    const currentTime = currentParticle.position.time;
-    const currentDay = currentParticle.position.day;
-    const currentRoom = currentParticle.position.room;
-    const currentFakultas = currentParticle.pengampu.fakultas;
-    const currentJenisMatkul = currentParticle.pengampu.jenisMatkul;
-    const currentKategoriKelas = currentParticle.pengampu.kategoriKelas;
+        // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
+        const currentTime = currentParticle.position.time;
+        const currentDay = currentParticle.position.day;
+        const currentRoom = currentParticle.position.room;
 
-    for (let j = i + 1; j < particle.length; j++) {
-      const otherParticle = particle[j];
+        for (let j = i + 1; j < particle.length; j++) {
+            const otherParticle = particle[j];
 
-      // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
-      const otherTime = otherParticle.position.time;
-      const otherDay = otherParticle.position.day;
-      const otherRoom = otherParticle.position.room;
-      const otherFakultas = otherParticle.pengampu.fakultas;
-      const otherJenisMatkul = otherParticle.pengampu.jenisMatkul;
-      const otherKategoriKelas = otherParticle.pengampu.kategoriKelas;
+            // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
+            const otherTime = otherParticle.position.time;
+            const otherDay = otherParticle.position.day;
+            const otherRoom = otherParticle.position.room;
 
-      // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
-      if (
-        currentTime === otherTime &&
-        currentDay === otherDay &&
-        currentRoom === otherRoom
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal yang bentrok
-      }
-
-      // Memeriksa kriteria tambahan
-      if (
-        currentFakultas === "hukum" &&
-        otherFakultas === "hukum" &&
-        currentRoom !== "FHIS 01" &&
-        otherRoom !== "FHIS 01"
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal hukum yang tidak di ruangan FHIS 01
-      }
-
-      if (
-        currentFakultas === "ilkom" &&
-        otherFakultas === "ilkom" &&
-        currentRoom === "FHIS 01" &&
-        otherRoom === "FHIS 01"
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal ilkom yang di ruangan FHIS 01
-      }
-
-      if (
-        currentJenisMatkul === "praktikum" &&
-        otherJenisMatkul === "praktikum" &&
-        currentRoom !== "Lab 1" &&
-        currentRoom !== "Lab 2" &&
-        otherRoom !== "Lab 1" &&
-        otherRoom !== "Lab 2"
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal praktikum yang tidak di ruangan Lab 1 atau Lab 2
-      }
-
-      if (
-        currentJenisMatkul === "teori" &&
-        otherJenisMatkul === "teori" &&
-        currentRoom === "Lab 1" &&
-        currentRoom === "Lab 2" &&
-        otherRoom === "Lab 1" &&
-        otherRoom === "Lab 2"
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal teori yang di ruangan Lab 1 atau Lab 2
-      }
-
-      if (
-        currentKategoriKelas === "malam" &&
-        otherKategoriKelas === "malam" &&
-        (currentDay === "Senin" ||
-          currentDay === "Selasa" ||
-          currentDay === "Rabu" ||
-          currentDay === "Kamis" ||
-          currentDay === "Jumat") &&
-        (otherDay === "Senin" ||
-          otherDay === "Selasa" ||
-          otherDay === "Rabu" ||
-          otherDay === "Kamis" ||
-          otherDay === "Jumat") &&
-        (currentTime === "17:00-19:00" || currentTime === "19:00-21:00") &&
-        (otherTime === "17:00-19:00" || otherTime === "19:00-21:00")
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal malam yang tidak di hari dan slot waktu yang tersedia
-      }
-
-      if (
-        currentKategoriKelas === "ekstensi" &&
-        otherKategoriKelas === "ekstensi" &&
-        (currentDay === "Sabtu" || currentDay === "Minggu") &&
-        (otherDay === "Sabtu" || otherDay === "Minggu")
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal ekstensi yang tidak di hari yang tersedia
-      }
-
-      if (
-        currentKategoriKelas === "reguler" &&
-        otherKategoriKelas === "reguler" &&
-        (currentDay === "Senin" ||
-          currentDay === "Selasa" ||
-          currentDay === "Rabu" ||
-          currentDay === "Kamis" ||
-          currentDay === "Jumat") &&
-        (otherDay === "Senin" ||
-          otherDay === "Selasa" ||
-          otherDay === "Rabu" ||
-          otherDay === "Kamis" ||
-          otherDay === "Jumat") &&
-        (currentTime === "08:00-10:00" ||
-          currentTime === "10:00-12:00" ||
-          currentTime === "13:00-15:00" ||
-          currentTime === "15:00-17:00") &&
-        (otherTime === "08:00-10:00" ||
-          otherTime === "10:00-12:00" ||
-          otherTime === "13:00-15:00" ||
-          otherTime === "15:00-17:00")
-      ) {
-        fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
-      }
+            // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
+            if (
+                currentTime === otherTime &&
+                currentDay === otherDay &&
+                currentRoom === otherRoom
+            ) {
+                fitness++; // Menambahkan fitness jika terdapat jadwal yang bentrok
+            }
+        }
     }
-  }
 
-  return fitness;
+    return fitness;
 }
+
+// function calculateFitness(particle) {
+//   let fitness = 0;
+
+//   for (let i = 0; i < particle.length; i++) {
+//     const currentParticle = particle[i];
+
+//     // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
+//     const currentTime = currentParticle.position.time;
+//     const currentDay = currentParticle.position.day;
+//     const currentRoom = currentParticle.position.room;
+//     const currentFakultas = currentParticle.pengampu.fakultas;
+//     const currentJenisMatkul = currentParticle.pengampu.jenisMatkul;
+//     const currentKategoriKelas = currentParticle.pengampu.kategoriKelas;
+
+//     for (let j = i + 1; j < particle.length; j++) {
+//       const otherParticle = particle[j];
+
+//       // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
+//       const otherTime = otherParticle.position.time;
+//       const otherDay = otherParticle.position.day;
+//       const otherRoom = otherParticle.position.room;
+//       const otherFakultas = otherParticle.pengampu.fakultas;
+//       const otherJenisMatkul = otherParticle.pengampu.jenisMatkul;
+//       const otherKategoriKelas = otherParticle.pengampu.kategoriKelas;
+
+//       // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
+//       if (
+//         currentTime === otherTime &&
+//         currentDay === otherDay &&
+//         currentRoom === otherRoom
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal yang bentrok
+//       }
+
+//       // Memeriksa kriteria tambahan
+//       if (
+//         currentFakultas === "hukum" &&
+//         otherFakultas === "hukum" &&
+//         currentRoom !== "FHIS 01" &&
+//         otherRoom !== "FHIS 01"
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal hukum yang tidak di ruangan FHIS 01
+//       }
+
+//       if (
+//         currentFakultas === "ilkom" &&
+//         otherFakultas === "ilkom" &&
+//         currentRoom === "FHIS 01" &&
+//         otherRoom === "FHIS 01"
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal ilkom yang di ruangan FHIS 01
+//       }
+
+//       if (
+//         currentJenisMatkul === "praktikum" &&
+//         otherJenisMatkul === "praktikum" &&
+//         currentRoom !== "Lab 1" &&
+//         currentRoom !== "Lab 2" &&
+//         otherRoom !== "Lab 1" &&
+//         otherRoom !== "Lab 2"
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal praktikum yang tidak di ruangan Lab 1 atau Lab 2
+//       }
+
+//       if (
+//         currentJenisMatkul === "teori" &&
+//         otherJenisMatkul === "teori" &&
+//         currentRoom === "Lab 1" &&
+//         currentRoom === "Lab 2" &&
+//         otherRoom === "Lab 1" &&
+//         otherRoom === "Lab 2"
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal teori yang di ruangan Lab 1 atau Lab 2
+//       }
+
+//       if (
+//         currentKategoriKelas === "malam" &&
+//         otherKategoriKelas === "malam" &&
+//         (currentDay === "Senin" ||
+//           currentDay === "Selasa" ||
+//           currentDay === "Rabu" ||
+//           currentDay === "Kamis" ||
+//           currentDay === "Jumat") &&
+//         (otherDay === "Senin" ||
+//           otherDay === "Selasa" ||
+//           otherDay === "Rabu" ||
+//           otherDay === "Kamis" ||
+//           otherDay === "Jumat") &&
+//         (currentTime === "17:00-19:00" || currentTime === "19:00-21:00") &&
+//         (otherTime === "17:00-19:00" || otherTime === "19:00-21:00")
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal malam yang tidak di hari dan slot waktu yang tersedia
+//       }
+
+//       if (
+//         currentKategoriKelas === "ekstensi" &&
+//         otherKategoriKelas === "ekstensi" &&
+//         (currentDay === "Sabtu" || currentDay === "Minggu") &&
+//         (otherDay === "Sabtu" || otherDay === "Minggu")
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal ekstensi yang tidak di hari yang tersedia
+//       }
+
+//       if (
+//         currentKategoriKelas === "reguler" &&
+//         otherKategoriKelas === "reguler" &&
+//         (currentDay === "Senin" ||
+//           currentDay === "Selasa" ||
+//           currentDay === "Rabu" ||
+//           currentDay === "Kamis" ||
+//           currentDay === "Jumat") &&
+//         (otherDay === "Senin" ||
+//           otherDay === "Selasa" ||
+//           otherDay === "Rabu" ||
+//           otherDay === "Kamis" ||
+//           otherDay === "Jumat") &&
+//         (currentTime === "08:00-10:00" ||
+//           currentTime === "10:00-12:00" ||
+//           currentTime === "13:00-15:00" ||
+//           currentTime === "15:00-17:00") &&
+//         (otherTime === "08:00-10:00" ||
+//           otherTime === "10:00-12:00" ||
+//           otherTime === "13:00-15:00" ||
+//           otherTime === "15:00-17:00")
+//       ) {
+//         fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
+//       }
+//     }
+//   }
+
+//   return fitness;
+// }
 
 // Fungsi untuk mengkonversi nilai posisi menjadi data yang sesuai
 function convertPositionToData(position) {
