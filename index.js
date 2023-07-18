@@ -1,4 +1,5 @@
 const pengampu = [];
+const particlesToUpdate = [];
 const localStoragePengampu = "PENGAMPU_GENAP";
 // Definisikan slot waktu, hari dan ruangan yang tersedia
 let slotWaktu = ["08:00-10:00", "10:00-12:00", "13:00-15:00", "15:00-17:00", "17:00-19:00", "19:00-21:00"];
@@ -9,24 +10,12 @@ let slotRuangan = ["205", "101", "305", "306", "402", "403", "404", "FHIS 01", "
 class Particle {
     constructor(pengampu) {
         this.pengampu = pengampu;
-        // this.fitness = 0;
+        this.fitness = 0;
         this.position = {}; // Current particle position
         this.velocity = {}; // Current particle velocity
         this.bestPosition = {}; // Personal best position achieved by the particle
+        this.isSesuaiKriteria = true;
     }
-
-    // Initialization of the particle's position and velocity
-    //   initialize(pengampu) {
-    //     // Initialize the position and velocity for each course
-    //     pengampu.forEach(ajar => {
-    //         const randomDay = 1 + Math.floor(Math.random() * (7 - 1));
-    //         const randomRoom = 1 + Math.floor(Math.random() * (11 - 1));
-    //         const randomTime = 1 + Math.floor(Math.random() * (6 - 1));
-    //         this.position = { room: randomRoom, time: randomTime, day: randomDay };
-    //         this.velocity = { room: randomRoom, time: randomTime, day: randomDay };
-    //         this.bestPosition = { room: randomRoom, time: randomTime, day: randomDay };
-    //     });
-    //   }
 
     initialize(pengampu) {
         let randomDay, randomRoom, randomTime;
@@ -68,12 +57,6 @@ class Particle {
             }
         }
 
-        // } else if (pengampu.fakultas === "hukum") {
-        //     randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
-        //     randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
-        //     randomRoom = 8; // Set to "FHIS 01"
-        // }
-
         // Menentukan room, time dan day matkul hukum
         if (pengampu.fakultas === "hukum") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
@@ -88,16 +71,67 @@ class Particle {
     }
 
     // Update the particle's velocity and position
-    updateVelocity(globalBestPosition, w, c1, c2) {
-        for (const key in this.velocity) {
-            this.velocity[key] = Math.floor(
-                w * this.velocity[key] +
-                Math.random() * c1 * (this.bestPosition[key] - this.position[key]) +
-                Math.random() * c2 * (globalBestPosition[key] - this.position[key])
-            )
+    updateVelocity(particle) {
+        // for (const key in this.velocity) {
+        //     this.velocity[key] = Math.floor(
+        //         w * this.velocity[key] +
+        //         Math.random() * c1 * (this.bestPosition[key] - this.position[key]) +
+        //         Math.random() * c2 * (globalBestPosition[key] - this.position[key])
+        //     )
 
-            this.position[key] = this.velocity[key] + this.position[key]
+        //     this.position[key] = this.velocity[key] + this.position[key]
+        // }
+
+        let randomDay, randomRoom, randomTime;
+        
+        // Randomly select day, time and room
+        if (particle.pengampu.kategoriKelas === "reguler") {
+            randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
+            randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
+
+            if (particle.pengampu.jenisMatkul === "teori"){
+                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+            } else if (particle.pengampu.jenisMatkul === "praktikum") {
+                randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+            }
+
+        } else if (particle.pengampu.kategoriKelas === "malam") {
+            randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
+            randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
+
+            if (particle.pengampu.jenisMatkul === "teori"){
+                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+            } else if (pengampu.jenisMatkul === "praktikum") {
+                randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+            }
+
+        } else if (particle.pengampu.kategoriKelas === "ekstensi") {
+            randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
+            randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
+        
+            if (particle.pengampu.jenisMatkul === "teori"){
+                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+
+                while (randomRoom === 9) {
+                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 9
+                }
+
+            } else if (particle.pengampu.jenisMatkul === "praktikum") {
+                randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+            }
         }
+
+        // Menentukan room, time dan day matkul hukum
+        if (particle.pengampu.fakultas === "hukum") {
+            randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
+            randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
+            randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
+        }
+        
+        // Assign position and velocity
+        this.velocity = { room: randomRoom, time: randomTime, day: randomDay };
+        this.position = { room: randomRoom, time: randomTime, day: randomDay };
+        this.bestPosition = { room: randomRoom, time: randomTime, day: randomDay };
     }
 }
 
@@ -105,21 +139,117 @@ class Particle {
 document.addEventListener("DOMContentLoaded", function() {
     loadDataFromStorage();
 
-    const prosesJadwalBtn = document.querySelector("section .proses-jadwal-btn");
+    // const prosesJadwalBtn = document.querySelector("section .proses-jadwal-btn");
+    // prosesJadwalBtn.addEventListener("click", function() {
+    //     // Main aplication
+
+    //     // Initialize the swarm with particles
+    //     for (let i = 0; i < jumlahPengampu; i++) {
+    //         const particle = new Particle(pengampu[i]);
+    //         particle.initialize(pengampu[i]);
+    //         swarm.push(particle);
+    //     }
+        
+    //     // Perform PSO iterations until fitness reaches 0
+    //     // let iteration = 0; // kalo mau pake maxiterasi, aktifkan baris kode ini
+    //     // let fitness = calculateFitness(swarm);
+
+    //     // swarm.forEach(particle => {
+    //     //     // Calculate fitness based on defined criteria and update personal best position
+    //     //     const particleFitness = calculateFitness(particle, swarm);
+    //     //     // console.log(particleFitness);
+    //     //     // if (!particle.bestFitness || particleFitness < particle.bestFitness) {
+    //     //     //     particle.bestFitness = particleFitness;
+    //     //     //     particle.bestPosition = { ...particle.position };
+    //     //     // }
+    //     //     // // Update global best position if necessary
+    //     //     // if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
+    //     //     //     globalBestPosition = { ...particle.position };
+    //     //     //     globalBestPositionFitness = particleFitness;
+    //     //     // }
+    //     // });
+
+    //     // while (fitness > 0) {
+    //     //     // Evaluate fitness for each particle and update global best position
+    //     //     swarm.forEach(particle => {
+    //     //         // Calculate fitness based on defined criteria and update personal best position
+    //     //         const particleFitness = calculateFitness(swarm);
+    //     //         if (!particle.bestFitness || particleFitness < particle.bestFitness) {
+    //     //             particle.bestFitness = particleFitness;
+    //     //             particle.bestPosition = { ...particle.position };
+    //     //         }
+    //     //         // Update global best position if necessary
+    //     //         if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
+    //     //             globalBestPosition = { ...particle.position };
+    //     //             globalBestPositionFitness = particleFitness;
+    //     //         }
+    //     //     });
+
+    //     //     // Update particle velocities and positions
+    //     //     swarm.forEach(particle => {
+    //     //         particle.updateVelocity(globalBestPosition, w, c1, c2);
+    //     //     });
+
+    //     //     // iteration++;
+    //     //     fitness = calculateFitness(swarm);
+    //     // }
+        
+    //     // console.log("Final fitness:", fitness);
+
+    //     // menampilkan hasil pembuatan jadwal
+    //     swarm.forEach(particle => {
+    //         const convertPositionResult = convertPositionToData(particle.position);
+    //         const finalSwarm = {...convertPositionResult, ...particle.pengampu};
+    //         hasilPenjadwalan.push(finalSwarm);
+    //         // console.log(finalSwarm);
+    //     });
+        
+    //     console.log(swarm);
+    //     console.log(hasilPenjadwalan);
+
+    //     // // Menampilkan data jadwal dalam bentuk tabel
+    //     // // Ambil referensi tabel
+    //     // const tabelJadwal = document.querySelector('.tabel-jadwal');
+
+    //     // const row = tabelJadwal.rows[2];
+
+    //     // // Ambil waktu, ruangan dan hari dari slot jadwal pertama
+    //     // const waktuTabel = row.cells[1].textContent;
+    //     // const ruanganTabel = tabelJadwal.rows[1].cells[0].textContent;
+    //     // const hariTabel = row.cells[0].textContent;
+
+    //     // // cari jadwal yg sesuai dengan slot
+    //     // const jadwal = hasilPenjadwalan.find((item) => item.time === waktuTabel && item.room === ruanganTabel && item.day === hariTabel);
+        
+    //     // // kalo jadwal yg sesuai ditemukan, maka tampilkan ke slot
+    //     // if (jadwal) {                 
+    //     //     const cell = row.cells[2];
+    //     //     cell.innerHTML = `
+    //     //     ${jadwal.className} <br>
+    //     //     ${jadwal.courseName} <br>
+    //     //     ${jadwal.lecturerName}
+    //     //     `
+    //     // }
+    // })
+});
+
+const prosesJadwalBtn = document.querySelector("section .proses-jadwal-btn");
     prosesJadwalBtn.addEventListener("click", function() {
         // Main aplication
 
         // Definisikan parameter PSO
         let globalBestPosition = null;
-        let jumlahPartikel = pengampu.length;
-        let iterasiMaksimal = 100;
+        let jumlahPengampu = pengampu.length;
+        let iterasiMaksimal = 5;
         let c1 = 2;
         let c2 = 2;
-        let w = 1;
-
+        let w = 0.9;
+        
         // Initialize the swarm with particles
+        const hasilPenjadwalan = [];
         const swarm = [];
-        for (let i = 0; i < jumlahPartikel; i++) {
+        const particlesToUpdate = [];
+        for (let i = 0; i < jumlahPengampu; i++) {
             const particle = new Particle(pengampu[i]);
             particle.initialize(pengampu[i]);
             swarm.push(particle);
@@ -128,6 +258,30 @@ document.addEventListener("DOMContentLoaded", function() {
         // Perform PSO iterations until fitness reaches 0
         // let iteration = 0; // kalo mau pake maxiterasi, aktifkan baris kode ini
         // let fitness = calculateFitness(swarm);
+        let swarmFitness = 1;
+        while (swarmFitness > 0) {
+            swarmFitness = 0;
+            swarm.forEach(particle => {
+                // Calculate fitness based on defined criteria and update personal best position
+                const particleFitness = calculateFitness(particle, swarm);
+                particle.fitness = particleFitness;
+                // Tambahkan partikel ke dalam array particlesToUpdate
+                if (particleFitness > 0) {
+                    particlesToUpdate.push(particle); 
+                }
+
+                // akumulasi fitness partikel ini dengan partikel lain
+                swarmFitness += particleFitness
+            });
+
+            if (swarmFitness > 0) {
+                swarm.forEach(particle => {
+                    if (particle.fitness > 0) {
+                        particle.updateVelocity(particle);
+                    }
+                });
+            }
+        }
 
         // while (fitness > 0) {
         //     // Evaluate fitness for each particle and update global best position
@@ -155,17 +309,176 @@ document.addEventListener("DOMContentLoaded", function() {
         // }
         
         // console.log("Final fitness:", fitness);
+        const swarmDaySorted = swarm.sort(function (a, b) {
+            return a.position.day - b.position.day;
+        });
 
-        // menampilkan hasil pembuatan jadwal
-        swarm.forEach(particle => {
+        const swarmTimeSorted = swarmDaySorted.sort(function (a, b) {
+            return a.position.time - b.position.time;
+        });
+
+        // const swarmRoomSorted = swarmDaySorted.sort(function (a, b) {
+        //     return a.position.room - b.position.room;
+        // });
+
+        // konversi hasil pembuatan jadwal ke data yang sesuai
+        swarmTimeSorted.forEach(particle => {
             const convertPositionResult = convertPositionToData(particle.position);
-            const finalSwarm = {...convertPositionResult, ...particle.pengampu};
-            console.log(finalSwarm);
+            const finalSwarm = {...convertPositionResult, ...particle.pengampu, fitness: particle.fitness};
+            hasilPenjadwalan.push(finalSwarm);
+            // console.log(finalSwarm);
         });
         
-        console.log(swarm);
-    })
-});
+        hasilPenjadwalan.forEach(particle => {
+            console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness}`);
+        })
+        // console.log(swarm);
+        // console.log(hasilPenjadwalan);
+        // console.log(particlesToUpdate);
+        console.log(swarmFitness);
+
+        // Menampilkan data jadwal dalam bentuk tabel
+        // Ambil referensi tabel
+        const tabelJadwal = document.querySelector('.tabel-jadwal');
+
+        // ambil referensi header time dan day
+        const timeElements = document.querySelectorAll('th.time');
+        const dayElements = document.querySelectorAll('th.day');
+
+        // Membuat array dari elemen-elemen time dan day yang ditemukan
+        const timeArray = Array.from(timeElements);
+        const dayArray = Array.from(dayElements);
+
+        // ambil referensi seluruh cell pada tabel dan ubah ke array
+        const cells = document.querySelectorAll('.tabel-jadwal td');
+        const cellArray = Array.from(cells);
+
+        // looping sebanyak 7 kali (hari tersedia)
+        // for (let i = 0; i < 7; i++) {
+
+            // looping sebanyak 6 kali (time tersedia)
+            // for (let j = 0; j < 6; j++) {
+
+            //     // looping sebanyak 11 kali (ruangan tersedia)
+            //     for (let k = 0; k < 11; k++) {
+            //         const ruanganTabel = tabelJadwal.rows[1].cells[k].textContent;
+            //         const waktuTabel = tabelJadwal.rows[2].cells[1].textContent;
+
+            //         // cari jadwal yg sesuai dengan slot
+            //         const jadwal = hasilPenjadwalan.find((item) => item.time === waktuTabel && item.room === ruanganTabel && item.day === hariTabel);
+
+            //         // kalo jadwal yg sesuai ditemukan, maka tampilkan ke slot
+            //         if (jadwal) {                 
+            //             cellArray[i].innerHTML = `
+            //             ${jadwal.className} <br>
+            //             ${jadwal.courseName} <br>
+            //             ${jadwal.lecturerName}
+            //             `
+            //         }
+            //         console.log(k);
+            //     }   
+            // }
+        // }
+
+        // hasilPenjadwalan.forEach((item, index) => {
+        //     // console.log(`${item} dan ${index}: ${item.courseName} di ruangan ${item.room}`);
+        //     const time = item.time;
+        //     const day = item.day;
+        //     const room = item.room;
+
+        //     // Menghitung indeks elemen <td> berdasarkan time, day, dan room
+        //     const rowIndex = Math.floor(1 + (index % 6)); // Menyesuaikan dengan struktur tabel (indeks dimulai dari 1)
+        //     const columnIndex = Math.floor(2 + index / 6); // Menyesuaikan dengan struktur tabel (indeks dimulai dari 2)
+
+        //     // Mengisi nilai pada elemen <td> yang sesuai dengan time, day, dan room
+        //     const cellIndex = rowIndex * 12 + columnIndex;
+        //     console.log(cellArray[cellIndex]);
+        //     // // cellArray[cellIndex].innerHTML = `
+        //     // //     ${item.className} <br>
+        //     // //     ${item.courseName} <br>
+        //     // //     ${item.lecturerName}
+        //     // // `;
+        // })
+
+        // for (let i = 0; i < 462; i++) {
+        //     cellArray[i].innerHTML = `
+        //         nama kelas
+        //         nama matkul
+        //         nama dosen pengampu
+        //     `
+        // }
+
+        // looping sebanyak 7 kali (hari tersedia)
+        // for (let i = 0; i < dayArray.length; i++) {
+
+        //     const hariTabel = dayArray[i].textContent; // senin-minggu
+            
+        //     // looping sebanyak 6 kali (time tersedia)
+        //     for (let j = 0; j < timeArray.length; j++) {
+        //         const waktuTabel = timeArray[j].textContent; // 08:00-10:00 sampai 19:00-21:00
+
+        //         // looping sebanyak 11 kali (ruangan tersedia)
+        //         for (let k = 0; k < tabelJadwal.rows[1].cells.length; k++) {
+        //             const ruanganTabel = tabelJadwal.rows[1].cells[k].textContent;
+        //             // const waktuTabel = tabelJadwal.rows[2].cells[1].textContent;
+
+        //             // cari jadwal yg sesuai dengan slot
+        //             // const jadwal = hasilPenjadwalan.find((item) => item.time === waktuTabel && item.room === ruanganTabel && item.day === hariTabel);
+                
+        //             // // Menghitung indeks elemen <td> berdasarkan waktu, hari, dan ruangan
+        //             // const rowIndex = 2 + (j % 6); // Menyesuaikan dengan struktur tabel (indeks dimulai dari 2)
+        //             // const columnIndex = k;
+
+        //             // // Mengisi nilai pada elemen <td> yang sesuai dengan waktu, hari, dan ruangan
+        //             // const cellIndex = rowIndex * 12 + columnIndex;
+        //             // cellArray[cellIndex].innerHTML = jadwal ? `
+        //             //     ${jadwal.className} <br>
+        //             //     ${jadwal.courseName} <br>
+        //             //     ${jadwal.lecturerName}
+        //             // ` : '';
+
+        //             // kalo jadwal yg sesuai ditemukan, maka tampilkan ke slot
+        //             // if (jadwal) {                 
+        //             //     cellArray[i].innerHTML = `
+        //             //     ${jadwal.className} <br>
+        //             //     ${jadwal.courseName} <br>
+        //             //     ${jadwal.lecturerName}
+        //             //     `
+        //             // }
+        //             // console.log(j);
+        //         }   
+        //     }
+        // }
+
+        // ambil baris jadwal senin
+        // const tabelSenin = tabelJadwal.rows[2];
+
+        // looping sebanyak jumlah time yg tersedia
+        // for (let i = 0; i < 6; i++) {
+        //     // Ambil waktu, ruangan dan hari dari slot jadwal pertama
+        //     const hariTabel = tabelSenin.cells[0].textContent; // senin
+        //     const waktuTabel = tabelJadwal.rows[i + 2].cells[1].textContent;
+        //     // const waktuTabel = tabelSenin.cells[1].textContent; // 08:00-10:00
+            
+        //     // looping sebanyak jumlah ruangan yang tersedia
+        //     for (let j = 0; j < tabelJadwal.rows[1].cells.length; j++) {
+        //         const ruanganTabel = tabelJadwal.rows[1].cells[j].textContent; // 205
+                
+        //         // cari jadwal yg sesuai dengan slot
+        //         const jadwal = hasilPenjadwalan.find((item) => item.time === waktuTabel && item.room === ruanganTabel && item.day === hariTabel);
+            
+        //         // kalo jadwal yg sesuai ditemukan, maka tampilkan ke slot
+        //         if (jadwal) {                 
+        //             const cell = tabelSenin.cells[j + 2];
+        //             cell.innerHTML = `
+        //             ${jadwal.className} <br>
+        //             ${jadwal.courseName} <br>
+        //             ${jadwal.lecturerName}
+        //             `
+        //         }
+        //     }
+        // }
+})
 
 // handle submit
 const inputPengampuForm = document.getElementById("inputPengampu");
@@ -376,24 +689,72 @@ function handleEditButton(pengampuId) {
 }
 
 // fungsi untuk menghitung nilai fitness
-function calculateFitness(particle) {
-    let fitness = 0;
+// function calculateFitness(particle, swarm) {
+//     let fitness = 0;
 
-    for (let i = 0; i < particle.length; i++) {
-        const currentParticle = particle[i];
+//     for (let i = 0; i < swarm.length; i++) {
+//         const currentParticle = particle;
 
-        // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
-        const currentTime = currentParticle.position.time;
-        const currentDay = currentParticle.position.day;
-        const currentRoom = currentParticle.position.room;
+//         // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
+//         const currentTime = currentParticle.position.time;
+//         const currentDay = currentParticle.position.day;
+//         const currentRoom = currentParticle.position.room;
 
-        for (let j = i + 1; j < particle.length; j++) {
-            const otherParticle = particle[j];
+//         for (let j = i + 1; j < swarm.length; j++) {
+//             const otherParticle = swarm[j];
+
+//             // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
+//             const otherTime = otherParticle.position.time;
+//             const otherDay = otherParticle.position.day;
+//             const otherRoom = otherParticle.position.room;
+
+//             // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
+//             if (
+//                 currentTime === otherTime &&
+//                 currentDay === otherDay &&
+//                 currentRoom === otherRoom
+//             ) {
+//                 fitness++; // Menambahkan fitness jika terdapat jadwal yang bentrok
+//                 particlesToUpdate.push(currentParticle); // Menambahkan partikel ke dalam array particlesToUpdate
+//             }
+//         }
+
+//         if (fitness === 0) {
+//             currentParticle.isSesuaiKriteria = true;
+//         }
+//     }
+
+//     return fitness;
+// }
+
+function calculateFitness(particle, swarm) {
+    // let fitness = 0;
+    // let indexParticle = swarm.indexOf(particle)
+
+    // for (let i = 0; i < swarm.length; i++) {
+        const currentParticle = particle;
+        // currentParticle.isSesuaiKriteria = true; // Setel awal properti isSesuaiKriteria ke true
+
+        for (let j = 0; j < swarm.length; j++) {
+            if (swarm.indexOf(currentParticle) === j) continue; // Skip jika partikel sama
+
+            const otherParticle = swarm[j];
+
+            // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
+            const currentTime = currentParticle.position.time;
+            const currentDay = currentParticle.position.day;
+            const currentRoom = currentParticle.position.room;
+            const currentFakultas = currentParticle.pengampu.fakultas;
+            const currentJenisMatkul = currentParticle.pengampu.jenisMatkul;
+            const currentKategoriKelas = currentParticle.pengampu.kategoriKelas;
 
             // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
             const otherTime = otherParticle.position.time;
             const otherDay = otherParticle.position.day;
             const otherRoom = otherParticle.position.room;
+            const otherFakultas = otherParticle.pengampu.fakultas;
+            const otherJenisMatkul = otherParticle.pengampu.jenisMatkul;
+            const otherKategoriKelas = otherParticle.pengampu.kategoriKelas;
 
             // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
             if (
@@ -401,12 +762,85 @@ function calculateFitness(particle) {
                 currentDay === otherDay &&
                 currentRoom === otherRoom
             ) {
-                fitness++; // Menambahkan fitness jika terdapat jadwal yang bentrok
+                currentParticle.fitness++; // Tambahkan fitness jika terdapat jadwal yang bentrok
+                // currentParticle.isSesuaiKriteria = false; // Setel properti isSesuaiKriteria ke false jika terdapat bentrok
             }
+
+            // Memeriksa kriteria tambahan
+
+            // if (
+            //     currentJenisMatkul === "praktikum" &&
+            //     currentRoom !== 10 &&
+            //     currentRoom !== 11
+            // ) {
+            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal praktikum yang tidak di ruangan Lab 1 atau Lab 2
+            // }
+
+            // if (
+            //     currentJenisMatkul === "teori" &&
+            //     currentRoom === 10 &&
+            //     currentRoom === 11
+            // ) {
+            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal teori yang di ruangan Lab 1 atau Lab 2
+            // }
+
+            // if (
+            //     currentKategoriKelas === "malam" &&
+            //     (currentDay === 1 ||
+            //     currentDay === 2 ||
+            //     currentDay === 3 ||
+            //     currentDay === 4 ||
+            //     currentDay === 5) &&
+            //     (currentTime === 5 || currentTime === 6)
+            // ) {
+            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal malam yang tidak di hari dan slot waktu yang tersedia
+            // }
+
+            // if (
+            //     currentKategoriKelas === "ekstensi" &&
+            //     (currentDay === 6 || currentDay === 7)
+            // ) {
+            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal ekstensi yang tidak di hari yang tersedia
+            // }
+
+            // if (
+            //     currentKategoriKelas === "reguler" &&
+            //     (currentDay === 1 ||
+            //     currentDay === 2 ||
+            //     currentDay === 3 ||
+            //     currentDay === 4 ||
+            //     currentDay === 5) &&
+            //     (currentTime === 1 ||
+            //     currentTime === 2 ||
+            //     currentTime === 3 ||
+            //     currentTime === 4)
+            // ) {
+            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
+            // }
+
+            // if (
+            //     currentFakultas === "hukum" &&
+            //     (currentDay === 6 || currentDay === 7) &&
+            //     (currentTime === 1 ||
+            //     currentTime === 2 ||
+            //     currentTime === 3 ||
+            //     currentTime === 4 ||
+            //     currentTime === 5) &&
+            //     (currentRoom === 7 ||
+            //     currentRoom === 8 ||
+            //      currentRoom === 9)
+            // ) {
+            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
+            // }
         }
+
+    if (currentParticle.fitness !== 0) {
+        currentParticle.isSesuaiKriteria = false;
+        // particlesToUpdate.push(currentParticle); // Tambahkan partikel ke dalam array particlesToUpdate
     }
 
-    return fitness;
+    // }
+    return currentParticle.fitness;
 }
 
 // function calculateFitness(particle) {
@@ -566,3 +1000,70 @@ function convertPositionToData(position) {
 
     return { room, time, day };
 }
+
+// // Menampilkan data jadwal dalam bentuk tabel
+
+// // Ambil referensi tabel
+// const tabelJadwal = document.querySelector('.tabel-jadwal');
+
+// const row = tabelJadwal.rows[2];
+
+// // Ambil waktu dan ruangan dari slot jadwal pertama di baris saat ini
+// const waktu = row.cells[1].textContent;
+// const room = tabelJadwal.rows[1].cells[0].textContent;
+// console.log(hasilPenjadwalan);
+
+// Cari jadwal yang sesuai dengan waktu saat ini di finalSwarm
+// const jadwal = hasilPenjadwalan.find((item) => item.time === waktu);
+// console.log(jadwal);
+
+// Iterasi untuk setiap baris dalam tabel, dimulai dari baris ke-2 (indeks 1) karena baris pertama adalah header
+// for (let i = 2; i < tabelJadwal.rows.length; i++) {
+//   const row = tabelJadwal.rows[i];
+
+//   // Ambil waktu dari elemen kolom pertama di baris saat ini
+//   const waktu = row.cells[0].textContent;
+
+//   // Cari jadwal yang sesuai dengan waktu saat ini di finalSwarm
+//   const jadwal = finalSwarm.find((item) => item.slotWaktu === waktu);
+
+//   // Jika jadwal ditemukan, isi data ke kolom-kolom selanjutnya
+//   if (jadwal) {
+//     for (let j = 0; j < jadwal.hariTersedia.length; j++) {
+//       const ruangan = jadwal.hariTersedia[j].ruangan;
+//       const cell = row.cells[j + 1];
+//       cell.textContent = ruangan;
+//     }
+//   }
+// }
+
+
+// const jadwal = {
+//     senin: {
+//         '08:00-10:00': '205',
+//         '10:00-12:00': '101',
+//         '13:00-15:00': '305',
+//         '15:00-17:00': '306',
+//         '17:00-19:00': '402',
+//         '19:00-21:00': '403'
+//     },
+//     // Tambahkan data jadwal untuk hari Selasa, Rabu, dst.
+//     // selasa: {
+//     //     '08:00-10:00': '...',
+//     //     ...
+//     // },
+//     // rabu: {
+//     //     '08:00-10:00': '...',
+//     //     ...
+//     // },
+//     // ...
+// };
+
+// // Mengisi data jadwal ke dalam tabel
+// for (const hari in jadwal) {
+//     for (const waktu in jadwal[hari]) {
+//         const cellId = `${hari.toLowerCase()}-${waktu.replace(':', '')}`;
+//         const cell = document.getElementById(cellId);
+//         cell.textContent = jadwal[hari][waktu];
+//     }
+// }

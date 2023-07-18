@@ -165,3 +165,28 @@ input:-webkit-autofill:active{
     min-height: 30px;
     min-width: 30px;
 }
+
+/* style untuk tabel jadwal */
+.tabel-jadwal {
+    border-collapse: collapse;
+    /* font-family: Arial, sans-serif; */
+    width: 100%;
+}
+
+.tabel-jadwal th, .tabel-jadwal td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.tabel-jadwal th {
+    background-color: #f2f2f2;
+}
+
+.tabel-jadwal th.time, .tabel-jadwal th.day {
+    transform: rotate(180deg);
+    transform-origin: center;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    /* text-orientation: sideways; */
+}
