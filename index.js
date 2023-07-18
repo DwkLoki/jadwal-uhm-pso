@@ -14,7 +14,7 @@ class Particle {
         this.position = {}; // Current particle position
         this.velocity = {}; // Current particle velocity
         this.bestPosition = {}; // Personal best position achieved by the particle
-        this.isSesuaiKriteria = true;
+        this.isSesuaiKriteria = false;
     }
 
     initialize(pengampu) {
@@ -70,8 +70,43 @@ class Particle {
         this.bestPosition = { room: randomRoom, time: randomTime, day: randomDay };
     }
 
+    // cek status optimal partikel
+    checkStatus(swarm) {
+        // let particleFitness = 0;
+        const currentParticle = this;
+
+        // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
+        const currentTime = currentParticle.position.time;
+        const currentDay = currentParticle.position.day;
+        const currentRoom = currentParticle.position.room;
+
+        for (let i = 0; i < swarm.length; i++) {
+            const otherParticle = swarm[i];
+
+            if (currentParticle === otherParticle) continue; // Skip jika partikel sama
+            // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
+            const otherTime = otherParticle.position.time;
+            const otherDay = otherParticle.position.day;
+            const otherRoom = otherParticle.position.room;
+
+            // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
+            if (
+                currentTime === otherTime &&
+                currentDay === otherDay &&
+                currentRoom === otherRoom
+            ) {
+                this.fitness++; // Tambahkan fitness jika terdapat jadwal yang bentrok
+                // currentParticle.isSesuaiKriteria = false; // Setel properti isSesuaiKriteria ke false jika terdapat bentrok
+            }
+        }
+
+        if (this.fitness === 0) {
+            this.isSesuaiKriteria = true;
+        }
+    }
+
     // Update the particle's velocity and position
-    updateVelocity(particle) {
+    updateVelocity() {
         // for (const key in this.velocity) {
         //     this.velocity[key] = Math.floor(
         //         w * this.velocity[key] +
@@ -85,44 +120,44 @@ class Particle {
         let randomDay, randomRoom, randomTime;
         
         // Randomly select day, time and room
-        if (particle.pengampu.kategoriKelas === "reguler") {
+        if (this.pengampu.kategoriKelas === "reguler") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
 
-            if (particle.pengampu.jenisMatkul === "teori"){
+            if (this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (particle.pengampu.jenisMatkul === "praktikum") {
+            } else if (this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (particle.pengampu.kategoriKelas === "malam") {
+        } else if (this.pengampu.kategoriKelas === "malam") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
 
-            if (particle.pengampu.jenisMatkul === "teori"){
+            if (this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
             } else if (pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (particle.pengampu.kategoriKelas === "ekstensi") {
+        } else if (this.pengampu.kategoriKelas === "ekstensi") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
         
-            if (particle.pengampu.jenisMatkul === "teori"){
+            if (this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
 
                 while (randomRoom === 9) {
                     randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 9
                 }
 
-            } else if (particle.pengampu.jenisMatkul === "praktikum") {
+            } else if (this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
         }
 
         // Menentukan room, time dan day matkul hukum
-        if (particle.pengampu.fakultas === "hukum") {
+        if (this.pengampu.fakultas === "hukum") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
             randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
@@ -132,6 +167,7 @@ class Particle {
         this.velocity = { room: randomRoom, time: randomTime, day: randomDay };
         this.position = { room: randomRoom, time: randomTime, day: randomDay };
         this.bestPosition = { room: randomRoom, time: randomTime, day: randomDay };
+        this.fitness = 0;
     }
 }
 
@@ -243,115 +279,181 @@ const prosesJadwalBtn = document.querySelector("section .proses-jadwal-btn");
         let iterasiMaksimal = 5;
         let c1 = 2;
         let c2 = 2;
-        let w = 0.9;
+        let w = 1;
         
         // Initialize the swarm with particles
         const hasilPenjadwalan = [];
+        const jadwalBelumOptimal = [];
+        const jadwalSudahOptimal = [];
         const swarm = [];
         const particlesToUpdate = [];
+
+        // proses #1 inisialisasi/pembangkitan posisi dan velocity partikel
         for (let i = 0; i < jumlahPengampu; i++) {
             const particle = new Particle(pengampu[i]);
             particle.initialize(pengampu[i]);
             swarm.push(particle);
         }
-        
-        // Perform PSO iterations until fitness reaches 0
-        // let iteration = 0; // kalo mau pake maxiterasi, aktifkan baris kode ini
-        // let fitness = calculateFitness(swarm);
-        let swarmFitness = 1;
-        while (swarmFitness > 0) {
-            swarmFitness = 0;
-            swarm.forEach(particle => {
-                // Calculate fitness based on defined criteria and update personal best position
-                const particleFitness = calculateFitness(particle, swarm);
-                particle.fitness = particleFitness;
-                // Tambahkan partikel ke dalam array particlesToUpdate
-                if (particleFitness > 0) {
-                    particlesToUpdate.push(particle); 
-                }
 
-                // akumulasi fitness partikel ini dengan partikel lain
-                swarmFitness += particleFitness
-            });
+        // const newSwarm = swarm.map(particle => Object.create(Object.getPrototypeOf(particle), Object.getOwnPropertyDescriptors(particle)));
 
-            if (swarmFitness > 0) {
-                swarm.forEach(particle => {
-                    if (particle.fitness > 0) {
-                        particle.updateVelocity(particle);
-                    }
-                });
-            }
-        }
-
-        // while (fitness > 0) {
-        //     // Evaluate fitness for each particle and update global best position
-        //     swarm.forEach(particle => {
-        //         // Calculate fitness based on defined criteria and update personal best position
-        //         const particleFitness = calculateFitness(swarm);
-        //         if (!particle.bestFitness || particleFitness < particle.bestFitness) {
-        //             particle.bestFitness = particleFitness;
-        //             particle.bestPosition = { ...particle.position };
-        //         }
-        //         // Update global best position if necessary
-        //         if (!globalBestPosition || particleFitness < globalBestPositionFitness) {
-        //             globalBestPosition = { ...particle.position };
-        //             globalBestPositionFitness = particleFitness;
-        //         }
-        //     });
-
-        //     // Update particle velocities and positions
-        //     swarm.forEach(particle => {
-        //         particle.updateVelocity(globalBestPosition, w, c1, c2);
-        //     });
-
-        //     // iteration++;
-        //     fitness = calculateFitness(swarm);
-        // }
-        
-        // console.log("Final fitness:", fitness);
+        // proses #2 mengurutkan seluruh partikel bedasarkan hari
+        // sampai sini, tiap partikel sudah dipasangkan posisi/slot jadwal yang sesuai dengan kriteria yg ditentukan saat inisialisasi
+        // namun masih ada beberapa partikel yg memiliki nilai posisi yang sama (bentrok)
         const swarmDaySorted = swarm.sort(function (a, b) {
             return a.position.day - b.position.day;
         });
+        
+        // proses #3 mengindentifikasi partikel yg memiliki nilai posisi sama / bentrok
+        swarmDaySorted.forEach(particle => {
+            particle.checkStatus(swarmDaySorted);
+        })
 
-        const swarmTimeSorted = swarmDaySorted.sort(function (a, b) {
-            return a.position.time - b.position.time;
-        });
+        // proses #4 pisahkan partikel yg sudah optimal dan belum
+        const swarmBelumOptimal = swarmDaySorted.filter(particle => particle.isSesuaiKriteria === false);
+        const swarmSudahOptimal = swarmDaySorted.filter(particle => particle.isSesuaiKriteria);
+        
+        // proses #5 cek apakah jumlah partikel yg belum optimal lebih sedikit?
+        // selama jumlah partikel yg belum optimal lebih banyak, maka inisialisasi ulang
+        // while (swarmBelumOptimal.length > swarmSudahOptimal.length) {
+        //     // proses #6 inisialisasi/pembangkitan posisi dan velocity partikel
+        //     for (let i = 0; i < jumlahPengampu; i++) {
+        //         const particle = new Particle(pengampu[i]);
+        //         particle.initialize(pengampu[i]);
+        //         swarm.push(particle);
+        //     }
 
-        // const swarmRoomSorted = swarmDaySorted.sort(function (a, b) {
-        //     return a.position.room - b.position.room;
+        //     // proses #7 mengurutkan seluruh partikel bedasarkan hari
+        //     swarmDaySorted = swarm.sort(function (a, b) {
+        //         return a.position.day - b.position.day;
+        //     });
+        // }
+
+        // swarmSudahOptimal.sort(function (a, b) {
+        //     return a.position.day - b.position.day;
         // });
 
+        // swarmBelumOptimal.sort(function (a, b) {
+        //     return a.position.day - b.position.day;
+        // });
+
+        // console.log(swarmDaySorted);
+        // console.log("partikel belum optimal", swarmBelumOptimal);
+        // console.log("partikel sudah optimal", swarmSudahOptimal);
+
+
+        const newSwarmBelumOptimal = swarmBelumOptimal.map(particle => Object.create(Object.getPrototypeOf(particle), Object.getOwnPropertyDescriptors(particle)));
+        let isAllOptimal = 0;
+        while (!isAllOptimal) {
+            newSwarmBelumOptimal.forEach(particle => {
+                particle.updateVelocity();
+                // particle.initialize(particle.pengampu)
+            })
+
+            newSwarmBelumOptimal.forEach(particle => {
+                particle.checkStatus(swarmSudahOptimal);
+
+                if (particle.isSesuaiKriteria === true) {
+                    swarmSudahOptimal.push(particle)
+                }
+            })
+
+            // Menghapus partikel yang sesuai kriteria dari newSwarmBelumOptimal
+            const newSwarmBelumOptimalFiltered = newSwarmBelumOptimal.filter(particle => !particle.isSesuaiKriteria);
+
+            // Memperbarui newSwarmBelumOptimal dengan partikel yang tidak sesuai kriteria
+            newSwarmBelumOptimal.length = 0;
+            newSwarmBelumOptimal.push(...newSwarmBelumOptimalFiltered);
+
+            // Memeriksa apakah semua partikel sudah optimal
+            isAllOptimal = newSwarmBelumOptimal.length === 0;
+
+            // mengecek berapa kali looping terjadi
+            console.log("terjadi looping");
+        }
+
+
+        swarmSudahOptimal.sort(function (a, b) {
+            return a.position.day - b.position.day;
+        });
+
         // konversi hasil pembuatan jadwal ke data yang sesuai
-        swarmTimeSorted.forEach(particle => {
+        swarmSudahOptimal.forEach(particle => {
             const convertPositionResult = convertPositionToData(particle.position);
-            const finalSwarm = {...convertPositionResult, ...particle.pengampu, fitness: particle.fitness};
+            const finalSwarm = {...convertPositionResult, ...particle.pengampu, fitness: particle.fitness, isSesuaiKriteria: particle.isSesuaiKriteria};
             hasilPenjadwalan.push(finalSwarm);
             // console.log(finalSwarm);
         });
         
         hasilPenjadwalan.forEach(particle => {
-            console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness}`);
+            console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
         })
+
+        // console.log("partikel sudah optimal", swarmSudahOptimal);
+        console.log("partikel belum optimal", newSwarmBelumOptimal);
+
+
+        // Perform PSO iterations until fitness reaches 0
+        // let iteration = 0; // kalo mau pake maxiterasi, aktifkan baris kode ini
+        // let fitness = calculateFitness(swarm);
+        // let swarmFitness = 1;
+        // while (swarmFitness > 0) {
+        //     swarmFitness = 0;
+        //     swarm.forEach(particle => {
+        //         // Calculate fitness based on defined criteria and update personal best position
+        //         const particleFitness = calculateFitness(particle, swarm);
+        //         particle.fitness = particleFitness;
+        //         // Tambahkan partikel ke dalam array particlesToUpdate
+        //         if (particleFitness > 0) {
+        //             particlesToUpdate.push(particle); 
+        //         }
+
+        //         // akumulasi fitness partikel ini dengan partikel lain
+        //         swarmFitness += particleFitness
+        //     });
+
+        //     if (swarmFitness > 0) {
+        //         swarm.forEach(particle => {
+        //             if (particle.fitness > 0) {
+        //                 particle.updateVelocity(particle);
+        //             }
+        //         });
+        //     }
+        // }
+        
+
+
+        // konversi hasil pembuatan jadwal ke data yang sesuai
+        // swarmDaySorted.forEach(particle => {
+        //     const convertPositionResult = convertPositionToData(particle.position);
+        //     const finalSwarm = {...convertPositionResult, ...particle.pengampu, fitness: particle.fitness, isSesuaiKriteria: particle.isSesuaiKriteria};
+        //     hasilPenjadwalan.push(finalSwarm);
+        //     // console.log(finalSwarm);
+        // });
+        
+        // hasilPenjadwalan.forEach(particle => {
+        //     console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
+        // })
         // console.log(swarm);
         // console.log(hasilPenjadwalan);
         // console.log(particlesToUpdate);
-        console.log(swarmFitness);
+        // console.log(swarmFitness);
 
         // Menampilkan data jadwal dalam bentuk tabel
         // Ambil referensi tabel
-        const tabelJadwal = document.querySelector('.tabel-jadwal');
+        // const tabelJadwal = document.querySelector('.tabel-jadwal');
 
         // ambil referensi header time dan day
-        const timeElements = document.querySelectorAll('th.time');
-        const dayElements = document.querySelectorAll('th.day');
+        // const timeElements = document.querySelectorAll('th.time');
+        // const dayElements = document.querySelectorAll('th.day');
 
         // Membuat array dari elemen-elemen time dan day yang ditemukan
-        const timeArray = Array.from(timeElements);
-        const dayArray = Array.from(dayElements);
+        // const timeArray = Array.from(timeElements);
+        // const dayArray = Array.from(dayElements);
 
         // ambil referensi seluruh cell pada tabel dan ubah ke array
-        const cells = document.querySelectorAll('.tabel-jadwal td');
-        const cellArray = Array.from(cells);
+        // const cells = document.querySelectorAll('.tabel-jadwal td');
+        // const cellArray = Array.from(cells);
 
         // looping sebanyak 7 kali (hari tersedia)
         // for (let i = 0; i < 7; i++) {
@@ -727,120 +829,114 @@ function handleEditButton(pengampuId) {
 //     return fitness;
 // }
 
-function calculateFitness(particle, swarm) {
-    // let fitness = 0;
-    // let indexParticle = swarm.indexOf(particle)
+function calculateFitness(particle, swarmDaySorted) {
+    // const currentParticle = particle;
+    // currentParticle.isSesuaiKriteria = true; // Setel awal properti isSesuaiKriteria ke true
+    
+    let particleFitness = 0;
+    const currentParticle = particle;
 
-    // for (let i = 0; i < swarm.length; i++) {
-        const currentParticle = particle;
-        // currentParticle.isSesuaiKriteria = true; // Setel awal properti isSesuaiKriteria ke true
+    // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
+    const currentTime = currentParticle.position.time;
+    const currentDay = currentParticle.position.day;
+    const currentRoom = currentParticle.position.room;
 
-        for (let j = 0; j < swarm.length; j++) {
-            if (swarm.indexOf(currentParticle) === j) continue; // Skip jika partikel sama
+    for (let i = 0; i < swarmDaySorted.length; i++) {
+        const otherParticle = swarmDaySorted[i];
+        
+        if (swarmDaySorted.indexOf(currentParticle) === i) continue; // Skip jika partikel sama
+        // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
+        const otherTime = otherParticle.position.time;
+        const otherDay = otherParticle.position.day;
+        const otherRoom = otherParticle.position.room;
 
-            const otherParticle = swarm[j];
-
-            // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
-            const currentTime = currentParticle.position.time;
-            const currentDay = currentParticle.position.day;
-            const currentRoom = currentParticle.position.room;
-            const currentFakultas = currentParticle.pengampu.fakultas;
-            const currentJenisMatkul = currentParticle.pengampu.jenisMatkul;
-            const currentKategoriKelas = currentParticle.pengampu.kategoriKelas;
-
-            // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
-            const otherTime = otherParticle.position.time;
-            const otherDay = otherParticle.position.day;
-            const otherRoom = otherParticle.position.room;
-            const otherFakultas = otherParticle.pengampu.fakultas;
-            const otherJenisMatkul = otherParticle.pengampu.jenisMatkul;
-            const otherKategoriKelas = otherParticle.pengampu.kategoriKelas;
-
-            // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
-            if (
-                currentTime === otherTime &&
-                currentDay === otherDay &&
-                currentRoom === otherRoom
-            ) {
-                currentParticle.fitness++; // Tambahkan fitness jika terdapat jadwal yang bentrok
-                // currentParticle.isSesuaiKriteria = false; // Setel properti isSesuaiKriteria ke false jika terdapat bentrok
-            }
-
-            // Memeriksa kriteria tambahan
-
-            // if (
-            //     currentJenisMatkul === "praktikum" &&
-            //     currentRoom !== 10 &&
-            //     currentRoom !== 11
-            // ) {
-            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal praktikum yang tidak di ruangan Lab 1 atau Lab 2
-            // }
-
-            // if (
-            //     currentJenisMatkul === "teori" &&
-            //     currentRoom === 10 &&
-            //     currentRoom === 11
-            // ) {
-            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal teori yang di ruangan Lab 1 atau Lab 2
-            // }
-
-            // if (
-            //     currentKategoriKelas === "malam" &&
-            //     (currentDay === 1 ||
-            //     currentDay === 2 ||
-            //     currentDay === 3 ||
-            //     currentDay === 4 ||
-            //     currentDay === 5) &&
-            //     (currentTime === 5 || currentTime === 6)
-            // ) {
-            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal malam yang tidak di hari dan slot waktu yang tersedia
-            // }
-
-            // if (
-            //     currentKategoriKelas === "ekstensi" &&
-            //     (currentDay === 6 || currentDay === 7)
-            // ) {
-            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal ekstensi yang tidak di hari yang tersedia
-            // }
-
-            // if (
-            //     currentKategoriKelas === "reguler" &&
-            //     (currentDay === 1 ||
-            //     currentDay === 2 ||
-            //     currentDay === 3 ||
-            //     currentDay === 4 ||
-            //     currentDay === 5) &&
-            //     (currentTime === 1 ||
-            //     currentTime === 2 ||
-            //     currentTime === 3 ||
-            //     currentTime === 4)
-            // ) {
-            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
-            // }
-
-            // if (
-            //     currentFakultas === "hukum" &&
-            //     (currentDay === 6 || currentDay === 7) &&
-            //     (currentTime === 1 ||
-            //     currentTime === 2 ||
-            //     currentTime === 3 ||
-            //     currentTime === 4 ||
-            //     currentTime === 5) &&
-            //     (currentRoom === 7 ||
-            //     currentRoom === 8 ||
-            //      currentRoom === 9)
-            // ) {
-            //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
-            // }
+        // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
+        if (
+            currentTime === otherTime &&
+            currentDay === otherDay &&
+            currentRoom === otherRoom
+        ) {
+            currentParticle.fitness++; // Tambahkan fitness jika terdapat jadwal yang bentrok
+            // currentParticle.isSesuaiKriteria = false; // Setel properti isSesuaiKriteria ke false jika terdapat bentrok
         }
+    }
 
-    if (currentParticle.fitness !== 0) {
-        currentParticle.isSesuaiKriteria = false;
+        // Memeriksa kriteria tambahan
+
+        // if (
+        //     currentJenisMatkul === "praktikum" &&
+        //     currentRoom !== 10 &&
+        //     currentRoom !== 11
+        // ) {
+        //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal praktikum yang tidak di ruangan Lab 1 atau Lab 2
+        // }
+
+        // if (
+        //     currentJenisMatkul === "teori" &&
+        //     currentRoom === 10 &&
+        //     currentRoom === 11
+        // ) {
+        //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal teori yang di ruangan Lab 1 atau Lab 2
+        // }
+
+        // if (
+        //     currentKategoriKelas === "malam" &&
+        //     (currentDay === 1 ||
+        //     currentDay === 2 ||
+        //     currentDay === 3 ||
+        //     currentDay === 4 ||
+        //     currentDay === 5) &&
+        //     (currentTime === 5 || currentTime === 6)
+        // ) {
+        //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal malam yang tidak di hari dan slot waktu yang tersedia
+        // }
+
+        // if (
+        //     currentKategoriKelas === "ekstensi" &&
+        //     (currentDay === 6 || currentDay === 7)
+        // ) {
+        //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal ekstensi yang tidak di hari yang tersedia
+        // }
+
+        // if (
+        //     currentKategoriKelas === "reguler" &&
+        //     (currentDay === 1 ||
+        //     currentDay === 2 ||
+        //     currentDay === 3 ||
+        //     currentDay === 4 ||
+        //     currentDay === 5) &&
+        //     (currentTime === 1 ||
+        //     currentTime === 2 ||
+        //     currentTime === 3 ||
+        //     currentTime === 4)
+        // ) {
+        //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
+        // }
+
+        // if (
+        //     currentFakultas === "hukum" &&
+        //     (currentDay === 6 || currentDay === 7) &&
+        //     (currentTime === 1 ||
+        //     currentTime === 2 ||
+        //     currentTime === 3 ||
+        //     currentTime === 4 ||
+        //     currentTime === 5) &&
+        //     (currentRoom === 7 ||
+        //     currentRoom === 8 ||
+        //      currentRoom === 9)
+        // ) {
+        //     currentParticle.fitness++; // Menambahkan fitness jika terdapat jadwal reguler yang tidak di hari dan slot waktu yang tersedia
+        // }
+
+    if (currentParticle.fitness === 0) {
+        currentParticle.isSesuaiKriteria = true;
         // particlesToUpdate.push(currentParticle); // Tambahkan partikel ke dalam array particlesToUpdate
+    } else {
+        particleFitness = currentParticle.fitness;
     }
 
     // }
-    return currentParticle.fitness;
+    return particleFitness;
 }
 
 // function calculateFitness(particle) {
