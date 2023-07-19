@@ -13,776 +13,728 @@
     <script src="index.js" defer></script>
 </head>
 <body>
+    <header>
+        <div class="left-section-header">
+            <img src="assets/favicon.png" alt="logo-univ">
+        </div>
+        <div class="right-section-header">
+            <h1>Sistem Penjadwalan Perkuliahan</h1>
+            <h2>Universitas Handayani Makassar</h2>
+        </div>
+    </header>
     <main>
-        <section class="pengampu-list-section">
-            <!-- <div class="search-bar">
-                <form id="searchPengampu" autocomplete="off">
-                    <button id="searchSubmit" type="submit">
-                        <img src="assets/search-icon.svg" alt="search-icon">
-                    </button>
-                    <input id="searchPengampuInput" type="text" placeholder="Cari Judul Buku...">
-                </form>
-            </div> -->
+        <section class="first-section">
+            <div class="pengampu-list-section">
+                <!-- <div class="search-bar">
+                    <form id="searchPengampu" autocomplete="off">
+                        <button id="searchSubmit" type="submit">
+                            <img src="assets/search-icon.svg" alt="search-icon">
+                        </button>
+                        <input id="searchPengampuInput" type="text" placeholder="Cari Judul Buku...">
+                    </form>
+                </div> -->
 
-            <div class="tabel-daftar-pengampu">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <td scope="col">No</td>
-                            <td scope="col">Nama Mata Kuliah</td>
-                            <td scope="col">Nama Dosen</td>
-                            <td scope="col">Kelas</td>
-                            <td scope="col">Aksii</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- <tr>
-                            <td scope="row">1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">2</td>
-                            <td>Jacob</td>
-                            <td>tdornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">3</td>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr> -->
-                    </tbody>
-                </table>
+                <div class="tabel-daftar-pengampu">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td scope="col">No</td>
+                                <td scope="col">Nama Mata Kuliah</td>
+                                <td scope="col">Nama Dosen</td>
+                                <td scope="col">Kelas</td>
+                                <td scope="col">Aksii</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <tr>
+                                <td scope="row">1</td>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">2</td>
+                                <td>Jacob</td>
+                                <td>tdornton</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">3</td>
+                                <td colspan="2">Larry the Bird</td>
+                                <td>@twitter</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <h3>Masukkan Data Perkuliahan</h3>
+                <form id="inputPengampu" autocomplete="off">
+                    <div class="input">
+                        <input id="inputCourseName" type="text" placeholder="Mata Kuliah" required>
+                    </div>
+                    <div class="input">
+                        <input id="inputLecturerName" type="text" placeholder="Dosen" required>
+                    </div>
+                    <div class="input">
+                        <input id="inputClassName" type="text" placeholder="Kelas" required>
+                    </div>
+                    <div class="input">
+                        <select id="inputJenisMatkul" required>
+                            <option value="" selected disabled hidden>Jenis Matkul</option>
+                            <option value="teori">Teori</option>
+                            <option value="praktikum">Praktikum</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputKategoriKelas" required>
+                            <option value="" selected disabled hidden>Kategori Kelas</option>
+                            <option value="reguler">Reguler</option>
+                            <option value="malam">Malam</option>
+                            <option value="ekstensi">Ekstensi</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputFakultas" required>
+                            <option value="" selected disabled hidden>Fakultas</option>
+                            <option value="ilkom">Ilmu Komputer</option>
+                            <option value="hukum">Hukum dan Ilmu Sosial</option>
+                        </select>
+                    </div>
+                    <button id="pengampuSubmitBtn" type="submit">Simpan Data Pengampu</button>
+                </form>
             </div>
         </section>
 
-        <section class="input-section">
-            <h3>Masukkan Data Perkuliahan</h3>
-            <form id="inputPengampu" autocomplete="off">
-                <div class="input">
-                    <input id="inputCourseName" type="text" placeholder="Mata Kuliah" required>
-                </div>
-                <div class="input">
-                    <input id="inputLecturerName" type="text" placeholder="Dosen" required>
-                </div>
-                <div class="input">
-                    <input id="inputClassName" type="text" placeholder="Kelas" required>
-                </div>
-                <div class="input">
-                    <select id="inputJenisMatkul" required>
-                        <option value="" selected disabled hidden>Jenis Matkul</option>
-                        <option value="teori">Teori</option>
-                        <option value="praktikum">Praktikum</option>
-                    </select>
-                </div>
-                <div class="input">
-                    <select id="inputKategoriKelas" required>
-                        <option value="" selected disabled hidden>Kategori Kelas</option>
-                        <option value="reguler">Reguler</option>
-                        <option value="malam">Malam</option>
-                        <option value="ekstensi">Ekstensi</option>
-                    </select>
-                </div>
-                <div class="input">
-                    <select id="inputFakultas" required>
-                        <option value="" selected disabled hidden>Fakultas</option>
-                        <option value="ilkom">Ilmu Komputer</option>
-                        <option value="hukum">Hukum dan Ilmu Sosial</option>
-                    </select>
-                </div>
-                <button id="pengampuSubmitBtn" type="submit">Simpan Data Pengampu</button>
-            </form>
+        <div class="proses-jadwal-btn-container">
+            <button type="button" class="proses-jadwal-btn">
+                Proses Jadwal
+            </button>
+        </div>
+
+        <section>
+            <table class="tabel-jadwal">
+                <tr>
+                    <th rowspan="2" colspan="2">Hari/Jam</th>
+                    <th colspan="11">Ruangan</th>
+                </tr>
+                <tr>
+                    <th>205</th>
+                    <th>101</th>
+                    <th>305</th>
+                    <th>306</th>
+                    <th>402</th>
+                    <th>403</th>
+                    <th>404</th>
+                    <th>FHIS 01</th>
+                    <th>Pasca Lt.1</th>
+                    <th>Lab 1</th>
+                    <th>Lab 2</th>
+                </tr>
+                <tr class="tabel-senin"> <!-- row 2 di tabelJadwal  -->
+                    <th class="day" rowspan="6">Senin</th>
+                    <th class="time">08:00-10:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-senin">
+                    <th class="time">10:00-12:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-senin">
+                    <th class="time">13:00-15:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-senin">
+                    <th class="time">15:00-17:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-senin">
+                    <th class="time">17:00-19:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-senin">
+                    <th class="time">19:00-21:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr class="tabel-selasa">
+                    <th class="day" rowspan="6">Selasa</th>
+                    <th class="time">08:00-10:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">10:00-12:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">13:00-15:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">15:00-17:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">17:00-19:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">19:00-21:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr class="tabel-rabu">
+                    <th class="day" rowspan="6">Rabu</th>
+                    <th class="time">08:00-10:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-rabu">
+                    <th class="time">10:00-12:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-rabu">
+                    <th class="time">13:00-15:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-rabu">
+                    <th class="time">15:00-17:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-rabu">
+                    <th class="time">17:00-19:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-rabu">
+                    <th class="time">19:00-21:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr class="tabel-kamis">
+                    <th class="day" rowspan="6">Kamis</th>
+                    <th class="time">08:00-10:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">10:00-12:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">13:00-15:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">15:00-17:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">17:00-19:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">19:00-21:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr class="tabel-jumat">
+                    <th class="day" rowspan="6">Jumat</th>
+                    <th class="time">08:00-10:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-jumat">
+                    <th class="time">10:00-12:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-jumat">
+                    <th class="time">13:00-15:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-jumat">
+                    <th class="time">15:00-17:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-jumat">
+                    <th class="time">17:00-19:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-jumat">
+                    <th class="time">19:00-21:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr class="tabel-sabtu">
+                    <th class="day" rowspan="6">Sabtu</th>
+                    <th class="time">08:00-10:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">10:00-12:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">13:00-15:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">15:00-17:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">17:00-19:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="time">19:00-21:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr class="tabel-minggu">
+                    <th class="day" rowspan="6">Minggu</th>
+                    <th class="time">08:00-10:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-minggu">
+                    <th class="time">10:00-12:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-minggu">
+                    <th class="time">13:00-15:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-minggu">
+                    <th class="time">15:00-17:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-minggu">
+                    <th class="time">17:00-19:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="tabel-minggu">
+                    <th class="time">19:00-21:00</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
         </section>
     </main>
-
-    <section>
-        <button type="button" class="btn btn-primary proses-jadwal-btn">
-            Proses Jadwal
-        </button>
-
-    </section>
-
-    <section>
-        <table class="tabel-jadwal">
-            <tr>
-                <th rowspan="2" colspan="2">Hari/Jam</th>
-                <th colspan="11">Ruangan</th>
-            </tr>
-            <tr>
-                <th>205</th>
-                <th>101</th>
-                <th>305</th>
-                <th>306</th>
-                <th>402</th>
-                <th>403</th>
-                <th>404</th>
-                <th>FHIS 01</th>
-                <th>Pasca Lt.1</th>
-                <th>Lab 1</th>
-                <th>Lab 2</th>
-            </tr>
-            <tr> <!-- row 2 di tabelJadwal  -->
-                <th class="day" rowspan="6">Senin</th>
-                <th class="time">08:00-10:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">10:00-12:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">13:00-15:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">15:00-17:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">17:00-19:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">19:00-21:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <th class="day" rowspan="6">Selasa</th>
-                <th class="time">08:00-10:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">10:00-12:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">13:00-15:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">15:00-17:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">17:00-19:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">19:00-21:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <th class="day" rowspan="6">Rabu</th>
-                <th class="time">08:00-10:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">10:00-12:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">13:00-15:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">15:00-17:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">17:00-19:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">19:00-21:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <th class="day" rowspan="6">Kamis</th>
-                <th class="time">08:00-10:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">10:00-12:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">13:00-15:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">15:00-17:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">17:00-19:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">19:00-21:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <th class="day" rowspan="6">Jumat</th>
-                <th class="time">08:00-10:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">10:00-12:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">13:00-15:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">15:00-17:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">17:00-19:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">19:00-21:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <th class="day" rowspan="6">Sabtu</th>
-                <th class="time">08:00-10:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">10:00-12:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">13:00-15:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">15:00-17:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">17:00-19:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">19:00-21:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <th class="day" rowspan="6">Minggu</th>
-                <th class="time">08:00-10:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">10:00-12:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">13:00-15:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">15:00-17:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">17:00-19:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class="time">19:00-21:00</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-    </section>
-
-    <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-    </button> -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editModalLabel">Ubah Data Perkuliahan</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editPengampu" autocomplete="off">
-                        <div class="input">
-                            <input id="editCourseName" type="text" placeholder="Mata Kuliah" required>
-                        </div>
-                        <div class="input">
-                            <input id="editLecturerName" type="text" placeholder="Dosen" required>
-                        </div>
-                        <div class="input">
-                            <input id="editClassName" type="text" placeholder="Kelas" required>
-                        </div>
-                        <div class="input">
-                            <select id="editJenisMatkul" required>
-                                <option value="" selected disabled hidden>Jenis Matkul</option>
-                                <option value="teori">Teori</option>
-                                <option value="praktikum">Praktikum</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="editKategoriKelas" required>
-                                <option value="" selected disabled hidden>Kategori Kelas</option>
-                                <option value="reguler">Reguler</option>
-                                <option value="malam">Malam</option>
-                                <option value="ekstensi">Ekstensi</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="editFakultas" required>
-                                <option value="" selected disabled hidden>Fakultas</option>
-                                <option value="ilkom">Ilmu Komputer</option>
-                                <option value="hukum">Hukum dan Ilmu Sosial</option>
-                            </select>
-                        </div>
-                        <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
-                        <button type="submit" id="pengampuEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
-                    </form>
-                </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" id="pengampuEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
-                </div> -->
-            </div>
-        </div>
-    </div>
 </body>
 </html>

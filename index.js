@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function() {
     loadDataFromStorage();
 });
 
-const prosesJadwalBtn = document.querySelector("section .proses-jadwal-btn");
+const prosesJadwalBtn = document.querySelector(".proses-jadwal-btn");
 prosesJadwalBtn.addEventListener("click", function() {
     // Main aplication
 

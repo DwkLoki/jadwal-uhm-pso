@@ -7,10 +7,50 @@
     font-family: 'Poppins', sans-serif;
 }
 
+/* style untuk header */
+header {
+    display: flex;
+    background-color: #3f73aa;
+    padding: 25px 0px;
+    align-items: center;
+}
+
+.right-section-header {
+    width: 70%;
+}
+
+.left-section-header {
+    width: 30%;
+    display: flex;
+    /* align-items: center; */
+    justify-content: end;
+    padding-right: 40px;
+}
+
+.left-section-header img {
+    width: 130px;
+}
+
+.right-section-header h1 {
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
+}
+
+.right-section-header h2 {
+    font-size: 40px;
+    color: white;
+}
+/* style untuk main */
 main {
+    /* display: flex; */
+    /* width: 100%; */
+    margin: 40px;
+}
+
+.first-section {
     display: flex;
     width: 100%;
-    margin: 0 auto;
 }
 
 /* styling for input section */
@@ -27,7 +67,7 @@ main {
     border: 3px solid #045c84;
     border-radius: 20px;
     padding: 35px;
-    margin: 25px;
+    /* margin: 25px; */
     height: 40%;
 }
 
@@ -87,8 +127,7 @@ main {
 .pengampu-list-section {
     width: 70%;
     border-radius: 20px;
-    padding: 50px 20px;
-    margin: 25px;
+    padding-right: 20px;
 }
 
 #searchPengampu {
@@ -153,7 +192,11 @@ input:-webkit-autofill:active{
     /* max-height: 35px; */
     min-height: 30px;
     min-width: 30px;
-    margin-right: 5px;
+    margin-bottom: 6px;
+}
+
+.edit-btn:hover {
+    background-color: #eed743;
 }
 
 .delete-btn {
@@ -166,21 +209,56 @@ input:-webkit-autofill:active{
     min-width: 30px;
 }
 
+.delete-btn:hover {
+    background-color: #569fec;
+}
+
 /* style untuk tabel jadwal */
+.proses-jadwal-btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.proses-jadwal-btn {
+    font-size: 16px;
+    width: 15%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #719ECE;
+    border: 2px solid #719ECE;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.proses-jadwal-btn:hover {
+    background-color: #3f73aa;
+    border: 2px solid #3f73aa;
+}
+
+/* style untuk tabel jadwal */
+.tabel-daftar-pengampu table td {
+    text-align: center;
+    vertical-align: middle;
+}
 .tabel-jadwal {
     border-collapse: collapse;
     /* font-family: Arial, sans-serif; */
     width: 100%;
+    font-size: 9px;
 }
 
 .tabel-jadwal th, .tabel-jadwal td {
-    border: 1px solid #ddd;
+    border: 2px solid #3f73aa;
     padding: 8px;
     text-align: center;
 }
 
 .tabel-jadwal th {
-    background-color: #f2f2f2;
+    background-color: #a7c0ff;
+    color: #3f73aa;
+    /* color: black; */
+    font-size: 12px;
 }
 
 .tabel-jadwal th.time, .tabel-jadwal th.day {
@@ -189,4 +267,8 @@ input:-webkit-autofill:active{
     white-space: nowrap;
     writing-mode: vertical-rl;
     /* text-orientation: sideways; */
+}
+
+.tabel-senin td, .tabel-rabu td, .tabel-jumat td, .tabel-minggu td {
+    background-color: #e6e6e6;
 }
