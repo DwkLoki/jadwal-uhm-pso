@@ -296,7 +296,7 @@ prosesJadwalBtn.addEventListener("click", function() {
     }
 })
 
-// handle submit
+// handle submit input pengampu
 const inputPengampuForm = document.getElementById("inputPengampu");
 
 inputPengampuForm.addEventListener("submit", function(event) {
