@@ -1,6 +1,8 @@
 const pengampu = [];
+const pesanan = [];
 const particlesToUpdate = [];
 const localStoragePengampu = "PENGAMPU_GENAP";
+const localStoragePesanan = "JADWAL_PESANAN";
 // Definisikan slot waktu, hari dan ruangan yang tersedia
 let slotWaktu = ["08:00-10:00", "10:00-12:00", "13:00-15:00", "15:00-17:00", "17:00-19:00", "19:00-21:00"];
 let hariTersedia = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
@@ -164,6 +166,7 @@ class Particle {
 // load data setiap kali DOM sudah dimuat
 document.addEventListener("DOMContentLoaded", function() {
     loadDataFromStorage();
+    loadDataPesananFromStorage();
 });
 
 const prosesJadwalBtn = document.querySelector(".proses-jadwal-btn");
@@ -179,13 +182,36 @@ prosesJadwalBtn.addEventListener("click", function() {
     let w = 1;
     
     // Initialize the swarm with particles
-    const hasilPenjadwalan = [];
+    const hasilPenjadwalan = []; // menyimpan hasil akhir pembuatan jadwal
     const swarm = [];
 
     // proses #1 inisialisasi/pembangkitan posisi dan velocity partikel
     for (let i = 0; i < jumlahPengampu; i++) {
         const particle = new Particle(pengampu[i]);
         particle.initialize(pengampu[i]);
+        swarm.push(particle);
+    }
+
+    for (let indexPesanan = 0; indexPesanan < pesanan.length; indexPesanan++) {
+        const particle = new Particle(pesanan[indexPesanan]);
+        particle.isSesuaiKriteria = true;
+        particle.position = { 
+            room: Number(pesanan[indexPesanan].ruangan), 
+            time: Number(pesanan[indexPesanan].waktu), 
+            day: Number(pesanan[indexPesanan].hari) 
+        };
+
+        particle.velocity = { 
+            room: Number(pesanan[indexPesanan].ruangan), 
+            time: Number(pesanan[indexPesanan].waktu), 
+            day: Number(pesanan[indexPesanan].hari) 
+        };
+
+        particle.bestPosition = { 
+            room: Number(pesanan[indexPesanan].ruangan), 
+            time: Number(pesanan[indexPesanan].waktu), 
+            day: Number(pesanan[indexPesanan].hari) 
+        };
         swarm.push(particle);
     }
 
@@ -257,6 +283,7 @@ prosesJadwalBtn.addEventListener("click", function() {
 
     // console.log("partikel sudah optimal", swarmSudahOptimal);
     console.log("partikel belum optimal", newSwarmBelumOptimal);
+    // console.log(hasilPenjadwalan.length);
 
     // ------------------------------------------------ //
     //    Menampilkan data jadwal dalam bentuk tabel    //
@@ -338,6 +365,53 @@ inputPengampuForm.addEventListener("submit", function(event) {
     }
 });
 
+// handle submit input pengampu
+const inputPesananForm = document.getElementById("inputPesanan");
+
+inputPesananForm.addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Retrieve form values
+    const pengampuId = +new Date();
+
+    let courseName = document.getElementById("inputPesananCourseName").value;
+    let lecturerName = document.getElementById("inputPesananLecturerName").value;
+    let className = document.getElementById("inputPesananClassName").value;
+    let jenisMatkul = document.getElementById("inputPesananJenisMatkul").value;
+    let kategoriKelas = document.getElementById("inputPesananKategoriKelas").value;
+    let fakultas = document.getElementById("inputPesananFakultas").value;
+    let hari = document.getElementById("inputHari").value;
+    let waktu = document.getElementById("inputWaktu").value;
+    let ruangan = document.getElementById("inputRuangan").value;
+
+    const pesananObject = generatePesananObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan);
+
+    document.getElementById("inputPesananCourseName").value = null;
+    document.getElementById("inputPesananLecturerName").value = null;
+    document.getElementById("inputPesananClassName").value = null;
+    document.getElementById("inputPesananJenisMatkul").value = '';
+    document.getElementById("inputPesananKategoriKelas").value = '';
+    document.getElementById("inputPesananFakultas").value = '';
+    document.getElementById("inputHari").value = '';
+    document.getElementById("inputWaktu").value = '';
+    document.getElementById("inputRuangan").value = '';
+
+
+    pesanan.push(pesananObject);
+    saveDataPesanan();
+
+    console.log(pesanan);
+
+    // menampilkan semua data pada array pesanan dalam bentuk baris tabel
+    const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
+    tabelDaftarPesanan.innerHTML = '';
+
+    for (const pesananItem of pesanan) {
+        const newPesananElement = generatePesananElement(pesananItem);
+        tabelDaftarPesanan.append(newPesananElement);
+    }
+});
+
 // define all function here
 function generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
     return {
@@ -348,6 +422,21 @@ function generatePengampuObject(pengampuId, courseName, lecturerName, className,
         jenisMatkul,
         kategoriKelas,
         fakultas
+    }
+}
+
+function generatePesananObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan) {
+    return {
+        pengampuId,
+        courseName,
+        lecturerName,
+        className,
+        jenisMatkul,
+        kategoriKelas,
+        fakultas,
+        hari,
+        waktu,
+        ruangan
     }
 }
 
@@ -411,9 +500,74 @@ function generatePengampuElement(pengampuObject) {
     return dataPengampuElement;
 }
 
+function generatePesananElement(pesananObject) {
+    const logoEditBtn = document.createElement("i");
+    logoEditBtn.classList.add("bi", "bi-pencil-square");
+
+    const logoDeleteBtn = document.createElement("i");
+    logoDeleteBtn.classList.add("bi", "bi-trash");
+
+    const editBtn = document.createElement("button");
+    editBtn.classList.add("edit-btn");
+    editBtn.setAttribute("type", "button");
+    editBtn.setAttribute("data-bs-toggle", "modal");
+    editBtn.setAttribute("data-bs-target", "#editModal");
+    editBtn.append(logoEditBtn);
+    // editBtn.addEventListener("click", function(e) {
+    //     handleEditButton(pengampuObject.pengampuId);
+    // })
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.append(logoDeleteBtn);
+    deleteBtn.addEventListener("click", function() {
+        const selectedPesanan = pesanan.indexOf(pesananObject);
+        pesanan.splice(selectedPesanan, 1);
+
+        const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
+        tabelDaftarPesanan.innerHTML = '';
+
+        for (const pesananItem of pesanan) {
+            const newPesananElement = generatePesananElement(pesananItem);
+            tabelDaftarPesanan.append(newPesananElement);
+        }
+
+        saveDataPesanan();
+    })
+
+    const btnContainer = document.createElement("div");
+    btnContainer.classList.add("action-btn");
+    btnContainer.append(editBtn, deleteBtn);
+
+    const dataKolomAksi = document.createElement("td");
+    dataKolomAksi.append(btnContainer);
+
+    const dataKolomKelas = document.createElement("td");
+    dataKolomKelas.innerText = pesananObject.className;
+
+    const dataKolomDosen = document.createElement("td");
+    dataKolomDosen.innerText = pesananObject.lecturerName;
+
+    const dataKolomMatkul = document.createElement("td");
+    dataKolomMatkul.innerText = pesananObject.courseName;
+
+    const dataKolomNomor = document.createElement("td");
+    dataKolomNomor.innerText = pesanan.indexOf(pesananObject) + 1; //mendapatkan indeks sebuah array
+
+    const dataPesananElement = document.createElement("tr");
+    dataPesananElement.append(dataKolomNomor, dataKolomMatkul, dataKolomDosen, dataKolomKelas, dataKolomAksi);
+
+    return dataPesananElement;
+}
+
 function saveDataPengampu() {
     const dataJson = JSON.stringify(pengampu);
     localStorage.setItem(localStoragePengampu, dataJson);
+}
+
+function saveDataPesanan() {
+    const dataJson = JSON.stringify(pesanan);
+    localStorage.setItem(localStoragePesanan, dataJson);
 }
 
 function loadDataFromStorage() {
@@ -434,6 +588,27 @@ function loadDataFromStorage() {
     for (const pengampuItem of pengampu) {
         const newPengampuElement = generatePengampuElement(pengampuItem);
         tabelDaftarPengampu.append(newPengampuElement);
+    }
+}
+
+function loadDataPesananFromStorage() {
+    const serializedData = localStorage.getItem(localStoragePesanan);
+    
+    let data = JSON.parse(serializedData);
+    
+    if(data !== null){
+        for(let pesananItem of data){
+            pesanan.push(pesananItem);
+        }
+    }
+
+    // menampilkan semua data pada array pengampu dalam bentuk baris tabel
+    const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
+    tabelDaftarPesanan.innerHTML = '';
+
+    for (const pesananItem of pesanan) {
+        const newPesananElement = generatePesananElement(pesananItem);
+        tabelDaftarPesanan.append(newPesananElement);
     }
 }
 

@@ -24,47 +24,50 @@
     </header>
     <main>
         <section class="first-section">
-            <div class="pengampu-list-section">
-                <!-- <div class="search-bar">
-                    <form id="searchPengampu" autocomplete="off">
-                        <button id="searchSubmit" type="submit">
-                            <img src="assets/search-icon.svg" alt="search-icon">
-                        </button>
-                        <input id="searchPengampuInput" type="text" placeholder="Cari Judul Buku...">
-                    </form>
-                </div> -->
+            <div class="pengampu-list-container">
+                <div class="pengampu-list-section">
+                    <!-- <div class="search-bar">
+                        <form id="searchPengampu" autocomplete="off">
+                            <button id="searchSubmit" type="submit">
+                                <img src="assets/search-icon.svg" alt="search-icon">
+                            </button>
+                            <input id="searchPengampuInput" type="text" placeholder="Cari Judul Buku...">
+                        </form>
+                    </div> -->
 
-                <div class="tabel-daftar-pengampu">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <td scope="col">No</td>
-                                <td scope="col">Nama Mata Kuliah</td>
-                                <td scope="col">Nama Dosen</td>
-                                <td scope="col">Kelas</td>
-                                <td scope="col">Aksii</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- <tr>
-                                <td scope="row">1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <td scope="row">2</td>
-                                <td>Jacob</td>
-                                <td>tdornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <td scope="row">3</td>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                            </tr> -->
-                        </tbody>
-                    </table>
+                    <div class="tabel-daftar-pengampu">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td scope="col">No</td>
+                                    <td scope="col">Nama Mata Kuliah</td>
+                                    <td scope="col">Nama Dosen</td>
+                                    <td scope="col">Kelas</td>
+                                    <td scope="col">Aksi</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="pesanan-list-section">
+                    <h3>Daftar Jadwal Pesanan</h3>
+                    <div class="tabel-daftar-pengampu">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td scope="col">No</td>
+                                    <td scope="col">Nama Mata Kuliah</td>
+                                    <td scope="col">Nama Dosen</td>
+                                    <td scope="col">Kelas</td>
+                                    <td scope="col">Aksi</td>
+                                </tr>
+                            </thead>
+                            <tbody class="daftar-pesanan">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -111,23 +114,23 @@
                     <h3>Masukkan Jadwal Pesanan</h3>
                     <form id="inputPesanan" autocomplete="off">
                         <div class="input">
-                            <input id="inputCourseName" type="text" placeholder="Mata Kuliah" required>
+                            <input id="inputPesananCourseName" type="text" placeholder="Mata Kuliah" required>
                         </div>
                         <div class="input">
-                            <input id="inputLecturerName" type="text" placeholder="Dosen" required>
+                            <input id="inputPesananLecturerName" type="text" placeholder="Dosen" required>
                         </div>
                         <div class="input">
-                            <input id="inputClassName" type="text" placeholder="Kelas" required>
+                            <input id="inputPesananClassName" type="text" placeholder="Kelas" required>
                         </div>
                         <div class="input">
-                            <select id="inputJenisMatkul" required>
+                            <select id="inputPesananJenisMatkul" required>
                                 <option value="" selected disabled hidden>Jenis Matkul</option>
                                 <option value="teori">Teori</option>
                                 <option value="praktikum">Praktikum</option>
                             </select>
                         </div>
                         <div class="input">
-                            <select id="inputKategoriKelas" required>
+                            <select id="inputPesananKategoriKelas" required>
                                 <option value="" selected disabled hidden>Kategori Kelas</option>
                                 <option value="reguler">Reguler</option>
                                 <option value="malam">Malam</option>
@@ -135,7 +138,7 @@
                             </select>
                         </div>
                         <div class="input">
-                            <select id="inputFakultas" required>
+                            <select id="inputPesananFakultas" required>
                                 <option value="" selected disabled hidden>Fakultas</option>
                                 <option value="ilkom">Ilmu Komputer</option>
                                 <option value="hukum">Hukum dan Ilmu Sosial</option>

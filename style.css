@@ -131,10 +131,21 @@ main {
 }
 
 /* styling for pengampu section */
-.pengampu-list-section {
+.pengampu-list-container {
     width: 70%;
+}
+
+.pengampu-list-section {
+    width: 100%;
     border-radius: 20px;
     padding-right: 20px;
+}
+
+.pesanan-list-section {
+    width: 100%;
+    border-radius: 20px;
+    padding-right: 20px;
+    margin-top: 40px;
 }
 
 #searchPengampu {
