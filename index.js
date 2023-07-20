@@ -365,7 +365,7 @@ inputPengampuForm.addEventListener("submit", function(event) {
     }
 });
 
-// handle submit input pengampu
+// handle submit input pesanan
 const inputPesananForm = document.getElementById("inputPesanan");
 
 inputPesananForm.addEventListener("submit", function(event) {
@@ -411,6 +411,12 @@ inputPesananForm.addEventListener("submit", function(event) {
         tabelDaftarPesanan.append(newPesananElement);
     }
 });
+
+// handle download button
+const downloadBtn = document.querySelector(".download-jadwal-btn");
+downloadBtn.addEventListener("click", function() {
+    exportTableToPdf();
+})
 
 // define all function here
 function generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
@@ -611,6 +617,14 @@ function loadDataPesananFromStorage() {
         tabelDaftarPesanan.append(newPesananElement);
     }
 }
+
+function exportTableToPdf() {
+    const fileName = 'jadwal.' + 'xls'
+    const table = document.getElementById("tabel-jadwal")
+    const wb = XLSX.utils.table_to_book(table)
+    XLSX.writeFile(wb, fileName)
+}
+
 
 // handle edit button pengampu
 function handleEditButton(pengampuId) {

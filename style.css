@@ -146,6 +146,7 @@ main {
     border-radius: 20px;
     padding-right: 20px;
     margin-top: 40px;
+    margin-bottom: 80px;
 }
 
 #searchPengampu {
@@ -237,7 +238,7 @@ input:-webkit-autofill:active{
     justify-content: center;
 }
 
-.proses-jadwal-btn {
+.proses-jadwal-btn, .download-jadwal-btn {
     font-size: 16px;
     width: 15%;
     padding: 10px;
@@ -246,10 +247,10 @@ input:-webkit-autofill:active{
     border: 2px solid #719ECE;
     color: white;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin: 10px 15px 20px;
 }
 
-.proses-jadwal-btn:hover {
+.proses-jadwal-btn:hover, .download-jadwal-btn:hover {
     background-color: #3f73aa;
     border: 2px solid #3f73aa;
 }
