@@ -358,11 +358,15 @@ inputPengampuForm.addEventListener("submit", function(event) {
     // menampilkan semua data pada array pengampu dalam bentuk baris tabel
     const tabelDaftarPengampu = document.querySelector("tbody");
     tabelDaftarPengampu.innerHTML = '';
+    $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
+    $('#timetabling tbody').empty(); // Menghapus semua baris yang ada di tbody
 
     for (const pengampuItem of pengampu) {
         const newPengampuElement = generatePengampuElement(pengampuItem);
         tabelDaftarPengampu.append(newPengampuElement);
     }
+
+    new DataTable('#timetabling');
 });
 
 // handle submit input pesanan
@@ -472,11 +476,15 @@ function generatePengampuElement(pengampuObject) {
 
         const tabelDaftarPengampu = document.querySelector("tbody");
         tabelDaftarPengampu.innerHTML = '';
+        $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
+        $('#timetabling tbody').empty(); // Menghapus semua baris yang ada di tbody
 
         for (const pengampuItem of pengampu) {
             const newPengampuElement = generatePengampuElement(pengampuItem);
             tabelDaftarPengampu.append(newPengampuElement);
         }
+
+        new DataTable('#timetabling');
 
         saveDataPengampu();
     })
@@ -580,7 +588,7 @@ function loadDataFromStorage() {
     const serializedData = localStorage.getItem(localStoragePengampu);
     
     let data = JSON.parse(serializedData);
-    
+
     if(data !== null){
         for(let pengampuItem of data){
             pengampu.push(pengampuItem);
@@ -590,11 +598,15 @@ function loadDataFromStorage() {
     // menampilkan semua data pada array pengampu dalam bentuk baris tabel
     const tabelDaftarPengampu = document.querySelector("tbody");
     tabelDaftarPengampu.innerHTML = '';
+    $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
+    $('#timetabling tbody').empty(); // Menghapus semua baris yang ada di tbody
 
     for (const pengampuItem of pengampu) {
         const newPengampuElement = generatePengampuElement(pengampuItem);
         tabelDaftarPengampu.append(newPengampuElement);
     }
+
+    new DataTable('#timetabling');
 }
 
 function loadDataPesananFromStorage() {
@@ -618,12 +630,16 @@ function loadDataPesananFromStorage() {
     }
 }
 
+// ekspor hasil penjadwalan ke excel
 function exportTableToPdf() {
     const fileName = 'jadwal.' + 'xls'
     const table = document.getElementById("tabel-jadwal")
     const wb = XLSX.utils.table_to_book(table)
     XLSX.writeFile(wb, fileName)
 }
+
+// data table pagination
+// new DataTable('#timetabling');
 
 
 // handle edit button pengampu
