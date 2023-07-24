@@ -339,6 +339,12 @@ inputPengampuForm.addEventListener("submit", function(event) {
     let kategoriKelas = document.getElementById("inputKategoriKelas").value;
     let fakultas = document.getElementById("inputFakultas").value;
 
+    // Check if the same schedule already exists
+    if (isJadwalPengampuExists(courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas)) {
+        alert(`Data pengampu yang anda masukkan sudah ada.`);
+        return;
+    }
+
     const pengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas);
 
     document.getElementById("inputCourseName").value = null;
@@ -387,6 +393,13 @@ inputPesananForm.addEventListener("submit", function(event) {
     let hari = document.getElementById("inputHari").value;
     let waktu = document.getElementById("inputWaktu").value;
     let ruangan = document.getElementById("inputRuangan").value;
+
+    
+    // Check if the same schedule already exists
+    if (isJadwalPesananExists(hari, waktu, ruangan)) {
+        alert(`Jadwal pada Hari, Pukul dan di Ruangan tersebut sudah terisi.`);
+        return;
+    }
 
     const pesananObject = generatePesananObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan);
 
@@ -638,8 +651,27 @@ function exportTableToPdf() {
     XLSX.writeFile(wb, fileName)
 }
 
-// data table pagination
-// new DataTable('#timetabling');
+// form validation
+function isJadwalPesananExists(hari, waktu, ruangan) {
+    return pesanan.some(
+        (item) =>
+        item.hari === hari &&
+        item.waktu === waktu &&
+        item.ruangan === ruangan
+    );
+}
+
+function isJadwalPengampuExists(courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
+    return pengampu.some(
+        (item) =>
+        item.courseName === courseName &&
+        item.lecturerName === lecturerName &&
+        item.className === className &&
+        item.jenisMatkul === jenisMatkul &&
+        item.kategoriKelas === kategoriKelas &&
+        item.fakultas === fakultas
+    );
+}
 
 
 // handle edit button pengampu
