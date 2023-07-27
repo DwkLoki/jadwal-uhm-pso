@@ -430,7 +430,7 @@ inputPesananForm.addEventListener("submit", function(event) {
 });
 
 // handle download button
-const downloadBtn = document.querySelector(".download-jadwal-btn");
+const downloadBtn = document.querySelector("#download-jadwal-btn");
 downloadBtn.addEventListener("click", function() {
     exportTableToPdf();
 })
@@ -644,12 +644,154 @@ function loadDataPesananFromStorage() {
 }
 
 // ekspor hasil penjadwalan ke excel
+// function exportTableToPdf() {
+//     const tabelJadwal = document.getElementById("tabel-jadwal");
+//     const { jsPDF } = window.jspdf;
+
+//     domtoimage.toPng(tabelJadwal)
+//         .then(function (dataUrl) {
+//             const img = new Image();
+//             img.src = dataUrl;
+
+//             // // document.body.appendChild(img);
+
+//             // Membuat PDF dengan jsPDF
+//             const pdf = new jsPDF({
+//                 orientation: "landscape",
+//                 unit: "pt",
+//                 // format: [800, 277] // Menyesuaikan tinggi halaman dengan tinggi tabel
+//             });
+//             pdf.addImage(img, "PNG", 10, 10, 277, 0); // Menyesuaikan ukuran dan posisi gambar di PDF
+//             // pdf.addImage(dataUrl, 'PNG', 10, 10, 277, 0); // A4 size
+//             pdf.save("jadwal.pdf");
+//         })
+//         .catch(function (error) {
+//             console.error('Error capturing table:', error);
+//         });
+
+//     // html2canvas(document.querySelector("#tabel-jadwal")).then(canvas => {
+//     //     document.body.appendChild(canvas);
+//     // })
+
+//     // html2canvas($('#tabel-jadwal')[0], {
+//     //     onrendered: function (canvas) {
+//     //         var data = canvas.toDataURL();
+//     //         var docDefinition = {
+//     //             content: [{
+//     //                 image: data,
+//     //                 width: 500,
+//     //                 fit: [590, 100000]
+//     //             }]
+//     //         };
+//     //         pdfMake.createPdf(docDefinition).download("jadwal perkuliahan.pdf");
+//     //     }
+//     // });
+// }
+
 function exportTableToPdf() {
-    const fileName = 'jadwal.' + 'xls'
-    const table = document.getElementById("tabel-jadwal")
-    const wb = XLSX.utils.table_to_book(table)
-    XLSX.writeFile(wb, fileName)
+    const { jsPDF } = window.jspdf;
+
+    // Buat elemen induk sebagai wadah
+    const container = document.createElement("div");
+
+    const elem1 = document.querySelector(".tabel-header");
+    const elem2 = document.querySelector(".tabel-header2");
+    const elem3 = document.querySelectorAll("tr.tabel-senin");
+    const elem4 = document.querySelectorAll("tr.tabel-selasa");
+    const elem5 = document.querySelectorAll("tr.tabel-rabu");
+    const elem6 = document.querySelectorAll("tr.tabel-kamis");
+    const elem7 = document.querySelectorAll("tr.tabel-jumat");
+    const elem8 = document.querySelectorAll("tr.tabel-sabtu");
+    const elem9 = document.querySelectorAll("tr.tabel-minggu");
+    const arrayElem3 = Array.from(elem3);
+    const arrayElem4 = Array.from(elem4);
+    const arrayElem5 = Array.from(elem5);
+    const arrayElem6 = Array.from(elem6);
+    const arrayElem7 = Array.from(elem7);
+    const arrayElem8 = Array.from(elem8);
+    const arrayElem9 = Array.from(elem9);
+    
+    // Sisipkan elemen-elemen ke dalam elemen induk (container)
+    container.appendChild(elem1.cloneNode(true));
+    container.appendChild(elem2.cloneNode(true));
+    arrayElem3.forEach((elem) => {
+        container.appendChild(elem.cloneNode(true));
+    });
+    console.log(arrayElem3);
+
+    Promise.all([
+        domtoimage.toPng(elem1),
+        domtoimage.toPng(elem2),
+        domtoimage.toPng(arrayElem3[0]),
+        domtoimage.toPng(arrayElem3[1]),
+        domtoimage.toPng(arrayElem3[2]),
+        domtoimage.toPng(arrayElem3[3]),
+        domtoimage.toPng(arrayElem3[4]),
+        domtoimage.toPng(arrayElem3[5]),
+        domtoimage.toPng(arrayElem4[0]),
+        domtoimage.toPng(arrayElem4[1]),
+        domtoimage.toPng(arrayElem4[2]),
+        domtoimage.toPng(arrayElem4[3]),
+        domtoimage.toPng(arrayElem4[4]),
+        domtoimage.toPng(arrayElem4[5]),
+        domtoimage.toPng(arrayElem5[0]),
+        domtoimage.toPng(arrayElem5[1]),
+        domtoimage.toPng(arrayElem5[2]),
+        domtoimage.toPng(arrayElem5[3]),
+        domtoimage.toPng(arrayElem5[4]),
+        domtoimage.toPng(arrayElem5[5]),
+        domtoimage.toPng(arrayElem6[0]),
+        domtoimage.toPng(arrayElem6[1]),
+        domtoimage.toPng(arrayElem6[2]),
+        domtoimage.toPng(arrayElem6[3]),
+        domtoimage.toPng(arrayElem6[4]),
+        domtoimage.toPng(arrayElem6[5]),
+        domtoimage.toPng(arrayElem7[0]),
+        domtoimage.toPng(arrayElem7[1]),
+        domtoimage.toPng(arrayElem7[2]),
+        domtoimage.toPng(arrayElem7[3]),
+        domtoimage.toPng(arrayElem7[4]),
+        domtoimage.toPng(arrayElem7[5]),
+        domtoimage.toPng(arrayElem8[0]),
+        domtoimage.toPng(arrayElem8[1]),
+        domtoimage.toPng(arrayElem8[2]),
+        domtoimage.toPng(arrayElem8[3]),
+        domtoimage.toPng(arrayElem8[4]),
+        domtoimage.toPng(arrayElem8[5]),
+        domtoimage.toPng(arrayElem9[0]),
+        domtoimage.toPng(arrayElem9[1]),
+        domtoimage.toPng(arrayElem9[2]),
+        domtoimage.toPng(arrayElem9[3]),
+        domtoimage.toPng(arrayElem9[4]),
+        domtoimage.toPng(arrayElem9[5])
+    ])
+    .then(function (dataUrlArray) {
+        console.log(dataUrlArray);
+        const pdf = new jsPDF({
+            orientation: "landscape"
+        });
+
+        let yPosition = 15;
+
+        // Fungsi untuk menambahkan gambar tabel ke halaman PDF
+        for (let i = 0; i < 7; i++) {
+            pdf.addImage(dataUrlArray[i], 'PNG', 10, yPosition, 277, 0);
+            yPosition += 10;
+        }
+
+        pdf.addPage()
+
+        for (let i = 7; i < 13; i++) {
+            pdf.addImage(dataUrlArray[i], 'PNG', 10, 10, 277, 0);
+        }
+
+        // pdf.save("jadwal.pdf");
+    })
+    .catch(function (error) {
+        console.error('Error capturing elements:', error);
+    });
 }
+
 
 // form validation
 function isJadwalPesananExists(hari, waktu, ruangan) {
