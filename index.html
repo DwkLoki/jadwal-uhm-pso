@@ -52,7 +52,7 @@
                                     <td scope="col">Aksi</td>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="daftar-pengampu">
                             </tbody>
                         </table>
                     </div>
@@ -852,7 +852,7 @@
             </div>
         </div> -->
 
-        <!-- Modal -->
+        <!-- Modal untuk edit pesanan -->
         <div class="modal fade" id="editPesananModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -934,6 +934,55 @@
                             </div>
                             <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
                             <button type="submit" id="pesananEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal untuk edit pengampu -->
+        <div class="modal fade" id="editPengampuModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="editModalLabel">Ubah Data Perkuliahan</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editPengampuForm" autocomplete="off">
+                            <div class="input">
+                                <input id="inputPengampuCourseNameModal" type="text" placeholder="Mata Kuliah" required>
+                            </div>
+                            <div class="input">
+                                <input id="inputPengampuLecturerNameModal" type="text" placeholder="Dosen" required>
+                            </div>
+                            <div class="input">
+                                <input id="inputPengampuClassNameModal" type="text" placeholder="Kelas" required>
+                            </div>
+                            <div class="input">
+                                <select id="inputPengampuJenisMatkulModal" required>
+                                    <option value="" selected disabled hidden>Jenis Matkul</option>
+                                    <option value="teori">Teori</option>
+                                    <option value="praktikum">Praktikum</option>
+                                </select>
+                            </div>
+                            <div class="input">
+                                <select id="inputPengampuKategoriKelasModal" required>
+                                    <option value="" selected disabled hidden>Kategori Kelas</option>
+                                    <option value="reguler">Reguler</option>
+                                    <option value="malam">Malam</option>
+                                    <option value="ekstensi">Ekstensi</option>
+                                </select>
+                            </div>
+                            <div class="input">
+                                <select id="inputPengampuFakultasModal" required>
+                                    <option value="" selected disabled hidden>Fakultas</option>
+                                    <option value="ilkom">Ilmu Komputer</option>
+                                    <option value="hukum">Hukum dan Ilmu Sosial</option>
+                                </select>
+                            </div>
+                            <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
+                            <button type="submit" id="pengampuEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
                         </form>
                     </div>
                 </div>

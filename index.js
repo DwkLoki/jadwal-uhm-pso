@@ -463,6 +463,19 @@ function generatePesananObject(pengampuId, courseName, lecturerName, className, 
     }
 }
 
+// Event delegation untuk tombol "Edit pesanan"
+let selectedPengampu = null;
+
+const tablePengampuContainer = document.querySelector("tbody.daftar-pengampu"); // Gantikan "container" dengan elemen induk yang sesuai
+tablePengampuContainer.addEventListener("click", function(event) {
+    if (event.target.matches("i.bi.bi-pencil-square")) {
+        const rowIndex = event.target.closest("tr").rowIndex;
+        selectedPengampu = pengampu[rowIndex - 1]; // Kurangi 1 karena indeks dimulai dari 0
+        // console.log(selectedPesanan);
+        handleEditPengampuButton(selectedPengampu);
+    }
+});
+
 function generatePengampuElement(pengampuObject) {
     const logoEditBtn = document.createElement("i");
     logoEditBtn.classList.add("bi", "bi-pencil-square");
@@ -473,8 +486,8 @@ function generatePengampuElement(pengampuObject) {
     const editBtn = document.createElement("button");
     editBtn.classList.add("edit-btn");
     editBtn.setAttribute("type", "button");
-    editBtn.setAttribute("data-bs-toggle", "modal");
-    editBtn.setAttribute("data-bs-target", "#editModal");
+    // editBtn.setAttribute("data-bs-toggle", "modal");
+    // editBtn.setAttribute("data-bs-target", "#editModal");
     editBtn.append(logoEditBtn);
     // editBtn.addEventListener("click", function(e) {
     //     handleEditButton(pengampuObject.pengampuId);
@@ -1027,4 +1040,59 @@ saveBtn.addEventListener("click", function(e) {
         const newPesananElement = generatePesananElement(pesananItem);
         tabelDaftarPesanan.append(newPesananElement);
     }
+});
+
+// fungsi untuk handle edit pengampu
+function handleEditPengampuButton(selectedPengampu) {
+    // Tampilkan data pesanan di dalam modal
+    document.getElementById("inputPengampuCourseNameModal").value = selectedPengampu.courseName;
+    document.getElementById("inputPengampuLecturerNameModal").value = selectedPengampu.lecturerName;
+    document.getElementById("inputPengampuClassNameModal").value = selectedPengampu.className;
+    document.getElementById("inputPengampuJenisMatkulModal").value = selectedPengampu.jenisMatkul;
+    document.getElementById("inputPengampuKategoriKelasModal").value = selectedPengampu.kategoriKelas;
+    document.getElementById("inputPengampuFakultasModal").value = selectedPengampu.fakultas;
+
+    console.log("ter klik");
+
+    // Tampilkan modal
+    const editPengampuModal = new bootstrap.Modal(document.getElementById('editPengampuModal'));
+    editPengampuModal.show();
+}
+
+// Menangani klik tombol "Save" pada modal
+const savePengampuBtn = document.getElementById("pengampuEditBtn");
+savePengampuBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    console.log("ter klik save");
+    // Ambil nilai-nilai dari input di dalam modal
+    const newCourseName = document.getElementById("inputPengampuCourseNameModal").value;
+    const newLecturerName = document.getElementById("inputPengampuLecturerNameModal").value;
+    const newClassName = document.getElementById("inputPengampuClassNameModal").value;
+    const newJenisMatkul = document.getElementById("inputPengampuJenisMatkulModal").value;
+    const newKategoriKelas = document.getElementById("inputPengampuKategoriKelasModal").value;
+    const newFakultas = document.getElementById("inputPengampuFakultasModal").value;
+
+    // Update data pesanan dengan nilai-nilai baru
+    selectedPengampu.courseName = newCourseName;
+    selectedPengampu.lecturerName = newLecturerName;
+    selectedPengampu.className = newClassName;
+    selectedPengampu.jenisMatkul = newJenisMatkul;
+    selectedPengampu.kategoriKelas = newKategoriKelas;
+    selectedPengampu.fakultas = newFakultas;
+
+    // Simpan data pesanan yang sudah diubah ke local storage
+    saveDataPengampu();
+
+    // Update tampilan tabel dengan data pesanan yang baru
+    const tabelDaftarPengampu = document.querySelector("tbody.daftar-pengampu");
+    tabelDaftarPengampu.innerHTML = '';
+    $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
+    $('#timetabling tbody.daftar-pengampu').empty(); // Menghapus semua baris yang ada di tbody
+
+    for (const pengampuItem of pengampu) {
+        const newPengampuElement = generatePengampuElement(pengampuItem);
+        tabelDaftarPengampu.append(newPengampuElement);
+    }
+
+    new DataTable('#timetabling');
 });
