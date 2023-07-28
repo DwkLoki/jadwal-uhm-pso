@@ -291,3 +291,14 @@ input:-webkit-autofill:active{
 .tabel-senin td, .tabel-rabu td, .tabel-jumat td, .tabel-minggu td {
     background-color: #e6e6e6;
 }
+
+
+/* @media print {
+    body * {
+        display: none;
+    }
+
+    #tabel-jadwal * {
+        display: block;
+    }
+} */

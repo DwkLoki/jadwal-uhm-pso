@@ -689,108 +689,196 @@ function loadDataPesananFromStorage() {
 // }
 
 function exportTableToPdf() {
-    const { jsPDF } = window.jspdf;
+    $('header').css('display', 'none');
+    $('hr').css('display', 'none');
+    $('.first-section').css('display', 'none');
+    $('.proses-jadwal-btn-container').css('display', 'none');
 
-    // Buat elemen induk sebagai wadah
-    const container = document.createElement("div");
+    // Ambil semua tabel hari
+    const tabelSenin = document.querySelector(".tabel-senin");
+    const tabelSelasa = document.querySelector(".tabel-selasa");
+    const tabelRabu = document.querySelector(".tabel-rabu");
+    const tabelKamis = document.querySelector(".tabel-kamis");
+    const tabelJumat = document.querySelector(".tabel-jumat");
+    const tabelSabtu = document.querySelector(".tabel-sabtu");
+    const tabelMinggu = document.querySelector(".tabel-minggu");
 
-    const elem1 = document.querySelector(".tabel-header");
-    const elem2 = document.querySelector(".tabel-header2");
-    const elem3 = document.querySelectorAll("tr.tabel-senin");
-    const elem4 = document.querySelectorAll("tr.tabel-selasa");
-    const elem5 = document.querySelectorAll("tr.tabel-rabu");
-    const elem6 = document.querySelectorAll("tr.tabel-kamis");
-    const elem7 = document.querySelectorAll("tr.tabel-jumat");
-    const elem8 = document.querySelectorAll("tr.tabel-sabtu");
-    const elem9 = document.querySelectorAll("tr.tabel-minggu");
-    const arrayElem3 = Array.from(elem3);
-    const arrayElem4 = Array.from(elem4);
-    const arrayElem5 = Array.from(elem5);
-    const arrayElem6 = Array.from(elem6);
-    const arrayElem7 = Array.from(elem7);
-    const arrayElem8 = Array.from(elem8);
-    const arrayElem9 = Array.from(elem9);
-    
-    // Sisipkan elemen-elemen ke dalam elemen induk (container)
-    container.appendChild(elem1.cloneNode(true));
-    container.appendChild(elem2.cloneNode(true));
-    arrayElem3.forEach((elem) => {
-        container.appendChild(elem.cloneNode(true));
-    });
-    console.log(arrayElem3);
+    // Fungsi untuk mencetak tabel ke halaman PDF
+    const printTabelToPdf = async (tabel) => {
+        const dataUrl = await domtoimage.toPng(tabel);
+        const img = new Image();
+        img.src = dataUrl;
+        document.body.appendChild(img); // Menambahkan gambar ke body halaman
+        window.print(); // Mencetak halaman
+        document.body.removeChild(img); // Menghapus gambar setelah mencetak
+    };
 
-    Promise.all([
-        domtoimage.toPng(elem1),
-        domtoimage.toPng(elem2),
-        domtoimage.toPng(arrayElem3[0]),
-        domtoimage.toPng(arrayElem3[1]),
-        domtoimage.toPng(arrayElem3[2]),
-        domtoimage.toPng(arrayElem3[3]),
-        domtoimage.toPng(arrayElem3[4]),
-        domtoimage.toPng(arrayElem3[5]),
-        domtoimage.toPng(arrayElem4[0]),
-        domtoimage.toPng(arrayElem4[1]),
-        domtoimage.toPng(arrayElem4[2]),
-        domtoimage.toPng(arrayElem4[3]),
-        domtoimage.toPng(arrayElem4[4]),
-        domtoimage.toPng(arrayElem4[5]),
-        domtoimage.toPng(arrayElem5[0]),
-        domtoimage.toPng(arrayElem5[1]),
-        domtoimage.toPng(arrayElem5[2]),
-        domtoimage.toPng(arrayElem5[3]),
-        domtoimage.toPng(arrayElem5[4]),
-        domtoimage.toPng(arrayElem5[5]),
-        domtoimage.toPng(arrayElem6[0]),
-        domtoimage.toPng(arrayElem6[1]),
-        domtoimage.toPng(arrayElem6[2]),
-        domtoimage.toPng(arrayElem6[3]),
-        domtoimage.toPng(arrayElem6[4]),
-        domtoimage.toPng(arrayElem6[5]),
-        domtoimage.toPng(arrayElem7[0]),
-        domtoimage.toPng(arrayElem7[1]),
-        domtoimage.toPng(arrayElem7[2]),
-        domtoimage.toPng(arrayElem7[3]),
-        domtoimage.toPng(arrayElem7[4]),
-        domtoimage.toPng(arrayElem7[5]),
-        domtoimage.toPng(arrayElem8[0]),
-        domtoimage.toPng(arrayElem8[1]),
-        domtoimage.toPng(arrayElem8[2]),
-        domtoimage.toPng(arrayElem8[3]),
-        domtoimage.toPng(arrayElem8[4]),
-        domtoimage.toPng(arrayElem8[5]),
-        domtoimage.toPng(arrayElem9[0]),
-        domtoimage.toPng(arrayElem9[1]),
-        domtoimage.toPng(arrayElem9[2]),
-        domtoimage.toPng(arrayElem9[3]),
-        domtoimage.toPng(arrayElem9[4]),
-        domtoimage.toPng(arrayElem9[5])
-    ])
-    .then(function (dataUrlArray) {
-        console.log(dataUrlArray);
-        const pdf = new jsPDF({
-            orientation: "landscape"
+    // Sembunyikan semua tabel hari kecuali tabel senin
+    $('.tabel-senin').show();
+    $('.tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
+
+    // Cetak tabel senin
+    printTabelToPdf(tabelSenin)
+        .then(() => {
+            // Sembunyikan semua tabel hari kecuali tabel selasa
+            $('.tabel-selasa').show();
+            $('.tabel-senin, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
+
+            // Cetak tabel selasa
+            return printTabelToPdf(tabelSelasa);
+        })
+        .then(() => {
+            // Sembunyikan semua tabel hari kecuali tabel selasa
+            $('.tabel-rabu').show();
+            $('.tabel-senin, .tabel-selasa, .tabel-kamis, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
+
+            // Cetak tabel selasa
+            return printTabelToPdf(tabelRabu);
+        })
+        .then(() => {
+            // Sembunyikan semua tabel hari kecuali tabel selasa
+            $('.tabel-kamis').show();
+            $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
+
+            // Cetak tabel selasa
+            return printTabelToPdf(tabelKamis);
+        })
+        .then(() => {
+            // Sembunyikan semua tabel hari kecuali tabel selasa
+            $('.tabel-jumat').show();
+            $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-sabtu, .tabel-minggu').hide();
+
+            // Cetak tabel selasa
+            return printTabelToPdf(tabelJumat);
+        })
+        .then(() => {
+            // Sembunyikan semua tabel hari kecuali tabel selasa
+            $('.tabel-sabtu').show();
+            $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-minggu').hide();
+
+            // Cetak tabel selasa
+            return printTabelToPdf(tabelSabtu);
+        })
+        .then(() => {
+            // Sembunyikan semua tabel hari kecuali tabel selasa
+            $('.tabel-minggu').show();
+            $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-sabtu').hide();
+
+            // Cetak tabel selasa
+            return printTabelToPdf(tabelMinggu);
+        })
+        .then(() => {
+            // Lanjutkan proses serupa untuk setiap hari
+            // ...
+
+            // Setelah semua cetakan selesai, tampilkan kembali elemen yang disembunyikan
+            $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-sabtu, .tabel-minggu').show();
+
+            // Lakukan reload halaman setelah proses cetak selesai
+            location.reload();
+        })
+        .catch((error) => {
+            console.error('Error capturing elements:', error);
         });
-
-        let yPosition = 15;
-
-        // Fungsi untuk menambahkan gambar tabel ke halaman PDF
-        for (let i = 0; i < 7; i++) {
-            pdf.addImage(dataUrlArray[i], 'PNG', 10, yPosition, 277, 0);
-            yPosition += 10;
-        }
-
-        pdf.addPage()
-
-        for (let i = 7; i < 13; i++) {
-            pdf.addImage(dataUrlArray[i], 'PNG', 10, 10, 277, 0);
-        }
-
-        // pdf.save("jadwal.pdf");
-    })
-    .catch(function (error) {
-        console.error('Error capturing elements:', error);
-    });
 }
+
+
+// function exportTableToPdf() {
+//     const { jsPDF } = window.jspdf;
+
+//     // Buat elemen induk sebagai wadah
+//     // const container = document.createElement("div");
+
+//     const elem1 = document.querySelector(".tabel-header");
+//     const elem2 = document.querySelector(".tabel-header2");
+//     const elem3 = document.querySelectorAll("tr.tabel-senin");
+//     const elem4 = document.querySelectorAll("tr.tabel-selasa");
+//     const elem5 = document.querySelectorAll("tr.tabel-rabu");
+//     const elem6 = document.querySelectorAll("tr.tabel-kamis");
+//     const elem7 = document.querySelectorAll("tr.tabel-jumat");
+//     const elem8 = document.querySelectorAll("tr.tabel-sabtu");
+//     const elem9 = document.querySelectorAll("tr.tabel-minggu");
+//     const arrayElem3 = Array.from(elem3);
+//     const arrayElem4 = Array.from(elem4);
+//     const arrayElem5 = Array.from(elem5);
+//     const arrayElem6 = Array.from(elem6);
+//     const arrayElem7 = Array.from(elem7);
+//     const arrayElem8 = Array.from(elem8);
+//     const arrayElem9 = Array.from(elem9);
+
+//     Promise.all([
+//         domtoimage.toPng(elem1),
+//         domtoimage.toPng(elem2),
+//         domtoimage.toPng(arrayElem3[0]),
+//         domtoimage.toPng(arrayElem3[1]),
+//         domtoimage.toPng(arrayElem3[2]),
+//         domtoimage.toPng(arrayElem3[3]),
+//         domtoimage.toPng(arrayElem3[4]),
+//         domtoimage.toPng(arrayElem3[5]),
+//         domtoimage.toPng(arrayElem4[0]),
+//         domtoimage.toPng(arrayElem4[1]),
+//         domtoimage.toPng(arrayElem4[2]),
+//         domtoimage.toPng(arrayElem4[3]),
+//         domtoimage.toPng(arrayElem4[4]),
+//         domtoimage.toPng(arrayElem4[5]),
+//         domtoimage.toPng(arrayElem5[0]),
+//         domtoimage.toPng(arrayElem5[1]),
+//         domtoimage.toPng(arrayElem5[2]),
+//         domtoimage.toPng(arrayElem5[3]),
+//         domtoimage.toPng(arrayElem5[4]),
+//         domtoimage.toPng(arrayElem5[5]),
+//         domtoimage.toPng(arrayElem6[0]),
+//         domtoimage.toPng(arrayElem6[1]),
+//         domtoimage.toPng(arrayElem6[2]),
+//         domtoimage.toPng(arrayElem6[3]),
+//         domtoimage.toPng(arrayElem6[4]),
+//         domtoimage.toPng(arrayElem6[5]),
+//         domtoimage.toPng(arrayElem7[0]),
+//         domtoimage.toPng(arrayElem7[1]),
+//         domtoimage.toPng(arrayElem7[2]),
+//         domtoimage.toPng(arrayElem7[3]),
+//         domtoimage.toPng(arrayElem7[4]),
+//         domtoimage.toPng(arrayElem7[5]),
+//         domtoimage.toPng(arrayElem8[0]),
+//         domtoimage.toPng(arrayElem8[1]),
+//         domtoimage.toPng(arrayElem8[2]),
+//         domtoimage.toPng(arrayElem8[3]),
+//         domtoimage.toPng(arrayElem8[4]),
+//         domtoimage.toPng(arrayElem8[5]),
+//         domtoimage.toPng(arrayElem9[0]),
+//         domtoimage.toPng(arrayElem9[1]),
+//         domtoimage.toPng(arrayElem9[2]),
+//         domtoimage.toPng(arrayElem9[3]),
+//         domtoimage.toPng(arrayElem9[4]),
+//         domtoimage.toPng(arrayElem9[5])
+//     ])
+//     // domtoimage.toPng(container)
+//     .then(function (dataUrl) {
+//         console.log(dataUrl);
+//         const pdf = new jsPDF({
+//             orientation: "landscape"
+//         });
+
+//         let yPosition = 15;
+
+//         // Fungsi untuk menambahkan gambar tabel ke halaman PDF
+//         for (let i = 0; i < 7; i++) {
+//             pdf.addImage(dataUrlArray[i], 'PNG', 10, yPosition, 277, 0);
+//             yPosition += 10;
+//         }
+
+//         pdf.addPage()
+
+//         for (let i = 7; i < 13; i++) {
+//             pdf.addImage(dataUrlArray[i], 'PNG', 10, 10, 277, 0);
+//         }
+
+//         // pdf.save("jadwal.pdf");
+//     })
+//     .catch(function (error) {
+//         console.error('Error capturing elements:', error);
+//     });
+// }
 
 
 // form validation
@@ -802,6 +890,14 @@ function isJadwalPesananExists(hari, waktu, ruangan) {
         item.ruangan === ruangan
     );
 }
+
+// const arrbulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+// const date = new Date();
+
+// const tanggal = date.getDate();
+// const bulan = date.getMonth();
+// const tahun = date.getFullYear();
+// alert(`Makassar, ${tanggal} ${arrbulan[bulan]} ${tahun}`);
 
 function isJadwalPengampuExists(courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
     return pengampu.some(
