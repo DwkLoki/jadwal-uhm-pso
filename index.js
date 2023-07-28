@@ -1,8 +1,10 @@
 const pengampu = [];
 const pesanan = [];
 const particlesToUpdate = [];
-const localStoragePengampu = "PENGAMPU_GENAP";
-const localStoragePesanan = "JADWAL_PESANAN";
+// const localStoragePengampu = "PENGAMPU_GENAP";
+// const localStoragePesanan = "JADWAL_PESANAN";
+const localStoragePengampu = "PENGAMPU_GENAP_TES";
+const localStoragePesanan = "JADWAL_PESANAN_TES";
 // Definisikan slot waktu, hari dan ruangan yang tersedia
 let slotWaktu = ["08:00-10:00", "10:00-12:00", "13:00-15:00", "15:00-17:00", "17:00-19:00", "19:00-21:00"];
 let hariTersedia = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
@@ -435,6 +437,24 @@ downloadBtn.addEventListener("click", function() {
     exportTableToPdf();
 })
 
+const deleteAllDataBtn = document.querySelector("#hapus-jadwal-btn");
+deleteAllDataBtn.addEventListener("click", function() {
+    const confirmation = window.confirm("APAKAH ANDA YAKIN INGIN MENGHAPUS SEMUA DATA?");
+
+    if (confirmation) {
+        // Jika user menekan tombol "OK", maka hapus semua data
+        removeDataPengampu();
+        removeDataPesanan();
+        alert("Semua data telah dihapus!");
+
+        // Perbarui halaman setelah penghapusan data berhasil
+        location.reload();
+    } else {
+        // Jika user menekan tombol "Batal", tidak melakukan apa-apa
+        alert("Penghapusan data dibatalkan!");
+    }
+})
+
 // define all function here
 function generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
     return {
@@ -667,6 +687,14 @@ function loadDataPesananFromStorage() {
         const newPesananElement = generatePesananElement(pesananItem);
         tabelDaftarPesanan.append(newPesananElement);
     }
+}
+
+function removeDataPengampu() {
+    localStorage.removeItem(localStoragePengampu);
+}
+
+function removeDataPesanan() {
+    localStorage.removeItem(localStoragePesanan);
 }
 
 // fungsi print table
