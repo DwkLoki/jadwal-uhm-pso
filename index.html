@@ -15,11 +15,6 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
-    <!-- <script src="sheet.js"></script> -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
     <script src="index.js" defer></script>
 </head>
@@ -845,12 +840,105 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <tr class="tabel-minggu">
-                    <p>halo</p>
-                </tr>
                 </div>
             </table>
         </section>
+        <!-- <div class="d-flex justify-content-end">
+            <div>
+                <p style="margin-bottom: 0; font-size: 11px;">Makassar, 28 Juli 2023</p>
+                <img src="assets/ttdjadwal.jpg" alt="ttd jadwal" width="150">
+                <p style="text-decoration:underline; margin-bottom: 0; font-size: 11px;">Ir. Billy Eden William Asrul, S.Kom., M.T.</p>
+                <p style="margin-bottom: 0; font-size: 11px;">Wakil Rektor Bidang Akademik</p>
+            </div>
+        </div> -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="editPesananModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="editModalLabel">Ubah Data Perkuliahan</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editPesananForm" autocomplete="off">
+                            <div class="input">
+                                <input id="inputPesananCourseNameModal" type="text" placeholder="Mata Kuliah" required>
+                            </div>
+                            <div class="input">
+                                <input id="inputPesananLecturerNameModal" type="text" placeholder="Dosen" required>
+                            </div>
+                            <div class="input">
+                                <input id="inputPesananClassNameModal" type="text" placeholder="Kelas" required>
+                            </div>
+                            <div class="input">
+                                <select id="inputPesananJenisMatkulModal" required>
+                                    <option value="" selected disabled hidden>Jenis Matkul</option>
+                                    <option value="teori">Teori</option>
+                                    <option value="praktikum">Praktikum</option>
+                                </select>
+                            </div>
+                            <div class="input">
+                                <select id="inputPesananKategoriKelasModal" required>
+                                    <option value="" selected disabled hidden>Kategori Kelas</option>
+                                    <option value="reguler">Reguler</option>
+                                    <option value="malam">Malam</option>
+                                    <option value="ekstensi">Ekstensi</option>
+                                </select>
+                            </div>
+                            <div class="input">
+                                <select id="inputPesananFakultasModal" required>
+                                    <option value="" selected disabled hidden>Fakultas</option>
+                                    <option value="ilkom">Ilmu Komputer</option>
+                                    <option value="hukum">Hukum dan Ilmu Sosial</option>
+                                </select>
+                            </div>
+                            <div class="input">
+                                <select id="inputHariModal" required>
+                                    <option value="" selected disabled hidden>Hari</option>
+                                    <option value="1">Senin</option>
+                                    <option value="2">Selasa</option>
+                                    <option value="3">Rabu</option>
+                                    <option value="4">Kamis</option>
+                                    <option value="5">Jumat</option>
+                                    <option value="6">Sabtu</option>
+                                    <option value="7">Minggu</option>
+                                </select>
+                            </div>
+                            <div class="input">
+                                <select id="inputWaktuModal" required>
+                                    <option value="" selected disabled hidden>Waktu</option>
+                                    <option value="1">08:00 - 10:00</option>
+                                    <option value="2">10:00 - 12:00</option>
+                                    <option value="3">13:00 - 15:00</option>
+                                    <option value="4">15:00 - 17:00</option>
+                                    <option value="5">17:00 - 19:00</option>
+                                    <option value="6">19:00 - 21:00</option>
+                                </select>
+                            </div>
+                            <div class="input">
+                                <select id="inputRuanganModal" required>
+                                    <option value="" selected disabled hidden>Ruangan</option>
+                                    <option value="1">205</option>
+                                    <option value="2">101</option>
+                                    <option value="3">305</option>
+                                    <option value="4">306</option>
+                                    <option value="5">402</option>
+                                    <option value="6">403</option>
+                                    <option value="7">404</option>
+                                    <option value="8">FHIS 01</option>
+                                    <option value="9">Pasca Lt.1</option>
+                                    <option value="10">Lab 1</option>
+                                    <option value="11">Lab 2</option>
+                                </select>
+                            </div>
+                            <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
+                            <button type="submit" id="pesananEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 </html>

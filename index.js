@@ -417,7 +417,7 @@ inputPesananForm.addEventListener("submit", function(event) {
     pesanan.push(pesananObject);
     saveDataPesanan();
 
-    console.log(pesanan);
+    // console.log(pesanan);
 
     // menampilkan semua data pada array pesanan dalam bentuk baris tabel
     const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
@@ -527,6 +527,17 @@ function generatePengampuElement(pengampuObject) {
     return dataPengampuElement;
 }
 
+// Event delegation untuk tombol "Edit"
+const tablePesananContainer = document.querySelector("tbody.daftar-pesanan"); // Gantikan "container" dengan elemen induk yang sesuai
+tablePesananContainer.addEventListener("click", function(event) {
+    if (event.target.matches("i.bi.bi-pencil-square")) {
+        const rowIndex = event.target.closest("tr").rowIndex;
+        const pesananObject = pesanan[rowIndex - 1]; // Kurangi 1 karena indeks dimulai dari 0
+        // console.log(pesananObject);
+        handleEditButton(pesananObject);
+    }
+});
+
 function generatePesananElement(pesananObject) {
     const logoEditBtn = document.createElement("i");
     logoEditBtn.classList.add("bi", "bi-pencil-square");
@@ -538,10 +549,10 @@ function generatePesananElement(pesananObject) {
     editBtn.classList.add("edit-btn");
     editBtn.setAttribute("type", "button");
     editBtn.setAttribute("data-bs-toggle", "modal");
-    editBtn.setAttribute("data-bs-target", "#editModal");
+    editBtn.setAttribute("data-bs-target", "#editPesananModal");
     editBtn.append(logoEditBtn);
     // editBtn.addEventListener("click", function(e) {
-    //     handleEditButton(pengampuObject.pengampuId);
+    //     handleEditButton(pesananObject);
     // })
 
     const deleteBtn = document.createElement("button");
@@ -643,51 +654,7 @@ function loadDataPesananFromStorage() {
     }
 }
 
-// ekspor hasil penjadwalan ke excel
-// function exportTableToPdf() {
-//     const tabelJadwal = document.getElementById("tabel-jadwal");
-//     const { jsPDF } = window.jspdf;
-
-//     domtoimage.toPng(tabelJadwal)
-//         .then(function (dataUrl) {
-//             const img = new Image();
-//             img.src = dataUrl;
-
-//             // // document.body.appendChild(img);
-
-//             // Membuat PDF dengan jsPDF
-//             const pdf = new jsPDF({
-//                 orientation: "landscape",
-//                 unit: "pt",
-//                 // format: [800, 277] // Menyesuaikan tinggi halaman dengan tinggi tabel
-//             });
-//             pdf.addImage(img, "PNG", 10, 10, 277, 0); // Menyesuaikan ukuran dan posisi gambar di PDF
-//             // pdf.addImage(dataUrl, 'PNG', 10, 10, 277, 0); // A4 size
-//             pdf.save("jadwal.pdf");
-//         })
-//         .catch(function (error) {
-//             console.error('Error capturing table:', error);
-//         });
-
-//     // html2canvas(document.querySelector("#tabel-jadwal")).then(canvas => {
-//     //     document.body.appendChild(canvas);
-//     // })
-
-//     // html2canvas($('#tabel-jadwal')[0], {
-//     //     onrendered: function (canvas) {
-//     //         var data = canvas.toDataURL();
-//     //         var docDefinition = {
-//     //             content: [{
-//     //                 image: data,
-//     //                 width: 500,
-//     //                 fit: [590, 100000]
-//     //             }]
-//     //         };
-//     //         pdfMake.createPdf(docDefinition).download("jadwal perkuliahan.pdf");
-//     //     }
-//     // });
-// }
-
+// fungsi print table
 function exportTableToPdf() {
     $('header').css('display', 'none');
     $('hr').css('display', 'none');
@@ -704,13 +671,46 @@ function exportTableToPdf() {
     const tabelMinggu = document.querySelector(".tabel-minggu");
 
     // Fungsi untuk mencetak tabel ke halaman PDF
-    const printTabelToPdf = async (tabel) => {
+    const printTabelToPdf = async (tabel, isLastPage) => {
+        // Menambahkan keterangan waktu pada konten tanda tangan
+        const arrbulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+        const date = new Date();
+
+        const tanggal = date.getDate();
+        const bulan = date.getMonth();
+        const tahun = date.getFullYear();
+        // alert(`Makassar, ${tanggal} ${arrbulan[bulan]} ${tahun}`);
+
+        // Tambahkan elemen <div> untuk tanda tangan dan keterangan tanggal
+        const tandaTanganContainer = document.createElement("div");
+        tandaTanganContainer.classList.add("d-flex", "justify-content-end");
+        tandaTanganContainer.innerHTML = 
+        `
+        <div>
+            <p style="margin-bottom: 0; font-size: 11px;">Makassar, ${tanggal} ${arrbulan[bulan]} ${tahun}</p>
+            <img src="assets/ttdjadwal.jpg" alt="ttd jadwal" width="150">
+            <p style="text-decoration:underline; margin-bottom: 0; font-size: 11px;">Ir. Billy Eden William Asrul, S.Kom., M.T.</p>
+            <p style="margin-bottom: 0; font-size: 11px;">Wakil Rektor Bidang Akademik</p>
+        </div>
+        `
+
         const dataUrl = await domtoimage.toPng(tabel);
         const img = new Image();
         img.src = dataUrl;
         document.body.appendChild(img); // Menambahkan gambar ke body halaman
+
+        // Jika halaman terakhir (tabel Minggu), tambahkan konten tanda tangan dan keterangan tanggal
+        if (isLastPage) {
+            document.body.appendChild(tandaTanganContainer);
+        }
+
         window.print(); // Mencetak halaman
         document.body.removeChild(img); // Menghapus gambar setelah mencetak
+
+        // Jika halaman terakhir (tabel Minggu), hapus konten tanda tangan dan keterangan tanggal setelah mencetak
+        if (isLastPage) {
+            document.body.removeChild(tandaTanganContainer);
+        }
     };
 
     // Sembunyikan semua tabel hari kecuali tabel senin
@@ -718,14 +718,14 @@ function exportTableToPdf() {
     $('.tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
 
     // Cetak tabel senin
-    printTabelToPdf(tabelSenin)
+    printTabelToPdf(tabelSenin, false)
         .then(() => {
             // Sembunyikan semua tabel hari kecuali tabel selasa
             $('.tabel-selasa').show();
             $('.tabel-senin, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
 
             // Cetak tabel selasa
-            return printTabelToPdf(tabelSelasa);
+            return printTabelToPdf(tabelSelasa, false);
         })
         .then(() => {
             // Sembunyikan semua tabel hari kecuali tabel selasa
@@ -733,7 +733,7 @@ function exportTableToPdf() {
             $('.tabel-senin, .tabel-selasa, .tabel-kamis, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
 
             // Cetak tabel selasa
-            return printTabelToPdf(tabelRabu);
+            return printTabelToPdf(tabelRabu, false);
         })
         .then(() => {
             // Sembunyikan semua tabel hari kecuali tabel selasa
@@ -741,7 +741,7 @@ function exportTableToPdf() {
             $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-jumat, .tabel-sabtu, .tabel-minggu').hide();
 
             // Cetak tabel selasa
-            return printTabelToPdf(tabelKamis);
+            return printTabelToPdf(tabelKamis, false);
         })
         .then(() => {
             // Sembunyikan semua tabel hari kecuali tabel selasa
@@ -749,7 +749,7 @@ function exportTableToPdf() {
             $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-sabtu, .tabel-minggu').hide();
 
             // Cetak tabel selasa
-            return printTabelToPdf(tabelJumat);
+            return printTabelToPdf(tabelJumat, false);
         })
         .then(() => {
             // Sembunyikan semua tabel hari kecuali tabel selasa
@@ -757,7 +757,7 @@ function exportTableToPdf() {
             $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-minggu').hide();
 
             // Cetak tabel selasa
-            return printTabelToPdf(tabelSabtu);
+            return printTabelToPdf(tabelSabtu, false);
         })
         .then(() => {
             // Sembunyikan semua tabel hari kecuali tabel selasa
@@ -765,7 +765,7 @@ function exportTableToPdf() {
             $('.tabel-senin, .tabel-selasa, .tabel-rabu, .tabel-kamis, .tabel-jumat, .tabel-sabtu').hide();
 
             // Cetak tabel selasa
-            return printTabelToPdf(tabelMinggu);
+            return printTabelToPdf(tabelMinggu, true);
         })
         .then(() => {
             // Lanjutkan proses serupa untuk setiap hari
@@ -782,105 +782,6 @@ function exportTableToPdf() {
         });
 }
 
-
-// function exportTableToPdf() {
-//     const { jsPDF } = window.jspdf;
-
-//     // Buat elemen induk sebagai wadah
-//     // const container = document.createElement("div");
-
-//     const elem1 = document.querySelector(".tabel-header");
-//     const elem2 = document.querySelector(".tabel-header2");
-//     const elem3 = document.querySelectorAll("tr.tabel-senin");
-//     const elem4 = document.querySelectorAll("tr.tabel-selasa");
-//     const elem5 = document.querySelectorAll("tr.tabel-rabu");
-//     const elem6 = document.querySelectorAll("tr.tabel-kamis");
-//     const elem7 = document.querySelectorAll("tr.tabel-jumat");
-//     const elem8 = document.querySelectorAll("tr.tabel-sabtu");
-//     const elem9 = document.querySelectorAll("tr.tabel-minggu");
-//     const arrayElem3 = Array.from(elem3);
-//     const arrayElem4 = Array.from(elem4);
-//     const arrayElem5 = Array.from(elem5);
-//     const arrayElem6 = Array.from(elem6);
-//     const arrayElem7 = Array.from(elem7);
-//     const arrayElem8 = Array.from(elem8);
-//     const arrayElem9 = Array.from(elem9);
-
-//     Promise.all([
-//         domtoimage.toPng(elem1),
-//         domtoimage.toPng(elem2),
-//         domtoimage.toPng(arrayElem3[0]),
-//         domtoimage.toPng(arrayElem3[1]),
-//         domtoimage.toPng(arrayElem3[2]),
-//         domtoimage.toPng(arrayElem3[3]),
-//         domtoimage.toPng(arrayElem3[4]),
-//         domtoimage.toPng(arrayElem3[5]),
-//         domtoimage.toPng(arrayElem4[0]),
-//         domtoimage.toPng(arrayElem4[1]),
-//         domtoimage.toPng(arrayElem4[2]),
-//         domtoimage.toPng(arrayElem4[3]),
-//         domtoimage.toPng(arrayElem4[4]),
-//         domtoimage.toPng(arrayElem4[5]),
-//         domtoimage.toPng(arrayElem5[0]),
-//         domtoimage.toPng(arrayElem5[1]),
-//         domtoimage.toPng(arrayElem5[2]),
-//         domtoimage.toPng(arrayElem5[3]),
-//         domtoimage.toPng(arrayElem5[4]),
-//         domtoimage.toPng(arrayElem5[5]),
-//         domtoimage.toPng(arrayElem6[0]),
-//         domtoimage.toPng(arrayElem6[1]),
-//         domtoimage.toPng(arrayElem6[2]),
-//         domtoimage.toPng(arrayElem6[3]),
-//         domtoimage.toPng(arrayElem6[4]),
-//         domtoimage.toPng(arrayElem6[5]),
-//         domtoimage.toPng(arrayElem7[0]),
-//         domtoimage.toPng(arrayElem7[1]),
-//         domtoimage.toPng(arrayElem7[2]),
-//         domtoimage.toPng(arrayElem7[3]),
-//         domtoimage.toPng(arrayElem7[4]),
-//         domtoimage.toPng(arrayElem7[5]),
-//         domtoimage.toPng(arrayElem8[0]),
-//         domtoimage.toPng(arrayElem8[1]),
-//         domtoimage.toPng(arrayElem8[2]),
-//         domtoimage.toPng(arrayElem8[3]),
-//         domtoimage.toPng(arrayElem8[4]),
-//         domtoimage.toPng(arrayElem8[5]),
-//         domtoimage.toPng(arrayElem9[0]),
-//         domtoimage.toPng(arrayElem9[1]),
-//         domtoimage.toPng(arrayElem9[2]),
-//         domtoimage.toPng(arrayElem9[3]),
-//         domtoimage.toPng(arrayElem9[4]),
-//         domtoimage.toPng(arrayElem9[5])
-//     ])
-//     // domtoimage.toPng(container)
-//     .then(function (dataUrl) {
-//         console.log(dataUrl);
-//         const pdf = new jsPDF({
-//             orientation: "landscape"
-//         });
-
-//         let yPosition = 15;
-
-//         // Fungsi untuk menambahkan gambar tabel ke halaman PDF
-//         for (let i = 0; i < 7; i++) {
-//             pdf.addImage(dataUrlArray[i], 'PNG', 10, yPosition, 277, 0);
-//             yPosition += 10;
-//         }
-
-//         pdf.addPage()
-
-//         for (let i = 7; i < 13; i++) {
-//             pdf.addImage(dataUrlArray[i], 'PNG', 10, 10, 277, 0);
-//         }
-
-//         // pdf.save("jadwal.pdf");
-//     })
-//     .catch(function (error) {
-//         console.error('Error capturing elements:', error);
-//     });
-// }
-
-
 // form validation
 function isJadwalPesananExists(hari, waktu, ruangan) {
     return pesanan.some(
@@ -890,14 +791,6 @@ function isJadwalPesananExists(hari, waktu, ruangan) {
         item.ruangan === ruangan
     );
 }
-
-// const arrbulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-// const date = new Date();
-
-// const tanggal = date.getDate();
-// const bulan = date.getMonth();
-// const tahun = date.getFullYear();
-// alert(`Makassar, ${tanggal} ${arrbulan[bulan]} ${tahun}`);
 
 function isJadwalPengampuExists(courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
     return pengampu.some(
@@ -911,67 +804,64 @@ function isJadwalPengampuExists(courseName, lecturerName, className, jenisMatkul
     );
 }
 
+// function handleEditPesanan(selectedPesanan) {
+//     return function (event) {
+//         event.preventDefault(); // Prevent form submission
 
-// handle edit button pengampu
-function handleEditButton(pengampuId) {
-    const selectedPengampu = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
+//         // Retrieve form values
+//         const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
+//         const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
+//         const newClassName = document.getElementById("inputPesananClassNameModal").value;
+//         const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
+//         const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
+//         const newFakultas = document.getElementById("inputPesananFakultasModal").value;
+//         const newHari = document.getElementById("inputHariModal").value;
+//         const newWaktu = document.getElementById("inputWaktuModal").value;
+//         const newRuangan = document.getElementById("inputRuanganModal").value;
 
-    // Set modal form values
-    document.getElementById("editCourseName").value = selectedPengampu.courseName;
-    document.getElementById("editLecturerName").value = selectedPengampu.lecturerName;
-    document.getElementById("editClassName").value = selectedPengampu.className;
-    document.getElementById("editJenisMatkul").value = selectedPengampu.jenisMatkul;
-    document.getElementById("editKategoriKelas").value = selectedPengampu.kategoriKelas;
-    document.getElementById("editFakultas").value = selectedPengampu.fakultas;
+//         // Update the copied pesanan object with new values
+//         selectedPesanan.courseName = newCourseName;
+//         selectedPesanan.lecturerName = newLecturerName;
+//         selectedPesanan.className = newClassName;
+//         selectedPesanan.jenisMatkul = newJenisMatkul;
+//         selectedPesanan.kategoriKelas = newKategoriKelas;
+//         selectedPesanan.fakultas = newFakultas;
+//         selectedPesanan.hari = newHari;
+//         selectedPesanan.waktu = newWaktu;
+//         selectedPesanan.ruangan = newRuangan;
 
-    // handle edit form submit event
-    const editPengampuForm = document.getElementById("editPengampu");
+//         console.log(selectedPesanan);
 
-    editPengampuForm.addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent form submission
+//         // Save the updated pesanan array to local storage
+//         saveDataPesanan();
 
-        // Retrieve form values
-        const newCourseName = document.getElementById("editCourseName").value;
-        const newLecturerName = document.getElementById("editLecturerName").value;
-        const newClassName = document.getElementById("editClassName").value;
-        const newJenisMatkul = document.getElementById("editJenisMatkul").value;
-        const newKategoriKelas = document.getElementById("editKategoriKelas").value;
-        const newFakultas = document.getElementById("editFakultas").value;
-
-        // Update the copied pengampu object with new values
-        selectedPengampu.courseName = newCourseName;
-        selectedPengampu.lecturerName = newLecturerName;
-        selectedPengampu.className = newClassName;
-        selectedPengampu.jenisMatkul = newJenisMatkul;
-        selectedPengampu.kategoriKelas = newKategoriKelas;
-        selectedPengampu.fakultas = newFakultas;
-
-        // Find the pengampu object in the array
-        const selectedPengampuAgain = pengampu.find(pengampu => pengampu.pengampuId === pengampuId);
-        // console.log(selectedPengampuAgain.pengampuId);
-        // Update the pengampu object with new values
-        // selectedPengampuAgain.pengampuId = pengampuId
-        selectedPengampuAgain.courseName = newCourseName;
-        selectedPengampuAgain.lecturerName = newLecturerName;
-        selectedPengampuAgain.className = newClassName;
-        selectedPengampuAgain.jenisMatkul = newJenisMatkul;
-        selectedPengampuAgain.kategoriKelas = newKategoriKelas;
-        selectedPengampuAgain.fakultas = newFakultas;
-
-        // Save the updated pengampu array to local storage
-        saveDataPengampu();
-
-        // Update the table with the updated pengampu data
-        const tabelDaftarPengampu = document.querySelector("tbody");
-        tabelDaftarPengampu.innerHTML = '';
+//         // Update the table with the updated pesanan data
+//         const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
+//         tabelDaftarPesanan.innerHTML = '';
         
-        for (const pengampuItem of pengampu) {
-            const newPengampuElement = generatePengampuElement(pengampuItem);
-            tabelDaftarPengampu.append(newPengampuElement);
-        }
-        // return false;
-    });
-}
+//         for (const pesananItem of pesanan) {
+//             const newPesananElement = generatePesananElement(pesananItem);
+//             tabelDaftarPesanan.append(newPesananElement);
+//         }
+//     }
+// };
+
+// // handle edit button pengampu
+// function handleEditButton(pesananObject) {
+//     const selectedPesanan = pesanan.find(pesanan => pesanan.pengampuId === pesananObject.pengampuId);
+//     console.log(selectedPesanan);
+
+//     // Set modal form values
+//     document.getElementById("inputPesananCourseNameModal").value = selectedPesanan.courseName;
+//     document.getElementById("inputPesananLecturerNameModal").value = selectedPesanan.lecturerName;
+//     document.getElementById("inputPesananClassNameModal").value = selectedPesanan.className;
+//     document.getElementById("inputPesananJenisMatkulModal").value = selectedPesanan.jenisMatkul;
+//     document.getElementById("inputPesananKategoriKelasModal").value = selectedPesanan.kategoriKelas;
+//     document.getElementById("inputPesananFakultasModal").value = selectedPesanan.fakultas;
+//     document.getElementById("inputHariModal").value = selectedPesanan.hari;
+//     document.getElementById("inputWaktuModal").value = selectedPesanan.waktu;
+//     document.getElementById("inputRuanganModal").value = selectedPesanan.ruangan;
+// }
 
 function calculateFitness(particle, swarmDaySorted) {
     let particleFitness = 0;
@@ -1035,4 +925,60 @@ function convertPositionToData(position) {
     const day = hariTersedia[dayIndex];
 
     return { room, time, day };
+}
+
+// fungsi untuk handle edit pesanan
+function handleEditButton(pesananObject) {
+    // Tampilkan data pesanan di dalam modal
+    document.getElementById("inputPesananCourseNameModal").value = pesananObject.courseName;
+    document.getElementById("inputPesananLecturerNameModal").value = pesananObject.lecturerName;
+    document.getElementById("inputPesananClassNameModal").value = pesananObject.className;
+    document.getElementById("inputPesananJenisMatkulModal").value = pesananObject.jenisMatkul;
+    document.getElementById("inputPesananKategoriKelasModal").value = pesananObject.kategoriKelas;
+    document.getElementById("inputPesananFakultasModal").value = pesananObject.fakultas;
+    document.getElementById("inputHariModal").value = pesananObject.hari;
+    document.getElementById("inputWaktuModal").value = pesananObject.waktu;
+    document.getElementById("inputRuanganModal").value = pesananObject.ruangan;
+
+    console.log("ter klik");
+
+    // Menangani klik tombol "Save" pada modal
+    const saveBtn = document.getElementById("pesananEditBtn");
+    saveBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        console.log("ter klik save");
+        // Ambil nilai-nilai dari input di dalam modal
+        const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
+        const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
+        const newClassName = document.getElementById("inputPesananClassNameModal").value;
+        const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
+        const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
+        const newFakultas = document.getElementById("inputPesananFakultasModal").value;
+        const newHari = document.getElementById("inputHariModal").value;
+        const newWaktu = document.getElementById("inputWaktuModal").value;
+        const newRuangan = document.getElementById("inputRuanganModal").value;
+
+        // Update data pesanan dengan nilai-nilai baru
+        pesananObject.courseName = newCourseName;
+        pesananObject.lecturerName = newLecturerName;
+        pesananObject.className = newClassName;
+        pesananObject.jenisMatkul = newJenisMatkul;
+        pesananObject.kategoriKelas = newKategoriKelas;
+        pesananObject.fakultas = newFakultas;
+        pesananObject.hari = newHari;
+        pesananObject.waktu = newWaktu;
+        pesananObject.ruangan = newRuangan;
+
+        // Simpan data pesanan yang sudah diubah ke local storage
+        saveDataPesanan();
+
+        // Update tampilan tabel dengan data pesanan yang baru
+        const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
+        tabelDaftarPesanan.innerHTML = '';
+        
+        for (const pesananItem of pesanan) {
+            const newPesananElement = generatePesananElement(pesananItem);
+            tabelDaftarPesanan.append(newPesananElement);
+        }
+    });
 }
