@@ -527,14 +527,16 @@ function generatePengampuElement(pengampuObject) {
     return dataPengampuElement;
 }
 
-// Event delegation untuk tombol "Edit"
+// Event delegation untuk tombol "Edit pesanan"
+let selectedPesanan = null;
+
 const tablePesananContainer = document.querySelector("tbody.daftar-pesanan"); // Gantikan "container" dengan elemen induk yang sesuai
 tablePesananContainer.addEventListener("click", function(event) {
     if (event.target.matches("i.bi.bi-pencil-square")) {
         const rowIndex = event.target.closest("tr").rowIndex;
-        const pesananObject = pesanan[rowIndex - 1]; // Kurangi 1 karena indeks dimulai dari 0
-        // console.log(pesananObject);
-        handleEditButton(pesananObject);
+        selectedPesanan = pesanan[rowIndex - 1]; // Kurangi 1 karena indeks dimulai dari 0
+        // console.log(selectedPesanan);
+        handleEditButton(selectedPesanan);
     }
 });
 
@@ -548,8 +550,8 @@ function generatePesananElement(pesananObject) {
     const editBtn = document.createElement("button");
     editBtn.classList.add("edit-btn");
     editBtn.setAttribute("type", "button");
-    editBtn.setAttribute("data-bs-toggle", "modal");
-    editBtn.setAttribute("data-bs-target", "#editPesananModal");
+    // editBtn.setAttribute("data-bs-toggle", "modal");
+    // editBtn.setAttribute("data-bs-target", "#editPesananModal");
     editBtn.append(logoEditBtn);
     // editBtn.addEventListener("click", function(e) {
     //     handleEditButton(pesananObject);
@@ -928,57 +930,101 @@ function convertPositionToData(position) {
 }
 
 // fungsi untuk handle edit pesanan
-function handleEditButton(pesananObject) {
+function handleEditButton(selectedPesanan) {
     // Tampilkan data pesanan di dalam modal
-    document.getElementById("inputPesananCourseNameModal").value = pesananObject.courseName;
-    document.getElementById("inputPesananLecturerNameModal").value = pesananObject.lecturerName;
-    document.getElementById("inputPesananClassNameModal").value = pesananObject.className;
-    document.getElementById("inputPesananJenisMatkulModal").value = pesananObject.jenisMatkul;
-    document.getElementById("inputPesananKategoriKelasModal").value = pesananObject.kategoriKelas;
-    document.getElementById("inputPesananFakultasModal").value = pesananObject.fakultas;
-    document.getElementById("inputHariModal").value = pesananObject.hari;
-    document.getElementById("inputWaktuModal").value = pesananObject.waktu;
-    document.getElementById("inputRuanganModal").value = pesananObject.ruangan;
+    document.getElementById("inputPesananCourseNameModal").value = selectedPesanan.courseName;
+    document.getElementById("inputPesananLecturerNameModal").value = selectedPesanan.lecturerName;
+    document.getElementById("inputPesananClassNameModal").value = selectedPesanan.className;
+    document.getElementById("inputPesananJenisMatkulModal").value = selectedPesanan.jenisMatkul;
+    document.getElementById("inputPesananKategoriKelasModal").value = selectedPesanan.kategoriKelas;
+    document.getElementById("inputPesananFakultasModal").value = selectedPesanan.fakultas;
+    document.getElementById("inputHariModal").value = selectedPesanan.hari;
+    document.getElementById("inputWaktuModal").value = selectedPesanan.waktu;
+    document.getElementById("inputRuanganModal").value = selectedPesanan.ruangan;
 
     console.log("ter klik");
 
-    // Menangani klik tombol "Save" pada modal
-    const saveBtn = document.getElementById("pesananEditBtn");
-    saveBtn.addEventListener("click", function(e) {
-        e.preventDefault();
-        console.log("ter klik save");
-        // Ambil nilai-nilai dari input di dalam modal
-        const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
-        const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
-        const newClassName = document.getElementById("inputPesananClassNameModal").value;
-        const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
-        const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
-        const newFakultas = document.getElementById("inputPesananFakultasModal").value;
-        const newHari = document.getElementById("inputHariModal").value;
-        const newWaktu = document.getElementById("inputWaktuModal").value;
-        const newRuangan = document.getElementById("inputRuanganModal").value;
+    // Tampilkan modal
+    const editPesananModal = new bootstrap.Modal(document.getElementById('editPesananModal'));
+    editPesananModal.show();
 
-        // Update data pesanan dengan nilai-nilai baru
-        pesananObject.courseName = newCourseName;
-        pesananObject.lecturerName = newLecturerName;
-        pesananObject.className = newClassName;
-        pesananObject.jenisMatkul = newJenisMatkul;
-        pesananObject.kategoriKelas = newKategoriKelas;
-        pesananObject.fakultas = newFakultas;
-        pesananObject.hari = newHari;
-        pesananObject.waktu = newWaktu;
-        pesananObject.ruangan = newRuangan;
+    // // Menangani klik tombol "Save" pada modal
+    // const saveBtn = document.getElementById("pesananEditBtn");
+    // saveBtn.addEventListener("click", function(e) {
+    //     e.preventDefault();
+    //     console.log("ter klik save");
+    //     // Ambil nilai-nilai dari input di dalam modal
+    //     const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
+    //     const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
+    //     const newClassName = document.getElementById("inputPesananClassNameModal").value;
+    //     const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
+    //     const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
+    //     const newFakultas = document.getElementById("inputPesananFakultasModal").value;
+    //     const newHari = document.getElementById("inputHariModal").value;
+    //     const newWaktu = document.getElementById("inputWaktuModal").value;
+    //     const newRuangan = document.getElementById("inputRuanganModal").value;
 
-        // Simpan data pesanan yang sudah diubah ke local storage
-        saveDataPesanan();
+    //     // Update data pesanan dengan nilai-nilai baru
+    //     pesananObject.courseName = newCourseName;
+    //     pesananObject.lecturerName = newLecturerName;
+    //     pesananObject.className = newClassName;
+    //     pesananObject.jenisMatkul = newJenisMatkul;
+    //     pesananObject.kategoriKelas = newKategoriKelas;
+    //     pesananObject.fakultas = newFakultas;
+    //     pesananObject.hari = newHari;
+    //     pesananObject.waktu = newWaktu;
+    //     pesananObject.ruangan = newRuangan;
 
-        // Update tampilan tabel dengan data pesanan yang baru
-        const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
-        tabelDaftarPesanan.innerHTML = '';
+    //     // Simpan data pesanan yang sudah diubah ke local storage
+    //     saveDataPesanan();
+
+    //     // Update tampilan tabel dengan data pesanan yang baru
+    //     const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
+    //     tabelDaftarPesanan.innerHTML = '';
         
-        for (const pesananItem of pesanan) {
-            const newPesananElement = generatePesananElement(pesananItem);
-            tabelDaftarPesanan.append(newPesananElement);
-        }
-    });
+    //     for (const pesananItem of pesanan) {
+    //         const newPesananElement = generatePesananElement(pesananItem);
+    //         tabelDaftarPesanan.append(newPesananElement);
+    //     }
+    // });
 }
+
+// Menangani klik tombol "Save" pada modal
+const saveBtn = document.getElementById("pesananEditBtn");
+saveBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    console.log("ter klik save");
+    // Ambil nilai-nilai dari input di dalam modal
+    const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
+    const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
+    const newClassName = document.getElementById("inputPesananClassNameModal").value;
+    const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
+    const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
+    const newFakultas = document.getElementById("inputPesananFakultasModal").value;
+    const newHari = document.getElementById("inputHariModal").value;
+    const newWaktu = document.getElementById("inputWaktuModal").value;
+    const newRuangan = document.getElementById("inputRuanganModal").value;
+
+    // Update data pesanan dengan nilai-nilai baru
+    selectedPesanan.courseName = newCourseName;
+    selectedPesanan.lecturerName = newLecturerName;
+    selectedPesanan.className = newClassName;
+    selectedPesanan.jenisMatkul = newJenisMatkul;
+    selectedPesanan.kategoriKelas = newKategoriKelas;
+    selectedPesanan.fakultas = newFakultas;
+    selectedPesanan.hari = newHari;
+    selectedPesanan.waktu = newWaktu;
+    selectedPesanan.ruangan = newRuangan;
+
+    // Simpan data pesanan yang sudah diubah ke local storage
+    saveDataPesanan();
+
+    // Update tampilan tabel dengan data pesanan yang baru
+    const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
+    tabelDaftarPesanan.innerHTML = '';
+    
+    for (const pesananItem of pesanan) {
+        const newPesananElement = generatePesananElement(pesananItem);
+        tabelDaftarPesanan.append(newPesananElement);
+    }
+});
