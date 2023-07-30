@@ -1,10 +1,10 @@
 const pengampu = [];
 const pesanan = [];
 const particlesToUpdate = [];
-// const localStoragePengampu = "PENGAMPU_GENAP";
-// const localStoragePesanan = "JADWAL_PESANAN";
-const localStoragePengampu = "PENGAMPU_GENAP_TES";
-const localStoragePesanan = "JADWAL_PESANAN_TES";
+const localStoragePengampu = "PENGAMPU_GENAP";
+const localStoragePesanan = "JADWAL_PESANAN";
+// const localStoragePengampu = "PENGAMPU_GENAP_TES";
+// const localStoragePesanan = "JADWAL_PESANAN_TES";
 // Definisikan slot waktu, hari dan ruangan yang tersedia
 let slotWaktu = ["08:00-10:00", "10:00-12:00", "13:00-15:00", "15:00-17:00", "17:00-19:00", "19:00-21:00"];
 let hariTersedia = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
@@ -236,9 +236,11 @@ prosesJadwalBtn.addEventListener("click", function() {
 
     // proses #5 duplikat array swarmBelumOptimal agar kita bisa melakukan update velocity/posisi
     const newSwarmBelumOptimal = swarmBelumOptimal.map(particle => Object.create(Object.getPrototypeOf(particle), Object.getOwnPropertyDescriptors(particle)));
-    
+    // const newSwarmBelumOptimal = swarmBelumOptimal.slice();
+
     // proses #6 main looping PSO, looping akan terus terjadi sampai jadwal optimal
     let isAllOptimal = 0;
+    let counterOptimal = 1;
     while (!isAllOptimal) {
         newSwarmBelumOptimal.forEach(particle => {
             particle.updateVelocity();
@@ -262,9 +264,14 @@ prosesJadwalBtn.addEventListener("click", function() {
 
         // Memeriksa apakah semua partikel sudah optimal
         isAllOptimal = newSwarmBelumOptimal.length === 0;
+        // // Memeriksa apakah semua partikel sudah optimal
+        // isAllOptimal = newSwarmBelumOptimal.every(particle => particle.isSesuaiKriteria);
+
 
         // mengecek berapa kali looping terjadi
-        console.log("terjadi looping");
+        console.log(`terjadi looping ke ${counterOptimal}`);
+        counterOptimal++;
+        console.log("partikel belum optimal", newSwarmBelumOptimal);
     }
 
     // proses #7 array jadwal yg sudah optimal kita urutkan berdasarkan hari
@@ -280,12 +287,12 @@ prosesJadwalBtn.addEventListener("click", function() {
         // console.log(finalSwarm);
     });
     
-    hasilPenjadwalan.forEach(particle => {
-        console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
-    })
+    // hasilPenjadwalan.forEach(particle => {
+    //     console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
+    // })
 
     // console.log("partikel sudah optimal", swarmSudahOptimal);
-    console.log("partikel belum optimal", newSwarmBelumOptimal);
+    // console.log("partikel belum optimal", newSwarmBelumOptimal);
     // console.log(hasilPenjadwalan.length);
 
     // ------------------------------------------------ //
