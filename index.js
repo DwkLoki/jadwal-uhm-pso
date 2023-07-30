@@ -171,6 +171,7 @@ document.addEventListener("DOMContentLoaded", function() {
     loadDataPesananFromStorage();
 });
 
+// handler proses jadwal menggunakan algoritma PSO
 const prosesJadwalBtn = document.querySelector(".proses-jadwal-btn");
 prosesJadwalBtn.addEventListener("click", function() {
     // Main aplication
@@ -313,7 +314,7 @@ prosesJadwalBtn.addEventListener("click", function() {
                 if (jadwal) {
                     cellArray[cellIndex].innerHTML = `
                     ${jadwal.className} <br>
-                    ${jadwal.courseName} <br>
+                    ${jadwal.courseName} || ${jadwal.jumlahSks} SKS <br>
                     ${jadwal.lecturerName}
                     `;
                 }
@@ -337,21 +338,23 @@ inputPengampuForm.addEventListener("submit", function(event) {
     let courseName = document.getElementById("inputCourseName").value;
     let lecturerName = document.getElementById("inputLecturerName").value;
     let className = document.getElementById("inputClassName").value;
+    let jumlahSks = document.getElementById("inputSks").value;
     let jenisMatkul = document.getElementById("inputJenisMatkul").value;
     let kategoriKelas = document.getElementById("inputKategoriKelas").value;
     let fakultas = document.getElementById("inputFakultas").value;
 
     // Check if the same schedule already exists
-    if (isJadwalPengampuExists(courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas)) {
+    if (isJadwalPengampuExists(courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas)) {
         alert(`Data pengampu yang anda masukkan sudah ada.`);
         return;
     }
 
-    const pengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas);
+    const pengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas);
 
     document.getElementById("inputCourseName").value = null;
     document.getElementById("inputLecturerName").value = null;
     document.getElementById("inputClassName").value = null;
+    document.getElementById("inputSks").value = '';
     document.getElementById("inputJenisMatkul").value = '';
     document.getElementById("inputKategoriKelas").value = '';
     document.getElementById("inputFakultas").value = '';
@@ -389,6 +392,7 @@ inputPesananForm.addEventListener("submit", function(event) {
     let courseName = document.getElementById("inputPesananCourseName").value;
     let lecturerName = document.getElementById("inputPesananLecturerName").value;
     let className = document.getElementById("inputPesananClassName").value;
+    let jumlahSks = document.getElementById("inputPesananJumlahSks").value;
     let jenisMatkul = document.getElementById("inputPesananJenisMatkul").value;
     let kategoriKelas = document.getElementById("inputPesananKategoriKelas").value;
     let fakultas = document.getElementById("inputPesananFakultas").value;
@@ -403,11 +407,12 @@ inputPesananForm.addEventListener("submit", function(event) {
         return;
     }
 
-    const pesananObject = generatePesananObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan);
+    const pesananObject = generatePesananObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan);
 
     document.getElementById("inputPesananCourseName").value = null;
     document.getElementById("inputPesananLecturerName").value = null;
     document.getElementById("inputPesananClassName").value = null;
+    document.getElementById("inputPesananJumlahSks").value = '';
     document.getElementById("inputPesananJenisMatkul").value = '';
     document.getElementById("inputPesananKategoriKelas").value = '';
     document.getElementById("inputPesananFakultas").value = '';
@@ -419,7 +424,7 @@ inputPesananForm.addEventListener("submit", function(event) {
     pesanan.push(pesananObject);
     saveDataPesanan();
 
-    // console.log(pesanan);
+    console.log(pesanan);
 
     // menampilkan semua data pada array pesanan dalam bentuk baris tabel
     const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
@@ -456,24 +461,26 @@ deleteAllDataBtn.addEventListener("click", function() {
 })
 
 // define all function here
-function generatePengampuObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
+function generatePengampuObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas) {
     return {
         pengampuId,
         courseName,
         lecturerName,
         className,
+        jumlahSks,
         jenisMatkul,
         kategoriKelas,
         fakultas
     }
 }
 
-function generatePesananObject(pengampuId, courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan) {
+function generatePesananObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan) {
     return {
         pengampuId,
         courseName,
         lecturerName,
         className,
+        jumlahSks,
         jenisMatkul,
         kategoriKelas,
         fakultas,
@@ -835,12 +842,13 @@ function isJadwalPesananExists(hari, waktu, ruangan) {
     );
 }
 
-function isJadwalPengampuExists(courseName, lecturerName, className, jenisMatkul, kategoriKelas, fakultas) {
+function isJadwalPengampuExists(courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas) {
     return pengampu.some(
         (item) =>
         item.courseName === courseName &&
         item.lecturerName === lecturerName &&
         item.className === className &&
+        item.jumlahSks === jumlahSks &&
         item.jenisMatkul === jenisMatkul &&
         item.kategoriKelas === kategoriKelas &&
         item.fakultas === fakultas
@@ -976,6 +984,7 @@ function handleEditButton(selectedPesanan) {
     document.getElementById("inputPesananCourseNameModal").value = selectedPesanan.courseName;
     document.getElementById("inputPesananLecturerNameModal").value = selectedPesanan.lecturerName;
     document.getElementById("inputPesananClassNameModal").value = selectedPesanan.className;
+    document.getElementById("inputPesananJumlahSksModal").value = selectedPesanan.jumlahSks;
     document.getElementById("inputPesananJenisMatkulModal").value = selectedPesanan.jenisMatkul;
     document.getElementById("inputPesananKategoriKelasModal").value = selectedPesanan.kategoriKelas;
     document.getElementById("inputPesananFakultasModal").value = selectedPesanan.fakultas;
@@ -1039,6 +1048,7 @@ saveBtn.addEventListener("click", function(e) {
     const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
     const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
     const newClassName = document.getElementById("inputPesananClassNameModal").value;
+    const newJumlahSks = document.getElementById("inputPesananJumlahSksModal").value;
     const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
     const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
     const newFakultas = document.getElementById("inputPesananFakultasModal").value;
@@ -1050,6 +1060,7 @@ saveBtn.addEventListener("click", function(e) {
     selectedPesanan.courseName = newCourseName;
     selectedPesanan.lecturerName = newLecturerName;
     selectedPesanan.className = newClassName;
+    selectedPesanan.jumlahSks = newJumlahSks;
     selectedPesanan.jenisMatkul = newJenisMatkul;
     selectedPesanan.kategoriKelas = newKategoriKelas;
     selectedPesanan.fakultas = newFakultas;
@@ -1076,6 +1087,7 @@ function handleEditPengampuButton(selectedPengampu) {
     document.getElementById("inputPengampuCourseNameModal").value = selectedPengampu.courseName;
     document.getElementById("inputPengampuLecturerNameModal").value = selectedPengampu.lecturerName;
     document.getElementById("inputPengampuClassNameModal").value = selectedPengampu.className;
+    document.getElementById("inputPengampuJumlahSksModal").value = selectedPengampu.jumlahSks;
     document.getElementById("inputPengampuJenisMatkulModal").value = selectedPengampu.jenisMatkul;
     document.getElementById("inputPengampuKategoriKelasModal").value = selectedPengampu.kategoriKelas;
     document.getElementById("inputPengampuFakultasModal").value = selectedPengampu.fakultas;
@@ -1096,6 +1108,7 @@ savePengampuBtn.addEventListener("click", function(e) {
     const newCourseName = document.getElementById("inputPengampuCourseNameModal").value;
     const newLecturerName = document.getElementById("inputPengampuLecturerNameModal").value;
     const newClassName = document.getElementById("inputPengampuClassNameModal").value;
+    const newJumlahSks = document.getElementById("inputPengampuJumlahSksModal").value;
     const newJenisMatkul = document.getElementById("inputPengampuJenisMatkulModal").value;
     const newKategoriKelas = document.getElementById("inputPengampuKategoriKelasModal").value;
     const newFakultas = document.getElementById("inputPengampuFakultasModal").value;
@@ -1104,6 +1117,7 @@ savePengampuBtn.addEventListener("click", function(e) {
     selectedPengampu.courseName = newCourseName;
     selectedPengampu.lecturerName = newLecturerName;
     selectedPengampu.className = newClassName;
+    selectedPengampu.jumlahSks = newJumlahSks;
     selectedPengampu.jenisMatkul = newJenisMatkul;
     selectedPengampu.kategoriKelas = newKategoriKelas;
     selectedPengampu.fakultas = newFakultas;
