@@ -622,6 +622,14 @@ function generatePesananElement(pesananObject) {
     const dataKolomAksi = document.createElement("td");
     dataKolomAksi.append(btnContainer);
 
+    const dataJadwal = document.createElement("td");
+    dataJadwal.innerHTML = 
+    `
+        ${hariTersedia[Number(pesananObject.hari) - 1]} <br>
+        Ruangan ${slotRuangan[Number(pesananObject.ruangan) - 1]} <br> 
+        ${slotWaktu[Number(pesananObject.waktu) - 1]} 
+    `;
+
     const dataKolomKelas = document.createElement("td");
     dataKolomKelas.innerText = pesananObject.className;
 
@@ -635,7 +643,7 @@ function generatePesananElement(pesananObject) {
     dataKolomNomor.innerText = pesanan.indexOf(pesananObject) + 1; //mendapatkan indeks sebuah array
 
     const dataPesananElement = document.createElement("tr");
-    dataPesananElement.append(dataKolomNomor, dataKolomMatkul, dataKolomDosen, dataKolomKelas, dataKolomAksi);
+    dataPesananElement.append(dataKolomNomor, dataKolomMatkul, dataKolomDosen, dataKolomKelas, dataJadwal, dataKolomAksi);
 
     return dataPesananElement;
 }
