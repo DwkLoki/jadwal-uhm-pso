@@ -52,8 +52,8 @@ class Particle {
             if (pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
 
-                while (randomRoom === 9) {
-                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 9
+                while (randomRoom === 8) {
+                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
             } else if (pengampu.jenisMatkul === "praktikum") {
@@ -130,7 +130,7 @@ class Particle {
 
             if (this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (pengampu.jenisMatkul === "praktikum") {
+            } else if (this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
@@ -141,8 +141,8 @@ class Particle {
             if (this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
 
-                while (randomRoom === 9) {
-                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 9
+                while (randomRoom === 8) {
+                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
             } else if (this.pengampu.jenisMatkul === "praktikum") {
@@ -286,14 +286,16 @@ prosesJadwalBtn.addEventListener("click", function() {
         hasilPenjadwalan.push(finalSwarm);
         // console.log(finalSwarm);
     });
+
+    // console.log(hasilPenjadwalan.length);
     
-    // hasilPenjadwalan.forEach(particle => {
-    //     console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
-    // })
+    hasilPenjadwalan.forEach(particle => {
+        console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
+    })
 
     // console.log("partikel sudah optimal", swarmSudahOptimal);
-    // console.log("partikel belum optimal", newSwarmBelumOptimal);
-    // console.log(hasilPenjadwalan.length);
+    // console.log("partikel belum optimal", newSwarmBelumOptimal.length);
+    // console.log(hasilPenjadwalan);
 
     // ------------------------------------------------ //
     //    Menampilkan data jadwal dalam bentuk tabel    //
