@@ -5,6 +5,7 @@ const localStoragePengampu = "PENGAMPU_GENAP";
 const localStoragePesanan = "JADWAL_PESANAN";
 // const localStoragePengampu = "PENGAMPU_GENAP_TES";
 // const localStoragePesanan = "JADWAL_PESANAN_TES";
+
 // Definisikan slot waktu, hari dan ruangan yang tersedia
 let slotWaktu = ["08:00-10:00", "10:00-12:00", "13:00-15:00", "15:00-17:00", "17:00-19:00", "19:00-21:00"];
 let hariTersedia = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
@@ -286,8 +287,6 @@ prosesJadwalBtn.addEventListener("click", function() {
         hasilPenjadwalan.push(finalSwarm);
         // console.log(finalSwarm);
     });
-
-    // console.log(hasilPenjadwalan.length);
     
     hasilPenjadwalan.forEach(particle => {
         console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
@@ -522,12 +521,7 @@ function generatePengampuElement(pengampuObject) {
     const editBtn = document.createElement("button");
     editBtn.classList.add("edit-btn");
     editBtn.setAttribute("type", "button");
-    // editBtn.setAttribute("data-bs-toggle", "modal");
-    // editBtn.setAttribute("data-bs-target", "#editModal");
     editBtn.append(logoEditBtn);
-    // editBtn.addEventListener("click", function(e) {
-    //     handleEditButton(pengampuObject.pengampuId);
-    // })
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
@@ -599,12 +593,7 @@ function generatePesananElement(pesananObject) {
     const editBtn = document.createElement("button");
     editBtn.classList.add("edit-btn");
     editBtn.setAttribute("type", "button");
-    // editBtn.setAttribute("data-bs-toggle", "modal");
-    // editBtn.setAttribute("data-bs-target", "#editPesananModal");
     editBtn.append(logoEditBtn);
-    // editBtn.addEventListener("click", function(e) {
-    //     handleEditButton(pesananObject);
-    // })
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
@@ -872,65 +861,6 @@ function isJadwalPengampuExists(courseName, lecturerName, className, jumlahSks, 
     );
 }
 
-// function handleEditPesanan(selectedPesanan) {
-//     return function (event) {
-//         event.preventDefault(); // Prevent form submission
-
-//         // Retrieve form values
-//         const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
-//         const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
-//         const newClassName = document.getElementById("inputPesananClassNameModal").value;
-//         const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
-//         const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
-//         const newFakultas = document.getElementById("inputPesananFakultasModal").value;
-//         const newHari = document.getElementById("inputHariModal").value;
-//         const newWaktu = document.getElementById("inputWaktuModal").value;
-//         const newRuangan = document.getElementById("inputRuanganModal").value;
-
-//         // Update the copied pesanan object with new values
-//         selectedPesanan.courseName = newCourseName;
-//         selectedPesanan.lecturerName = newLecturerName;
-//         selectedPesanan.className = newClassName;
-//         selectedPesanan.jenisMatkul = newJenisMatkul;
-//         selectedPesanan.kategoriKelas = newKategoriKelas;
-//         selectedPesanan.fakultas = newFakultas;
-//         selectedPesanan.hari = newHari;
-//         selectedPesanan.waktu = newWaktu;
-//         selectedPesanan.ruangan = newRuangan;
-
-//         console.log(selectedPesanan);
-
-//         // Save the updated pesanan array to local storage
-//         saveDataPesanan();
-
-//         // Update the table with the updated pesanan data
-//         const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
-//         tabelDaftarPesanan.innerHTML = '';
-        
-//         for (const pesananItem of pesanan) {
-//             const newPesananElement = generatePesananElement(pesananItem);
-//             tabelDaftarPesanan.append(newPesananElement);
-//         }
-//     }
-// };
-
-// // handle edit button pengampu
-// function handleEditButton(pesananObject) {
-//     const selectedPesanan = pesanan.find(pesanan => pesanan.pengampuId === pesananObject.pengampuId);
-//     console.log(selectedPesanan);
-
-//     // Set modal form values
-//     document.getElementById("inputPesananCourseNameModal").value = selectedPesanan.courseName;
-//     document.getElementById("inputPesananLecturerNameModal").value = selectedPesanan.lecturerName;
-//     document.getElementById("inputPesananClassNameModal").value = selectedPesanan.className;
-//     document.getElementById("inputPesananJenisMatkulModal").value = selectedPesanan.jenisMatkul;
-//     document.getElementById("inputPesananKategoriKelasModal").value = selectedPesanan.kategoriKelas;
-//     document.getElementById("inputPesananFakultasModal").value = selectedPesanan.fakultas;
-//     document.getElementById("inputHariModal").value = selectedPesanan.hari;
-//     document.getElementById("inputWaktuModal").value = selectedPesanan.waktu;
-//     document.getElementById("inputRuanganModal").value = selectedPesanan.ruangan;
-// }
-
 function calculateFitness(particle, swarmDaySorted) {
     let particleFitness = 0;
     const currentParticle = particle;
@@ -1014,46 +944,6 @@ function handleEditButton(selectedPesanan) {
     // Tampilkan modal
     const editPesananModal = new bootstrap.Modal(document.getElementById('editPesananModal'));
     editPesananModal.show();
-
-    // // Menangani klik tombol "Save" pada modal
-    // const saveBtn = document.getElementById("pesananEditBtn");
-    // saveBtn.addEventListener("click", function(e) {
-    //     e.preventDefault();
-    //     console.log("ter klik save");
-    //     // Ambil nilai-nilai dari input di dalam modal
-    //     const newCourseName = document.getElementById("inputPesananCourseNameModal").value;
-    //     const newLecturerName = document.getElementById("inputPesananLecturerNameModal").value;
-    //     const newClassName = document.getElementById("inputPesananClassNameModal").value;
-    //     const newJenisMatkul = document.getElementById("inputPesananJenisMatkulModal").value;
-    //     const newKategoriKelas = document.getElementById("inputPesananKategoriKelasModal").value;
-    //     const newFakultas = document.getElementById("inputPesananFakultasModal").value;
-    //     const newHari = document.getElementById("inputHariModal").value;
-    //     const newWaktu = document.getElementById("inputWaktuModal").value;
-    //     const newRuangan = document.getElementById("inputRuanganModal").value;
-
-    //     // Update data pesanan dengan nilai-nilai baru
-    //     pesananObject.courseName = newCourseName;
-    //     pesananObject.lecturerName = newLecturerName;
-    //     pesananObject.className = newClassName;
-    //     pesananObject.jenisMatkul = newJenisMatkul;
-    //     pesananObject.kategoriKelas = newKategoriKelas;
-    //     pesananObject.fakultas = newFakultas;
-    //     pesananObject.hari = newHari;
-    //     pesananObject.waktu = newWaktu;
-    //     pesananObject.ruangan = newRuangan;
-
-    //     // Simpan data pesanan yang sudah diubah ke local storage
-    //     saveDataPesanan();
-
-    //     // Update tampilan tabel dengan data pesanan yang baru
-    //     const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
-    //     tabelDaftarPesanan.innerHTML = '';
-        
-    //     for (const pesananItem of pesanan) {
-    //         const newPesananElement = generatePesananElement(pesananItem);
-    //         tabelDaftarPesanan.append(newPesananElement);
-    //     }
-    // });
 }
 
 // Menangani klik tombol "Save" pada modal
