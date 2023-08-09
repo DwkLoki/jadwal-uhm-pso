@@ -51,10 +51,10 @@ class Particle {
             randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
         
             if (pengampu.jenisMatkul === "teori"){
-                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+                randomRoom = Math.floor(Math.random() * 8) + 2; // 2-9
 
                 while (randomRoom === 8) {
-                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
+                    randomRoom = Math.floor(Math.random() * 8) + 2; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
             } else if (pengampu.jenisMatkul === "praktikum") {
@@ -140,10 +140,10 @@ class Particle {
             randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
         
             if (this.pengampu.jenisMatkul === "teori"){
-                randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+                randomRoom = Math.floor(Math.random() * 8) + 2; // 2-9
 
                 while (randomRoom === 8) {
-                    randomRoom = Math.floor(Math.random() * 9) + 1; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
+                    randomRoom = Math.floor(Math.random() * 8) + 2; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
             } else if (this.pengampu.jenisMatkul === "praktikum") {
@@ -170,6 +170,8 @@ class Particle {
 document.addEventListener("DOMContentLoaded", function() {
     loadDataFromStorage();
     loadDataPesananFromStorage();
+    console.log(pengampu);
+    console.log(pesanan);
 });
 
 // handler proses jadwal menggunakan algoritma PSO
@@ -371,7 +373,7 @@ inputPengampuForm.addEventListener("submit", function(event) {
     pengampu.push(pengampuObject);
     saveDataPengampu();
 
-    console.log(pengampu);
+    // console.log(pengampu);
     // console.log(pengampu.length);
 
     // menampilkan semua data pada array pengampu dalam bentuk baris tabel
@@ -432,7 +434,7 @@ inputPesananForm.addEventListener("submit", function(event) {
     pesanan.push(pesananObject);
     saveDataPesanan();
 
-    console.log(pesanan);
+    // console.log(pesanan);
 
     // menampilkan semua data pada array pesanan dalam bentuk baris tabel
     const tabelDaftarPesanan = document.querySelector("tbody.daftar-pesanan");
@@ -743,10 +745,10 @@ function exportTableToPdf() {
         tandaTanganContainer.innerHTML = 
         `
         <div>
-            <p style="margin-bottom: 0; font-size: 11px;">Makassar, ${tanggal} ${arrbulan[bulan]} ${tahun}</p>
-            <img src="assets/ttdjadwal.jpg" alt="ttd jadwal" width="150">
-            <p style="text-decoration:underline; margin-bottom: 0; font-size: 11px;">Ir. Billy Eden William Asrul, S.Kom., M.T.</p>
-            <p style="margin-bottom: 0; font-size: 11px;">Wakil Rektor Bidang Akademik</p>
+            <p style="margin-bottom: 0; font-size: 12px;">Makassar, ${tanggal} ${arrbulan[bulan]} ${tahun}</p>
+            <br><br><br>
+            <p style="text-decoration:underline; margin-bottom: 0; font-size: 12px;">Ir. Billy Eden William Asrul, S.Kom., M.T.</p>
+            <p style="margin-bottom: 0; font-size: 12px;">Wakil Rektor Bidang Akademik</p>
         </div>
         `
 
