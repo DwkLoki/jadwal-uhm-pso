@@ -182,7 +182,7 @@ prosesJadwalBtn.addEventListener("click", function() {
     // Definisikan parameter PSO
     let globalBestPosition = null;
     let jumlahPengampu = pengampu.length;
-    let iterasiMaksimal = 5;
+    let iterasiMaksimal = 100;
     let c1 = 2;
     let c2 = 2;
     let w = 1;
@@ -221,8 +221,6 @@ prosesJadwalBtn.addEventListener("click", function() {
         swarm.push(particle);
     }
 
-    console.log(swarm);
-
     // proses #2 mengurutkan seluruh partikel bedasarkan hari
     // sampai sini, tiap partikel sudah dipasangkan posisi/slot jadwal yang sesuai dengan kriteria yg ditentukan saat inisialisasi
     // namun masih ada beberapa partikel yg memiliki nilai posisi yang sama (bentrok)
@@ -243,9 +241,10 @@ prosesJadwalBtn.addEventListener("click", function() {
     const newSwarmBelumOptimal = swarmBelumOptimal.map(particle => Object.create(Object.getPrototypeOf(particle), Object.getOwnPropertyDescriptors(particle)));
 
     // proses #6 main looping PSO, looping akan terus terjadi sampai jadwal optimal
-    let isAllOptimal = 0;
+    let isAllOptimal = false;
+    let iterasiSaatIni = 0; // Inisialisasi iterasi saat ini
     let counterOptimal = 1;
-    while (!isAllOptimal) {
+    while (!isAllOptimal && iterasiSaatIni < iterasiMaksimal) {
         newSwarmBelumOptimal.forEach(particle => {
             particle.updateVelocity();
             // particle.initialize(particle.pengampu)
@@ -270,7 +269,7 @@ prosesJadwalBtn.addEventListener("click", function() {
         isAllOptimal = newSwarmBelumOptimal.length === 0;
         // // Memeriksa apakah semua partikel sudah optimal
         // isAllOptimal = newSwarmBelumOptimal.every(particle => particle.isSesuaiKriteria);
-
+        iterasiSaatIni++;
 
         // mengecek berapa kali looping terjadi
         console.log(`terjadi looping ke ${counterOptimal}`);
@@ -430,10 +429,7 @@ let selectedFile;
 
 document.getElementById("input-file").addEventListener("change", (e) => {
     selectedFile = e.target.files[0];
-});
 
-document.getElementById("convert-btn").addEventListener("click", (event) => {
-    event.preventDefault();
     if (selectedFile) {
         let fileReader = new FileReader();
         fileReader.readAsBinaryString(selectedFile);
@@ -444,7 +440,9 @@ document.getElementById("convert-btn").addEventListener("click", (event) => {
             let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
             
             // Modifikasi nama properti di dalam array rowObject
-            rowObject.forEach(item => {
+            rowObject.forEach((item, index) => {
+                item.pengampuId = index + 1;
+                
                 item.courseName = item["Nama Matakuliah"]; // Ganti nama properti di sini
                 delete item["Nama Matakuliah"]; // Hapus nama properti lama jika perlu
                 
@@ -454,7 +452,7 @@ document.getElementById("convert-btn").addEventListener("click", (event) => {
                 item.className = item["Kelas"]; 
                 delete item["Kelas"]; 
 
-                item.jumlahSks = item.SKS; 
+                item.jumlahSks = item.SKS.toString(); 
                 delete item.SKS; 
 
                 item.jenisMatkul = item["Jenis Matkul"]; 
@@ -493,7 +491,51 @@ document.getElementById("convert-btn").addEventListener("click", (event) => {
             // });
         }
     }
-})
+});
+
+// document.getElementById("convert-btn").addEventListener("click", (event) => {
+//     event.preventDefault();
+//     pengampu.forEach(item => {
+//         item.courseName = item["Nama Matakuliah"]; // Ganti nama properti di sini
+//         delete item["Nama Matakuliah"]; // Hapus nama properti lama jika perlu
+        
+//         item.lecturerName = item["Nama Dosen"]; 
+//         delete item["Nama Dosen"];
+        
+//         item.className = item["Kelas"]; 
+//         delete item["Kelas"]; 
+
+//         item.jumlahSks = item.SKS; 
+//         delete item.SKS; 
+
+//         item.jenisMatkul = item["Jenis Matkul"]; 
+//         delete item["Jenis Matkul"]; 
+
+//         item.kategoriKelas = item["Kategori Kelas"]; 
+//         delete item["Kategori Kelas"]; 
+
+//         item.fakultas = item["Fakultas"]; 
+//         delete item["Fakultas"]; 
+
+//         item.semester = item.Semester; 
+//         delete item.Semester; 
+//     });
+
+//     // menampilkan semua data pada array pengampu dalam bentuk baris tabel
+//     const tabelDaftarPengampu = document.querySelector("tbody");
+//     tabelDaftarPengampu.innerHTML = '';
+//     $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
+//     $('#timetabling tbody').empty(); // Menghapus semua baris yang ada di tbody
+
+//     for (const pengampuItem of pengampu) {
+//         const newPengampuElement = generatePengampuElement(pengampuItem);
+//         tabelDaftarPengampu.append(newPengampuElement);
+//     }
+
+//     new DataTable('#timetabling');
+
+//     saveDataPengampu();
+// })
 
 function generatePesananObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan) {
     return {
