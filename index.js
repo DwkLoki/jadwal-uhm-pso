@@ -242,9 +242,9 @@ prosesJadwalBtn.addEventListener("click", function() {
 
     // proses #6 main looping PSO, looping akan terus terjadi sampai jadwal optimal
     let isAllOptimal = false;
-    let iterasiSaatIni = 0; // Inisialisasi iterasi saat ini
+    // let iterasiSaatIni = 0; // Inisialisasi iterasi saat ini
     let counterOptimal = 1;
-    while (!isAllOptimal && iterasiSaatIni < iterasiMaksimal) {
+    while (!isAllOptimal) {
         newSwarmBelumOptimal.forEach(particle => {
             particle.updateVelocity();
             // particle.initialize(particle.pengampu)
@@ -269,7 +269,6 @@ prosesJadwalBtn.addEventListener("click", function() {
         isAllOptimal = newSwarmBelumOptimal.length === 0;
         // // Memeriksa apakah semua partikel sudah optimal
         // isAllOptimal = newSwarmBelumOptimal.every(particle => particle.isSesuaiKriteria);
-        iterasiSaatIni++;
 
         // mengecek berapa kali looping terjadi
         console.log(`terjadi looping ke ${counterOptimal}`);
@@ -442,7 +441,7 @@ document.getElementById("input-file").addEventListener("change", (e) => {
             // Modifikasi nama properti di dalam array rowObject
             rowObject.forEach((item, index) => {
                 item.pengampuId = index + 1;
-                
+
                 item.courseName = item["Nama Matakuliah"]; // Ganti nama properti di sini
                 delete item["Nama Matakuliah"]; // Hapus nama properti lama jika perlu
                 
@@ -471,10 +470,10 @@ document.getElementById("input-file").addEventListener("change", (e) => {
             pengampu = rowObject;
 
             // menampilkan semua data pada array pengampu dalam bentuk baris tabel
-            const tabelDaftarPengampu = document.querySelector("tbody");
+            const tabelDaftarPengampu = document.querySelector("tbody.daftar-pengampu");
             tabelDaftarPengampu.innerHTML = '';
             $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
-            $('#timetabling tbody').empty(); // Menghapus semua baris yang ada di tbody
+            $('#timetabling tbody.daftar-pengampu').empty(); // Menghapus semua baris yang ada di tbody
 
             for (const pengampuItem of pengampu) {
                 const newPengampuElement = generatePengampuElement(pengampuItem);
@@ -484,6 +483,10 @@ document.getElementById("input-file").addEventListener("change", (e) => {
             new DataTable('#timetabling');
 
             saveDataPengampu();
+            
+            // Setelah pemrosesan selesai, kosongkan input file
+            e.target.value = "";
+
             // console.log(pengampu);
             // workbook.SheetNames.forEach(sheet => {
             //     let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
@@ -493,49 +496,6 @@ document.getElementById("input-file").addEventListener("change", (e) => {
     }
 });
 
-// document.getElementById("convert-btn").addEventListener("click", (event) => {
-//     event.preventDefault();
-//     pengampu.forEach(item => {
-//         item.courseName = item["Nama Matakuliah"]; // Ganti nama properti di sini
-//         delete item["Nama Matakuliah"]; // Hapus nama properti lama jika perlu
-        
-//         item.lecturerName = item["Nama Dosen"]; 
-//         delete item["Nama Dosen"];
-        
-//         item.className = item["Kelas"]; 
-//         delete item["Kelas"]; 
-
-//         item.jumlahSks = item.SKS; 
-//         delete item.SKS; 
-
-//         item.jenisMatkul = item["Jenis Matkul"]; 
-//         delete item["Jenis Matkul"]; 
-
-//         item.kategoriKelas = item["Kategori Kelas"]; 
-//         delete item["Kategori Kelas"]; 
-
-//         item.fakultas = item["Fakultas"]; 
-//         delete item["Fakultas"]; 
-
-//         item.semester = item.Semester; 
-//         delete item.Semester; 
-//     });
-
-//     // menampilkan semua data pada array pengampu dalam bentuk baris tabel
-//     const tabelDaftarPengampu = document.querySelector("tbody");
-//     tabelDaftarPengampu.innerHTML = '';
-//     $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
-//     $('#timetabling tbody').empty(); // Menghapus semua baris yang ada di tbody
-
-//     for (const pengampuItem of pengampu) {
-//         const newPengampuElement = generatePengampuElement(pengampuItem);
-//         tabelDaftarPengampu.append(newPengampuElement);
-//     }
-
-//     new DataTable('#timetabling');
-
-//     saveDataPengampu();
-// })
 
 function generatePesananObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan) {
     return {
@@ -553,22 +513,25 @@ function generatePesananObject(pengampuId, courseName, lecturerName, className, 
     }
 }
 
-// Event delegation untuk tombol "Edit pesanan"
+// Event delegation untuk tombol "Edit pengampu"
 let selectedPengampu = null;
 
 const tablePengampuContainer = document.querySelector("tbody.daftar-pengampu"); // Gantikan "container" dengan elemen induk yang sesuai
 tablePengampuContainer.addEventListener("click", function(event) {
     if (event.target.matches("i.bi.bi-pencil-square")) {
-        const rowIndex = event.target.closest("tr").rowIndex;
-        selectedPengampu = pengampu[rowIndex - 1]; // Kurangi 1 karena indeks dimulai dari 0
-        // console.log(selectedPesanan);
-        handleEditPengampuButton(selectedPengampu);
+        const pengampuId = parseInt(event.target.dataset.pengampuId);
+        if (!isNaN(pengampuId) && pengampuId >= 0 && pengampuId < pengampu.length) {
+            selectedPengampu = pengampu[pengampuId - 1];
+            console.log(selectedPengampu);
+            handleEditPengampuButton(selectedPengampu);
+        }
     }
 });
 
 function generatePengampuElement(pengampuObject) {
     const logoEditBtn = document.createElement("i");
     logoEditBtn.classList.add("bi", "bi-pencil-square");
+    logoEditBtn.setAttribute("data-pengampu-id", pengampuObject.pengampuId);
 
     const logoDeleteBtn = document.createElement("i");
     logoDeleteBtn.classList.add("bi", "bi-trash");
@@ -770,6 +733,7 @@ function exportTableToPdf() {
     $('header').css('display', 'none');
     $('hr').css('display', 'none');
     $('.first-section').css('display', 'none');
+    $('.second-section').css('display', 'none');
     $('.proses-jadwal-btn-container').css('display', 'none');
 
     // Ambil semua tabel hari
