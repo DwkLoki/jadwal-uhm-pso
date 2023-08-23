@@ -1,4 +1,4 @@
-const pengampu = [];
+let pengampu = [];
 const pesanan = [];
 const particlesToUpdate = [];
 const localStoragePengampu = "PENGAMPU_GENAP";
@@ -26,44 +26,44 @@ class Particle {
         let randomDay, randomRoom, randomTime;
         
         // Randomly select day, time and room
-        if (pengampu.kategoriKelas === "reguler") {
+        if (pengampu.kategoriKelas === "Reguler" || pengampu.kategoriKelas === "reguler") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
 
-            if (pengampu.jenisMatkul === "teori"){
+            if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (pengampu.jenisMatkul === "praktikum") {
+            } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (pengampu.kategoriKelas === "malam") {
+        } else if (pengampu.kategoriKelas === "Malam" || pengampu.kategoriKelas === "malam") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
 
-            if (pengampu.jenisMatkul === "teori"){
+            if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (pengampu.jenisMatkul === "praktikum") {
+            } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (pengampu.kategoriKelas === "ekstensi") {
+        } else if (pengampu.kategoriKelas === "Ekstensi" || pengampu.kategoriKelas === "ekstensi") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
         
-            if (pengampu.jenisMatkul === "teori"){
+            if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 8) + 2; // 2-9
 
                 while (randomRoom === 8) {
                     randomRoom = Math.floor(Math.random() * 8) + 2; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
-            } else if (pengampu.jenisMatkul === "praktikum") {
+            } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
         }
 
         // Menentukan room, time dan day matkul hukum
-        if (pengampu.fakultas === "hukum") {
+        if (pengampu.fakultas === "Hukum dan Ilmu Sosial" || pengampu.fakultas === "hukum dan ilmu sosial") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
             randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
@@ -115,44 +115,44 @@ class Particle {
         let randomDay, randomRoom, randomTime;
         
         // Randomly select day, time and room
-        if (this.pengampu.kategoriKelas === "reguler") {
+        if (this.pengampu.kategoriKelas === "Reguler" || this.pengampu.kategoriKelas === "reguler") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
 
-            if (this.pengampu.jenisMatkul === "teori"){
+            if (this.pengampu.jenisMatkul === "Teori" || this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (this.pengampu.jenisMatkul === "praktikum") {
+            } else if (this.pengampu.jenisMatkul === "Praktikum" || this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (this.pengampu.kategoriKelas === "malam") {
+        } else if (this.pengampu.kategoriKelas === "Malam" || this.pengampu.kategoriKelas === "malam") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
 
-            if (this.pengampu.jenisMatkul === "teori"){
+            if (this.pengampu.jenisMatkul === "Teori" || this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (this.pengampu.jenisMatkul === "praktikum") {
+            } else if (this.pengampu.jenisMatkul === "Praktikum" || this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (this.pengampu.kategoriKelas === "ekstensi") {
+        } else if (this.pengampu.kategoriKelas === "Ekstensi" || this.pengampu.kategoriKelas === "ekstensi") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
         
-            if (this.pengampu.jenisMatkul === "teori"){
+            if (this.pengampu.jenisMatkul === "Teori" || this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 8) + 2; // 2-9
 
                 while (randomRoom === 8) {
                     randomRoom = Math.floor(Math.random() * 8) + 2; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
-            } else if (this.pengampu.jenisMatkul === "praktikum") {
+            } else if (this.pengampu.jenisMatkul === "Praktikum" || this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
         }
 
         // Menentukan room, time dan day matkul hukum
-        if (this.pengampu.fakultas === "hukum") {
+        if (this.pengampu.fakultas === "Hukum dan Ilmu Sosial" || this.pengampu.fakultas === "hukum dan ilmu sosial") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
             randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
@@ -170,8 +170,8 @@ class Particle {
 document.addEventListener("DOMContentLoaded", function() {
     loadDataFromStorage();
     loadDataPesananFromStorage();
-    console.log(pengampu);
-    console.log(pesanan);
+    // console.log(pengampu);
+    // console.log(pesanan);
 });
 
 // handler proses jadwal menggunakan algoritma PSO
@@ -182,7 +182,7 @@ prosesJadwalBtn.addEventListener("click", function() {
     // Definisikan parameter PSO
     let globalBestPosition = null;
     let jumlahPengampu = pengampu.length;
-    let iterasiMaksimal = 5;
+    let iterasiMaksimal = 100;
     let c1 = 2;
     let c2 = 2;
     let w = 1;
@@ -239,10 +239,10 @@ prosesJadwalBtn.addEventListener("click", function() {
 
     // proses #5 duplikat array swarmBelumOptimal agar kita bisa melakukan update velocity/posisi
     const newSwarmBelumOptimal = swarmBelumOptimal.map(particle => Object.create(Object.getPrototypeOf(particle), Object.getOwnPropertyDescriptors(particle)));
-    // const newSwarmBelumOptimal = swarmBelumOptimal.slice();
 
     // proses #6 main looping PSO, looping akan terus terjadi sampai jadwal optimal
-    let isAllOptimal = 0;
+    let isAllOptimal = false;
+    // let iterasiSaatIni = 0; // Inisialisasi iterasi saat ini
     let counterOptimal = 1;
     while (!isAllOptimal) {
         newSwarmBelumOptimal.forEach(particle => {
@@ -269,7 +269,6 @@ prosesJadwalBtn.addEventListener("click", function() {
         isAllOptimal = newSwarmBelumOptimal.length === 0;
         // // Memeriksa apakah semua partikel sudah optimal
         // isAllOptimal = newSwarmBelumOptimal.every(particle => particle.isSesuaiKriteria);
-
 
         // mengecek berapa kali looping terjadi
         console.log(`terjadi looping ke ${counterOptimal}`);
@@ -336,59 +335,6 @@ prosesJadwalBtn.addEventListener("click", function() {
     }
 })
 
-// handle submit input pengampu
-const inputPengampuForm = document.getElementById("inputPengampu");
-
-inputPengampuForm.addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent form submission
-
-    // Retrieve form values
-    const pengampuId = +new Date();
-
-    let courseName = document.getElementById("inputCourseName").value;
-    let lecturerName = document.getElementById("inputLecturerName").value;
-    let className = document.getElementById("inputClassName").value;
-    let jumlahSks = document.getElementById("inputSks").value;
-    let jenisMatkul = document.getElementById("inputJenisMatkul").value;
-    let kategoriKelas = document.getElementById("inputKategoriKelas").value;
-    let fakultas = document.getElementById("inputFakultas").value;
-
-    // Check if the same schedule already exists
-    if (isJadwalPengampuExists(courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas)) {
-        alert(`Data pengampu yang anda masukkan sudah ada.`);
-        return;
-    }
-
-    const pengampuObject = generatePengampuObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas);
-
-    document.getElementById("inputCourseName").value = null;
-    document.getElementById("inputLecturerName").value = null;
-    document.getElementById("inputClassName").value = null;
-    document.getElementById("inputSks").value = '';
-    document.getElementById("inputJenisMatkul").value = '';
-    document.getElementById("inputKategoriKelas").value = '';
-    document.getElementById("inputFakultas").value = '';
-
-
-    pengampu.push(pengampuObject);
-    saveDataPengampu();
-
-    // console.log(pengampu);
-    // console.log(pengampu.length);
-
-    // menampilkan semua data pada array pengampu dalam bentuk baris tabel
-    const tabelDaftarPengampu = document.querySelector("tbody");
-    tabelDaftarPengampu.innerHTML = '';
-    $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
-    $('#timetabling tbody').empty(); // Menghapus semua baris yang ada di tbody
-
-    for (const pengampuItem of pengampu) {
-        const newPengampuElement = generatePengampuElement(pengampuItem);
-        tabelDaftarPengampu.append(newPengampuElement);
-    }
-
-    new DataTable('#timetabling');
-});
 
 // handle submit input pesanan
 const inputPesananForm = document.getElementById("inputPesanan");
@@ -452,6 +398,7 @@ downloadBtn.addEventListener("click", function() {
     exportTableToPdf();
 })
 
+// handle hapus data
 const deleteAllDataBtn = document.querySelector("#hapus-jadwal-btn");
 deleteAllDataBtn.addEventListener("click", function() {
     const confirmation = window.confirm("APAKAH ANDA YAKIN INGIN MENGHAPUS SEMUA DATA?");
@@ -470,19 +417,85 @@ deleteAllDataBtn.addEventListener("click", function() {
     }
 })
 
-// define all function here
-function generatePengampuObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas) {
-    return {
-        pengampuId,
-        courseName,
-        lecturerName,
-        className,
-        jumlahSks,
-        jenisMatkul,
-        kategoriKelas,
-        fakultas
+
+// ---------------------------------------------- //
+//    Mendefinisikan semua function di sini      //
+// -------------------------------------------- //
+
+// function untuk mengkonversi file excel ke JSON kemudian tampilkan 
+// dalam bentuk tabel
+let selectedFile;
+
+document.getElementById("input-file").addEventListener("change", (e) => {
+    selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+        let fileReader = new FileReader();
+        fileReader.readAsBinaryString(selectedFile);
+        fileReader.onload = (event) => {
+            let data = event.target.result;
+            let workbook = XLSX.read(data, {type:"binary"});
+            let sheet = workbook.SheetNames[0];
+            let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+            
+            // Modifikasi nama properti di dalam array rowObject
+            rowObject.forEach((item, index) => {
+                item.pengampuId = index + 1;
+
+                item.courseName = item["Nama Matakuliah"]; // Ganti nama properti di sini
+                delete item["Nama Matakuliah"]; // Hapus nama properti lama jika perlu
+                
+                item.lecturerName = item["Nama Dosen"]; 
+                delete item["Nama Dosen"];
+                
+                item.className = item["Kelas"]; 
+                delete item["Kelas"]; 
+
+                item.jumlahSks = item.SKS.toString(); 
+                delete item.SKS; 
+
+                item.jenisMatkul = item["Jenis Matkul"]; 
+                delete item["Jenis Matkul"]; 
+
+                item.kategoriKelas = item["Kategori Kelas"]; 
+                delete item["Kategori Kelas"]; 
+
+                item.fakultas = item["Fakultas"]; 
+                delete item["Fakultas"]; 
+
+                item.semester = item.Semester; 
+                delete item.Semester; 
+            });
+            
+            pengampu = rowObject;
+
+            // menampilkan semua data pada array pengampu dalam bentuk baris tabel
+            const tabelDaftarPengampu = document.querySelector("tbody.daftar-pengampu");
+            tabelDaftarPengampu.innerHTML = '';
+            $('#timetabling').DataTable().destroy(); // Menghapus objek DataTable yang ada sebelumnya
+            $('#timetabling tbody.daftar-pengampu').empty(); // Menghapus semua baris yang ada di tbody
+
+            for (const pengampuItem of pengampu) {
+                const newPengampuElement = generatePengampuElement(pengampuItem);
+                tabelDaftarPengampu.append(newPengampuElement);
+            }
+
+            new DataTable('#timetabling');
+
+            saveDataPengampu();
+            
+            // Setelah pemrosesan selesai, kosongkan input file
+            e.target.value = "";
+
+            // console.log(pengampu);
+            // workbook.SheetNames.forEach(sheet => {
+            //     let rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+            //     console.log(rowObject);
+            // });
+        }
     }
-}
+});
+
 
 function generatePesananObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan) {
     return {
@@ -500,22 +513,25 @@ function generatePesananObject(pengampuId, courseName, lecturerName, className, 
     }
 }
 
-// Event delegation untuk tombol "Edit pesanan"
+// Event delegation untuk tombol "Edit pengampu"
 let selectedPengampu = null;
 
 const tablePengampuContainer = document.querySelector("tbody.daftar-pengampu"); // Gantikan "container" dengan elemen induk yang sesuai
 tablePengampuContainer.addEventListener("click", function(event) {
     if (event.target.matches("i.bi.bi-pencil-square")) {
-        const rowIndex = event.target.closest("tr").rowIndex;
-        selectedPengampu = pengampu[rowIndex - 1]; // Kurangi 1 karena indeks dimulai dari 0
-        // console.log(selectedPesanan);
-        handleEditPengampuButton(selectedPengampu);
+        const pengampuId = parseInt(event.target.dataset.pengampuId);
+        if (!isNaN(pengampuId) && pengampuId >= 0 && pengampuId < pengampu.length) {
+            selectedPengampu = pengampu[pengampuId - 1];
+            console.log(selectedPengampu);
+            handleEditPengampuButton(selectedPengampu);
+        }
     }
 });
 
 function generatePengampuElement(pengampuObject) {
     const logoEditBtn = document.createElement("i");
     logoEditBtn.classList.add("bi", "bi-pencil-square");
+    logoEditBtn.setAttribute("data-pengampu-id", pengampuObject.pengampuId);
 
     const logoDeleteBtn = document.createElement("i");
     logoDeleteBtn.classList.add("bi", "bi-trash");
@@ -717,6 +733,7 @@ function exportTableToPdf() {
     $('header').css('display', 'none');
     $('hr').css('display', 'none');
     $('.first-section').css('display', 'none');
+    $('.second-section').css('display', 'none');
     $('.proses-jadwal-btn-container').css('display', 'none');
 
     // Ambil semua tabel hari

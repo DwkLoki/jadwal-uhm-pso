@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penjadwalan Perkuliahan UHM</title>
+    <link rel="icon" href="assets/favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -16,6 +17,7 @@
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
     <script src="index.js" defer></script>
 </head>
 <body>
@@ -30,6 +32,10 @@
     </header>
     <main>
         <section class="first-section">
+            <form>
+                <input type="file" name="halo" class="form-control" id="input-file" accept=".xls, .xlsx">
+                <!-- <button id="convert-btn">Kirim</button> -->
+            </form>
             <div class="pengampu-list-container">
                 <div class="pengampu-list-section">
                     <div class="tabel-daftar-pengampu">
@@ -48,160 +54,114 @@
                         </table>
                     </div>
                 </div>
-                <div class="pesanan-list-section">
-                    <h3>Daftar Jadwal Permintaan Dosen</h3>
-                    <div class="tabel-daftar-pengampu">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <td scope="col">No</td>
-                                    <td scope="col">Nama Mata Kuliah</td>
-                                    <td scope="col">Nama Dosen</td>
-                                    <td scope="col">Kelas</td>
-                                    <td scope="col">Jadwal</td>
-                                    <td scope="col">Aksi</td>
-                                </tr>
-                            </thead>
-                            <tbody class="daftar-pesanan">
-                            </tbody>
-                        </table>
-                    </div>
+            </div>
+        </section>
+
+        <section class="second-section">
+            <div class="pesanan-list-section">
+                <h3>Daftar Jadwal Permintaan Dosen</h3>
+                <div class="tabel-daftar-pengampu">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td scope="col">No</td>
+                                <td scope="col">Nama Mata Kuliah</td>
+                                <td scope="col">Nama Dosen</td>
+                                <td scope="col">Kelas</td>
+                                <td scope="col">Jadwal</td>
+                                <td scope="col">Aksi</td>
+                            </tr>
+                        </thead>
+                        <tbody class="daftar-pesanan">
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="input-section-">
-                <div class="input-pengampu-section">
-                    <h3>Masukkan Data Perkuliahan</h3>
-                    <form id="inputPengampu" autocomplete="off">
-                        <div class="input">
-                            <input id="inputCourseName" type="text" placeholder="Mata Kuliah" required>
-                        </div>
-                        <div class="input">
-                            <input id="inputLecturerName" type="text" placeholder="Dosen" required>
-                        </div>
-                        <div class="input">
-                            <input id="inputClassName" type="text" placeholder="Kelas" required>
-                        </div>
-                        <div class="input">
-                            <select id="inputSks" required>
-                                <option value="" selected disabled hidden>Jumlah SKS</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputJenisMatkul" required>
-                                <option value="" selected disabled hidden>Jenis Matkul</option>
-                                <option value="teori">Teori</option>
-                                <option value="praktikum">Praktikum</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputKategoriKelas" required>
-                                <option value="" selected disabled hidden>Kategori Kelas</option>
-                                <option value="reguler">Reguler</option>
-                                <option value="malam">Malam</option>
-                                <option value="ekstensi">Ekstensi</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputFakultas" required>
-                                <option value="" selected disabled hidden>Fakultas</option>
-                                <option value="ilkom">Ilmu Komputer</option>
-                                <option value="hukum">Hukum dan Ilmu Sosial</option>
-                            </select>
-                        </div>
-                        <button id="pengampuSubmitBtn" type="submit">Simpan Data Pengampu</button>
-                    </form>
-                </div>
-
-                <div class="input-pengampu-section">
-                    <h3>Masukkan Jadwal <br>Permintaan Dosen</h3>
-                    <form id="inputPesanan" autocomplete="off">
-                        <div class="input">
-                            <input id="inputPesananCourseName" type="text" placeholder="Mata Kuliah" required>
-                        </div>
-                        <div class="input">
-                            <input id="inputPesananLecturerName" type="text" placeholder="Dosen" required>
-                        </div>
-                        <div class="input">
-                            <input id="inputPesananClassName" type="text" placeholder="Kelas" required>
-                        </div>
-                        <div class="input">
-                            <select id="inputPesananJumlahSks" required>
-                                <option value="" selected disabled hidden>Jumlah SKS</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputPesananJenisMatkul" required>
-                                <option value="" selected disabled hidden>Jenis Matkul</option>
-                                <option value="teori">Teori</option>
-                                <option value="praktikum">Praktikum</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputPesananKategoriKelas" required>
-                                <option value="" selected disabled hidden>Kategori Kelas</option>
-                                <option value="reguler">Reguler</option>
-                                <option value="malam">Malam</option>
-                                <option value="ekstensi">Ekstensi</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputPesananFakultas" required>
-                                <option value="" selected disabled hidden>Fakultas</option>
-                                <option value="ilkom">Ilmu Komputer</option>
-                                <option value="hukum">Hukum dan Ilmu Sosial</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputHari" required>
-                                <option value="" selected disabled hidden>Hari</option>
-                                <option value="1">Senin</option>
-                                <option value="2">Selasa</option>
-                                <option value="3">Rabu</option>
-                                <option value="4">Kamis</option>
-                                <option value="5">Jumat</option>
-                                <option value="6">Sabtu</option>
-                                <option value="7">Minggu</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputWaktu" required>
-                                <option value="" selected disabled hidden>Waktu</option>
-                                <option value="1">08:00 - 10:00</option>
-                                <option value="2">10:00 - 12:00</option>
-                                <option value="3">13:00 - 15:00</option>
-                                <option value="4">15:00 - 17:00</option>
-                                <option value="5">17:00 - 19:00</option>
-                                <option value="6">19:00 - 21:00</option>
-                            </select>
-                        </div>
-                        <div class="input">
-                            <select id="inputRuangan" required>
-                                <option value="" selected disabled hidden>Ruangan</option>
-                                <option value="1">205</option>
-                                <option value="2">101</option>
-                                <option value="3">305</option>
-                                <option value="4">306</option>
-                                <option value="5">402</option>
-                                <option value="6">403</option>
-                                <option value="7">404</option>
-                                <option value="8">FHIS 01</option>
-                                <option value="9">Pasca Lt.1</option>
-                                <option value="10">Lab 1</option>
-                                <option value="11">Lab 2</option>
-                            </select>
-                        </div>
-                        <button id="pesananSubmitBtn" type="submit">Simpan Jadwal Permintaan</button>
-                    </form>
-                </div>
+            <div class="input-pengampu-section">
+                <h3>Masukkan Jadwal <br>Permintaan Dosen</h3>
+                <form id="inputPesanan" autocomplete="off">
+                    <div class="input">
+                        <input id="inputPesananCourseName" type="text" placeholder="Mata Kuliah" required>
+                    </div>
+                    <div class="input">
+                        <input id="inputPesananLecturerName" type="text" placeholder="Dosen" required>
+                    </div>
+                    <div class="input">
+                        <input id="inputPesananClassName" type="text" placeholder="Kelas" required>
+                    </div>
+                    <div class="input">
+                        <select id="inputPesananJumlahSks" required>
+                            <option value="" selected disabled hidden>Jumlah SKS</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputPesananJenisMatkul" required>
+                            <option value="" selected disabled hidden>Jenis Matkul</option>
+                            <option value="teori">Teori</option>
+                            <option value="praktikum">Praktikum</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputPesananKategoriKelas" required>
+                            <option value="" selected disabled hidden>Kategori Kelas</option>
+                            <option value="reguler">Reguler</option>
+                            <option value="malam">Malam</option>
+                            <option value="ekstensi">Ekstensi</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputPesananFakultas" required>
+                            <option value="" selected disabled hidden>Fakultas</option>
+                            <option value="ilkom">Ilmu Komputer</option>
+                            <option value="hukum">Hukum dan Ilmu Sosial</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputHari" required>
+                            <option value="" selected disabled hidden>Hari</option>
+                            <option value="1">Senin</option>
+                            <option value="2">Selasa</option>
+                            <option value="3">Rabu</option>
+                            <option value="4">Kamis</option>
+                            <option value="5">Jumat</option>
+                            <option value="6">Sabtu</option>
+                            <option value="7">Minggu</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputWaktu" required>
+                            <option value="" selected disabled hidden>Waktu</option>
+                            <option value="1">08:00 - 10:00</option>
+                            <option value="2">10:00 - 12:00</option>
+                            <option value="3">13:00 - 15:00</option>
+                            <option value="4">15:00 - 17:00</option>
+                            <option value="5">17:00 - 19:00</option>
+                            <option value="6">19:00 - 21:00</option>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <select id="inputRuangan" required>
+                            <option value="" selected disabled hidden>Ruangan</option>
+                            <option value="1">205</option>
+                            <option value="2">101</option>
+                            <option value="3">305</option>
+                            <option value="4">306</option>
+                            <option value="5">402</option>
+                            <option value="6">403</option>
+                            <option value="7">404</option>
+                            <option value="8">FHIS 01</option>
+                            <option value="9">Pasca Lt.1</option>
+                            <option value="10">Lab 1</option>
+                            <option value="11">Lab 2</option>
+                        </select>
+                    </div>
+                    <button id="pesananSubmitBtn" type="submit">Simpan Jadwal Permintaan</button>
+                </form>
             </div>
         </section>
 
@@ -987,30 +947,30 @@
                                     <option value="" selected disabled hidden>Jumlah SKS</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
-                                    <option value="2">3</option>
-                                    <option value="2">4</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
                                 </select>
                             </div>
                             <div class="input">
                                 <select id="inputPengampuJenisMatkulModal" required>
                                     <option value="" selected disabled hidden>Jenis Matkul</option>
-                                    <option value="teori">Teori</option>
-                                    <option value="praktikum">Praktikum</option>
+                                    <option value="Teori">Teori</option>
+                                    <option value="Praktikum">Praktikum</option>
                                 </select>
                             </div>
                             <div class="input">
                                 <select id="inputPengampuKategoriKelasModal" required>
                                     <option value="" selected disabled hidden>Kategori Kelas</option>
-                                    <option value="reguler">Reguler</option>
-                                    <option value="malam">Malam</option>
-                                    <option value="ekstensi">Ekstensi</option>
+                                    <option value="Reguler">Reguler</option>
+                                    <option value="Malam">Malam</option>
+                                    <option value="Ekstensi">Ekstensi</option>
                                 </select>
                             </div>
                             <div class="input">
                                 <select id="inputPengampuFakultasModal" required>
                                     <option value="" selected disabled hidden>Fakultas</option>
-                                    <option value="ilkom">Ilmu Komputer</option>
-                                    <option value="hukum">Hukum dan Ilmu Sosial</option>
+                                    <option value="Ilmu Komputer">Ilmu Komputer</option>
+                                    <option value="Hukum dan Ilmu Sosial">Hukum dan Ilmu Sosial</option>
                                 </select>
                             </div>
                             <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
