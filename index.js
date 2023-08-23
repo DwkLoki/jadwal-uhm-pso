@@ -26,44 +26,44 @@ class Particle {
         let randomDay, randomRoom, randomTime;
         
         // Randomly select day, time and room
-        if (pengampu.kategoriKelas === "Reguler") {
+        if (pengampu.kategoriKelas === "Reguler" || pengampu.kategoriKelas === "reguler") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
 
-            if (pengampu.jenisMatkul === "Teori"){
+            if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (pengampu.jenisMatkul === "Praktikum") {
+            } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (pengampu.kategoriKelas === "Malam") {
+        } else if (pengampu.kategoriKelas === "Malam" || pengampu.kategoriKelas === "malam") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
 
-            if (pengampu.jenisMatkul === "Teori"){
+            if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (pengampu.jenisMatkul === "Praktikum") {
+            } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (pengampu.kategoriKelas === "Ekstensi") {
+        } else if (pengampu.kategoriKelas === "Ekstensi" || pengampu.kategoriKelas === "ekstensi") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
         
-            if (pengampu.jenisMatkul === "Teori"){
+            if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 8) + 2; // 2-9
 
                 while (randomRoom === 8) {
                     randomRoom = Math.floor(Math.random() * 8) + 2; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
-            } else if (pengampu.jenisMatkul === "Praktikum") {
+            } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
         }
 
         // Menentukan room, time dan day matkul hukum
-        if (pengampu.fakultas === "Hukum dan Ilmu Sosial") {
+        if (pengampu.fakultas === "Hukum dan Ilmu Sosial" || pengampu.fakultas === "hukum dan ilmu sosial") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
             randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
@@ -115,44 +115,44 @@ class Particle {
         let randomDay, randomRoom, randomTime;
         
         // Randomly select day, time and room
-        if (this.pengampu.kategoriKelas === "Reguler") {
+        if (this.pengampu.kategoriKelas === "Reguler" || this.pengampu.kategoriKelas === "reguler") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
 
-            if (this.pengampu.jenisMatkul === "Teori"){
+            if (this.pengampu.jenisMatkul === "Teori" || this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (this.pengampu.jenisMatkul === "Praktikum") {
+            } else if (this.pengampu.jenisMatkul === "Praktikum" || this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (this.pengampu.kategoriKelas === "Malam") {
+        } else if (this.pengampu.kategoriKelas === "Malam" || this.pengampu.kategoriKelas === "malam") {
             randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
             randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
 
-            if (this.pengampu.jenisMatkul === "Teori"){
+            if (this.pengampu.jenisMatkul === "Teori" || this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
-            } else if (this.pengampu.jenisMatkul === "Praktikum") {
+            } else if (this.pengampu.jenisMatkul === "Praktikum" || this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
 
-        } else if (this.pengampu.kategoriKelas === "Ekstensi") {
+        } else if (this.pengampu.kategoriKelas === "Ekstensi" || this.pengampu.kategoriKelas === "ekstensi") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
         
-            if (this.pengampu.jenisMatkul === "Teori"){
+            if (this.pengampu.jenisMatkul === "Teori" || this.pengampu.jenisMatkul === "teori"){
                 randomRoom = Math.floor(Math.random() * 8) + 2; // 2-9
 
                 while (randomRoom === 8) {
                     randomRoom = Math.floor(Math.random() * 8) + 2; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
                 }
 
-            } else if (this.pengampu.jenisMatkul === "Praktikum") {
+            } else if (this.pengampu.jenisMatkul === "Praktikum" || this.pengampu.jenisMatkul === "praktikum") {
                 randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
             }
         }
 
         // Menentukan room, time dan day matkul hukum
-        if (this.pengampu.fakultas === "Hukum dan Ilmu Sosial") {
+        if (this.pengampu.fakultas === "Hukum dan Ilmu Sosial" || this.pengampu.fakultas === "hukum dan ilmu sosial") {
             randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
             randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
             randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
