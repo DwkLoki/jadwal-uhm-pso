@@ -80,11 +80,13 @@ class Particle {
         // let particleFitness = 0;
         const currentParticle = this;
 
-        // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle saat ini
+        // Mendapatkan slot waktu, hari, ruangan, nama kelas dan nama dosen yang digunakan oleh particle saat ini
         const currentTime = currentParticle.position.time;
         const currentDay = currentParticle.position.day;
         const currentRoom = currentParticle.position.room;
-
+        const currentLecturer = currentParticle.pengampu.lecturerName;
+        const currentClass = currentParticle.pengampu.className;
+        
         for (let i = 0; i < swarm.length; i++) {
             const otherParticle = swarm[i];
 
@@ -93,12 +95,14 @@ class Particle {
             const otherTime = otherParticle.position.time;
             const otherDay = otherParticle.position.day;
             const otherRoom = otherParticle.position.room;
-
+            const otherLecturer = otherParticle.pengampu.lecturerName;
+            const otherClass = otherParticle.pengampu.className;
+            
             // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
             if (
-                currentTime === otherTime &&
-                currentDay === otherDay &&
-                currentRoom === otherRoom
+                (currentTime === otherTime && currentDay === otherDay && currentRoom === otherRoom) ||
+                (currentLecturer === otherLecturer && currentDay === otherDay && currentTime === otherTime) ||
+                (currentClass === otherClass && currentDay === otherDay && currentTime === otherTime)
             ) {
                 this.fitness++; // Tambahkan fitness jika terdapat jadwal yang bentrok
                 // currentParticle.isSesuaiKriteria = false; // Setel properti isSesuaiKriteria ke false jika terdapat bentrok
@@ -521,7 +525,7 @@ tablePengampuContainer.addEventListener("click", function(event) {
     if (event.target.matches("i.bi.bi-pencil-square")) {
         const pengampuId = parseInt(event.target.dataset.pengampuId);
         if (!isNaN(pengampuId) && pengampuId >= 0 && pengampuId < pengampu.length) {
-            selectedPengampu = pengampu[pengampuId - 1];
+            selectedPengampu = pengampu[pengampuId];
             console.log(selectedPengampu);
             handleEditPengampuButton(selectedPengampu);
         }
@@ -531,7 +535,8 @@ tablePengampuContainer.addEventListener("click", function(event) {
 function generatePengampuElement(pengampuObject) {
     const logoEditBtn = document.createElement("i");
     logoEditBtn.classList.add("bi", "bi-pencil-square");
-    logoEditBtn.setAttribute("data-pengampu-id", pengampuObject.pengampuId);
+    // logoEditBtn.setAttribute("data-pengampu-id", pengampuObject.pengampuId);
+    logoEditBtn.setAttribute("data-pengampu-id", pengampu.indexOf(pengampuObject));
 
     const logoDeleteBtn = document.createElement("i");
     logoDeleteBtn.classList.add("bi", "bi-trash");
