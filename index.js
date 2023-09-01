@@ -218,6 +218,10 @@ prosesJadwalBtn.addEventListener("click", function() {
     cells.forEach(cell => {
         cell.innerHTML = "";
     });
+
+    // hapus daftar jadwal yang belum optimal jika hasil generate sebelumnya memiliki jadwal yang belum optimal
+    const daftarJadwalBelumOptimal = document.querySelector("tbody.daftar-belum-optimal");
+    daftarJadwalBelumOptimal.innerHTML = '';
     
     // Main aplication
 
@@ -332,67 +336,90 @@ prosesJadwalBtn.addEventListener("click", function() {
 
     // Tampilkan peringatan jika hasil belum optimal
     if (newSwarmBelumOptimal.length !== 0) {
-        alert("Hasil penjadwalan belum optimal. Silakan tekan tombol 'Proses Jadwal' lagi");
-        location.reload();
-    } else {
-        // proses #7 array jadwal yg sudah optimal kita urutkan berdasarkan hari
-        swarmSudahOptimal.sort(function (a, b) {
-            return a.position.day - b.position.day;
-        });
+        alert(`Masih Terdapat ${newSwarmBelumOptimal.length} Jadwal yg belum mendapat posisi yg tepat`);
 
-        // konversi hasil pembuatan jadwal ke data yang sesuai
-        swarmSudahOptimal.forEach(particle => {
-            const convertPositionResult = convertPositionToData(particle.position);
-            const finalSwarm = {...convertPositionResult, ...particle.pengampu, fitness: particle.fitness, isSesuaiKriteria: particle.isSesuaiKriteria};
-            hasilPenjadwalan.push(finalSwarm);
-            // console.log(finalSwarm);
-        });
+        // const daftarJadwalBelumOptimal = document.querySelector("tbody.daftar-belum-optimal");
+        daftarJadwalBelumOptimal.innerHTML = '';
         
-        hasilPenjadwalan.forEach(particle => {
-            console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
-        })
+        let jadwalBelumOptimalHTML = ''; // String untuk mengumpulkan semua baris
+        for (const jadwalBelumOptimal of newSwarmBelumOptimal) {
+            jadwalBelumOptimalHTML += `
+                <tr>
+                    <td scope="col">${jadwalBelumOptimal.pengampu.courseName}</td>
+                    <td scope="col">${jadwalBelumOptimal.pengampu.lecturerName}</td>
+                    <td scope="col">${jadwalBelumOptimal.pengampu.className}</td>
+                    <td scope="col">${jadwalBelumOptimal.pengampu.jumlahSks}</td>
+                    <td scope="col">${jadwalBelumOptimal.pengampu.jenisMatkul}</td>
+                    <td scope="col">${jadwalBelumOptimal.pengampu.kategoriKelas}</td>
+                    <td scope="col">${jadwalBelumOptimal.pengampu.fakultas}</td>
+                </tr>
+            `;
+        }
+    
+        // Sekali loop selesai, setel innerHTML
+        daftarJadwalBelumOptimal.innerHTML = jadwalBelumOptimalHTML;
 
-        // console.log("partikel sudah optimal", swarmSudahOptimal);
-        // console.log("partikel belum optimal", newSwarmBelumOptimal.length);
-        // console.log(hasilPenjadwalan);
+        // location.reload();
+    }
 
-        // ------------------------------------------------ //
-        //    Menampilkan data jadwal dalam bentuk tabel    //
-        // ------------------------------------------------ //
+    // proses #7 array jadwal yg sudah optimal kita urutkan berdasarkan hari
+    swarmSudahOptimal.sort(function (a, b) {
+        return a.position.day - b.position.day;
+    });
 
-        // const tabelJadwal = document.querySelector('.tabel-jadwal');
-        const timeElements = document.querySelectorAll('th.time');
-        const dayElements = document.querySelectorAll('th.day');
-        // const cells = document.querySelectorAll('.tabel-jadwal td');
-        const cellArray = Array.from(cells);
+    // konversi hasil pembuatan jadwal ke data yang sesuai
+    swarmSudahOptimal.forEach(particle => {
+        const convertPositionResult = convertPositionToData(particle.position);
+        const finalSwarm = {...convertPositionResult, ...particle.pengampu, fitness: particle.fitness, isSesuaiKriteria: particle.isSesuaiKriteria};
+        hasilPenjadwalan.push(finalSwarm);
+        // console.log(finalSwarm);
+    });
+    
+    hasilPenjadwalan.forEach(particle => {
+        console.log(`${particle.day} || ${particle.time} || ${particle.room} || ${particle.courseName} || ${particle.lecturerName} || ${particle.className} || ${particle.kategoriKelas} || ${particle.jenisMatkul} || ${particle.fitness} || ${particle.isSesuaiKriteria}`);
+    })
 
-        let cellIndex = 0;
+    // console.log("partikel sudah optimal", swarmSudahOptimal);
+    // console.log("partikel belum optimal", newSwarmBelumOptimal.length);
+    // console.log(hasilPenjadwalan);
 
-        for (let hari = 0; hari <= 6; hari++) {
-            for (let time = 0; time <= 5; time++) {
-                for (let ruangan = 0; ruangan <= 10; ruangan++) {
-                    let indexI = hari % 7;
+    // ------------------------------------------------ //
+    //    Menampilkan data jadwal dalam bentuk tabel    //
+    // ------------------------------------------------ //
 
-                    const hariTabel = dayElements[indexI].textContent;
-                    const waktuTabel = timeElements[time].textContent;
-                    const ruanganTabel = tabelJadwal.rows[1].cells[ruangan].textContent;
+    // const tabelJadwal = document.querySelector('.tabel-jadwal');
+    const timeElements = document.querySelectorAll('th.time');
+    const dayElements = document.querySelectorAll('th.day');
+    // const cells = document.querySelectorAll('.tabel-jadwal td');
+    const cellArray = Array.from(cells);
 
-                    const jadwal = hasilPenjadwalan.find((item) => item.time === waktuTabel && item.room === ruanganTabel && item.day === hariTabel);
+    let cellIndex = 0;
 
-                    if (jadwal) {
-                        cellArray[cellIndex].innerHTML = `
-                        ${jadwal.className} <br>
-                        ${jadwal.courseName} || ${jadwal.jumlahSks} SKS <br>
-                        ${jadwal.lecturerName}
-                        `;
-                    }
+    for (let hari = 0; hari <= 6; hari++) {
+        for (let time = 0; time <= 5; time++) {
+            for (let ruangan = 0; ruangan <= 10; ruangan++) {
+                let indexI = hari % 7;
 
-                    cellIndex++;
-                    // console.log(`${hariTabel} || ${waktuTabel} || ${ruanganTabel}`);
+                const hariTabel = dayElements[indexI].textContent;
+                const waktuTabel = timeElements[time].textContent;
+                const ruanganTabel = tabelJadwal.rows[1].cells[ruangan].textContent;
+
+                const jadwal = hasilPenjadwalan.find((item) => item.time === waktuTabel && item.room === ruanganTabel && item.day === hariTabel);
+
+                if (jadwal) {
+                    cellArray[cellIndex].innerHTML = `
+                    ${jadwal.className} <br>
+                    ${jadwal.courseName} || ${jadwal.jumlahSks} SKS <br>
+                    ${jadwal.lecturerName}
+                    `;
                 }
+
+                cellIndex++;
+                // console.log(`${hariTabel} || ${waktuTabel} || ${ruanganTabel}`);
             }
         }
     }
+
 })
 
 
@@ -796,6 +823,7 @@ function exportTableToPdf() {
     $('.first-section').css('display', 'none');
     $('.second-section').css('display', 'none');
     $('.proses-jadwal-btn-container').css('display', 'none');
+    $('.tabel-daftar-belum-optimal').css('display', 'none');
 
     // Ambil semua tabel hari
     const tabelSenin = document.querySelector(".tabel-senin");
