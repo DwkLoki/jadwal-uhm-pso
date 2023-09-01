@@ -253,3 +253,7 @@ main {
 .tabel-senin td, .tabel-rabu td, .tabel-jumat td, .tabel-minggu td {
     background-color: #e6e6e6;
 }
+
+.tabel-daftar-belum-optimal {
+    margin-top: 50px;
+}
