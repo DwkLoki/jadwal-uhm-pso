@@ -3,6 +3,7 @@ const pesanan = [];
 const particlesToUpdate = [];
 const localStoragePengampu = "PENGAMPU_GENAP";
 const localStoragePesanan = "JADWAL_PESANAN";
+// const dosenJadwal = {};
 // const localStoragePengampu = "PENGAMPU_GENAP_TES";
 // const localStoragePesanan = "JADWAL_PESANAN_TES";
 
@@ -24,6 +25,79 @@ class Particle {
 
     initialize(pengampu) {
         let randomDay, randomRoom, randomTime;
+
+        // // Track jadwal yang sudah ditempatkan untuk dosen ini
+        // if (!dosenJadwal[pengampu.lecturerName]) {
+        //     // Randomly select day, time and room
+        //     if (pengampu.kategoriKelas === "Reguler" || pengampu.kategoriKelas === "reguler") {
+        //         randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
+        //         randomTime = Math.floor(Math.random() * 4) + 1; // 1-4 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00)
+
+        //         if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
+        //             randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+        //         } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
+        //             randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+        //         }
+
+        //     } else if (pengampu.kategoriKelas === "Malam" || pengampu.kategoriKelas === "malam") {
+        //         randomDay = Math.floor(Math.random() * 5) + 1; // 1-5 (Senin-Jumat)
+        //         randomTime = Math.floor(Math.random() * 2) + 5; // 5-6 (17:00-19:00, 19:00-21:00)
+
+        //         if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
+        //             randomRoom = Math.floor(Math.random() * 9) + 1; // 1-9
+        //         } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
+        //             randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+        //         }
+
+        //     } else if (pengampu.kategoriKelas === "Ekstensi" || pengampu.kategoriKelas === "ekstensi") {
+        //         randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
+        //         randomTime = Math.floor(Math.random() * 6) + 1; // 1-6 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00, 19:00-21:00)
+            
+        //         if (pengampu.jenisMatkul === "Teori" || pengampu.jenisMatkul === "teori"){
+        //             randomRoom = Math.floor(Math.random() * 8) + 2; // 2-9
+
+        //             while (randomRoom === 8) {
+        //                 randomRoom = Math.floor(Math.random() * 8) + 2; // Menghasilkan ulang angka acak jika angka sebelumnya adalah 8
+        //             }
+
+        //         } else if (pengampu.jenisMatkul === "Praktikum" || pengampu.jenisMatkul === "praktikum") {
+        //             randomRoom = Math.floor(Math.random() * 2) + 10; // 10-11
+        //         }
+        //     }
+
+        //     // Menentukan room, time dan day matkul hukum
+        //     if (pengampu.fakultas === "Hukum dan Ilmu Sosial" || pengampu.fakultas === "hukum dan ilmu sosial") {
+        //         randomDay = Math.floor(Math.random() * 2) + 6; // 6-7 (Sabtu-Minggu)
+        //         randomTime = Math.floor(Math.random() * 5) + 1; // 1-5 (08:00-10:00, 10:00-12:00, 13:00-15:00, 15:00-17:00, 17:00-19:00)
+        //         randomRoom = Math.floor(Math.random() * 3) + 7; // 7-9
+        //     }
+
+        //     dosenJadwal[pengampu.lecturerName] = {
+        //         day: randomDay,
+        //         time: randomTime,
+        //         kategoriKelas: pengampu.kategoriKelas,
+        //         jenisMatkul: pengampu.jenisMatkul,
+        //         fakultas: pengampu.fakultas,
+        //         count: 1 // Menghitung berapa kali dosen ini sudah muncul
+        //     };
+        // } else {
+        //     // Cek apakah sudah mencapai batas maksimum (3 kali dalam satu hari)
+        //     if (dosenJadwal[pengampu.lecturerName].count < 3) {
+        //         if (dosenJadwal[pengampu.lecturerName].kategoriKelas === pengampu.kategoriKelas) {
+        //             randomDay = dosenJadwal[pengampu.lecturerName].day; // Hari harus tetap sama
+        //             randomTime = dosenJadwal[pengampu.lecturerName].time + 1;
+        //         } else {
+
+        //         }
+        //         dosenJadwal[pengampu.lecturerName].count++;
+        //     } else {
+        //         // Jika sudah mencapai batas maksimum, pindah ke hari berikutnya
+        //         randomDay = dosenJadwal[pengampu.lecturerName].day + 1;
+        //         randomTime = 1; // Kembali ke waktu awal, generate time random lagi
+        //         dosenJadwal[pengampu.lecturerName].day = randomDay;
+        //         dosenJadwal[pengampu.lecturerName].count = 1; // Reset jumlah jadwal untuk hari baru
+        //     }
+        // }
         
         // Randomly select day, time and room
         if (pengampu.kategoriKelas === "Reguler" || pengampu.kategoriKelas === "reguler") {
@@ -408,9 +482,19 @@ prosesJadwalBtn.addEventListener("click", function() {
 
                 if (jadwal) {
                     cellArray[cellIndex].innerHTML = `
-                    ${jadwal.className} <br>
-                    ${jadwal.courseName} || ${jadwal.jumlahSks} SKS <br>
-                    ${jadwal.lecturerName}
+                    <div id="jadwal">
+                        <p>${jadwal.className}</p>
+                        <p>${jadwal.courseName} || ${jadwal.jumlahSks} SKS</p>
+                        <p>${jadwal.lecturerName}</p>
+                    </div>
+                    `;
+                } else {
+                    cellArray[cellIndex].innerHTML = `
+                    <div id="jadwal">
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                    </div>
                     `;
                 }
 
@@ -419,6 +503,71 @@ prosesJadwalBtn.addEventListener("click", function() {
             }
         }
     }
+
+    for (const cell of cellArray) {
+        cell.addEventListener('click', function() {
+            // Mengambil semua elemen paragraf di dalam elemen dengan id "jadwal"
+            let divJadwal = this.querySelector('#jadwal');
+            let paragraphs = divJadwal.querySelectorAll('p');
+
+            // Iterasi melalui semua paragraf dan terapkan logika yang sama untuk setiap paragraf
+            for (let i = 0; i < paragraphs.length; i++) {
+                let paragraph = paragraphs[i];
+
+                if (paragraph.hasAttribute('data-clicked')) {
+                    continue;
+                }
+                paragraph.setAttribute('data-clicked', 'yes');
+                paragraph.setAttribute('data-text', paragraph.innerText);
+
+                let input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.value = paragraph.innerText;
+                input.style.border = "0px";
+                input.style.padding = "5px";
+                input.style.backgroundColor = "#a7c0ff";
+
+                input.onblur = function() {
+                    var td = input.parentElement;
+                    var orig_text = input.parentElement.getAttribute('data-text');
+                    var current_text = this.value;
+
+                    if (orig_text != current_text) {
+                        // Terdapat perubahan; simpan perubahan
+                        td.removeAttribute('data-clicked');
+                        td.removeAttribute('data-text');
+                        td.innerHTML = current_text;
+                        console.log(orig_text + ' is changed to ' + current_text);
+                    } else {
+                        td.removeAttribute('data-clicked');
+                        td.removeAttribute('data-text');
+                        td.innerHTML = orig_text;
+                        console.log('no changes');
+                    }
+                }
+
+                paragraph.innerText = '';
+                paragraph.style.cssText = 'padding: 0px 0px';
+                paragraph.append(input);
+                // paragraph.firstElementChild.select();
+            }
+        })
+    }
+
+    document.addEventListener('click', function(event) {
+        let paragraphs = document.querySelectorAll('#tabel-jadwal p[data-clicked="yes"]');
+        // Periksa apakah yang diklik berada di luar tabel (tidak ada elemen dengan id "tabel-jadwal" yang berisi sel yang diklik)
+        if (!event.target.closest('#tabel-jadwal')) {
+            // Kembalikan semua elemen paragraf ke kondisi awal
+            for (let i = 0; i < paragraphs.length; i++) {
+                let paragraph = paragraphs[i];
+                let orig_text = paragraph.getAttribute('data-text');
+                paragraph.removeAttribute('data-clicked');
+                paragraph.removeAttribute('data-text');
+                paragraph.innerText = orig_text;
+            }
+        }
+    });
 
 })
 
@@ -447,6 +596,11 @@ inputPesananForm.addEventListener("submit", function(event) {
     // Check if the same schedule already exists
     if (isJadwalPesananExists(hari, waktu, ruangan)) {
         alert(`Jadwal pada Hari, Pukul dan di Ruangan tersebut sudah terisi.`);
+        return;
+    }
+
+    if (isJadwalPesananPengampuEqual(courseName, lecturerName, className)) {
+        alert(`Jadwal yang anda masukkan sudah tersedia di daftar pengampu non-pesanan, hapus terlebih dahulu data pada jadwal non-pesanan`);
         return;
     }
 
@@ -544,11 +698,63 @@ document.getElementById("input-file").addEventListener("change", (e) => {
                 item.jenisMatkul = item["Jenis Matkul"]; 
                 delete item["Jenis Matkul"]; 
 
+                // validasi nilai kolom jenis matkul
+                const distanceToTeori = levenshteinDistance(item.jenisMatkul.toLowerCase(), "teori");
+                const distanceToPraktikum = levenshteinDistance(item.jenisMatkul.toLowerCase(), "praktikum");
+
+                if (distanceToTeori <= 3 || distanceToPraktikum <= 3) {
+                    if (distanceToTeori <= distanceToPraktikum) {
+                        item.jenisMatkul = "Teori";
+                    } else {
+                        item.jenisMatkul = "Praktikum";
+                    }
+                } else {
+                    // Default jika tidak ada kesalahan pengejaan yang mendekati "Praktikum"
+                    item.jenisMatkul = "Teori"; // Atau pilihan lain sesuai kebutuhan
+                }
+
                 item.kategoriKelas = item["Kategori Kelas"]; 
-                delete item["Kategori Kelas"]; 
+                delete item["Kategori Kelas"];
+                
+                // Validasi nilai kolom kategori kelas
+                const distanceToReguler = levenshteinDistance(item.kategoriKelas.toLowerCase(), "reguler");
+                const distanceToMalam = levenshteinDistance(item.kategoriKelas.toLowerCase(), "malam");
+                const distanceToEkstensi = levenshteinDistance(item.kategoriKelas.toLowerCase(), "ekstensi");
+
+                if (distanceToReguler <= 3 || distanceToMalam <= 3 || distanceToEkstensi <= 3) {
+                    // Jika mendekati "reguler"
+                    if (distanceToReguler <= distanceToMalam && distanceToReguler <= distanceToEkstensi) {
+                        item.kategoriKelas = "Reguler";
+                    }
+                    // Jika mendekati "malam"
+                    else if (distanceToMalam <= distanceToReguler && distanceToMalam <= distanceToEkstensi) {
+                        item.kategoriKelas = "Malam";
+                    }
+                    // Jika mendekati "ekstensi"
+                    else {
+                        item.kategoriKelas = "Ekstensi";
+                    }
+                } else {
+                    // Default jika tidak ada kesalahan pengejaan yang mendekati kategori kelas
+                    item.kategoriKelas = "Reguler"; // Atau pilihan lain sesuai kebutuhan
+                }
 
                 item.fakultas = item["Fakultas"]; 
                 delete item["Fakultas"]; 
+                // validasi nilai kolom fakultas
+                const distanceToIlkom = levenshteinDistance(item.fakultas.toLowerCase().replace(/\s/g, ""), "ilmukomputer");
+                const distanceToHukum = levenshteinDistance(item.fakultas.toLowerCase().replace(/\s/g, ""), "hukumdanilmusosial");
+
+                if (distanceToIlkom <= 3 || distanceToHukum <= 3) {
+                    if (distanceToIlkom <= distanceToHukum) {
+                        item.fakultas = "Ilmu Komputer";
+                    } else {
+                        item.fakultas = "Hukum dan Ilmu Sosial";
+                    }
+                } else {
+                    // Default jika tidak ada kesalahan pengejaan yang mendekati "Praktikum"
+                    item.fakultas = "Ilmu Komputer"; // Atau pilihan lain sesuai kebutuhan
+                }
 
                 item.semester = item.Semester; 
                 delete item.Semester; 
@@ -583,6 +789,33 @@ document.getElementById("input-file").addEventListener("change", (e) => {
     }
 });
 
+function levenshteinDistance(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+
+    const matrix = [];
+
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            const cost = a[j - 1] === b[i - 1] ? 0 : 1;
+            matrix[i][j] = Math.min(
+                matrix[i - 1][j] + 1, // Deletion
+                matrix[i][j - 1] + 1, // Insertion
+                matrix[i - 1][j - 1] + cost // Substitution
+            );
+        }
+    }
+
+    return matrix[b.length][a.length];
+}
 
 function generatePesananObject(pengampuId, courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas, hari, waktu, ruangan) {
     return {
@@ -956,6 +1189,17 @@ function isJadwalPesananExists(hari, waktu, ruangan) {
     );
 }
 
+// Fungsi untuk memeriksa apakah jadwal pesanan sudah ada dalam data pengampu non-pesanan
+function isJadwalPesananPengampuEqual(courseName, lecturerName, className) {
+    // Lakukan perulangan pada array data pengampu non-pesanan
+    return pengampu.some(
+        (item) =>
+        item.courseName.trim().toLowerCase() === courseName.trim().toLowerCase() &&
+        item.lecturerName.trim().toLowerCase() === lecturerName.trim().toLowerCase() &&
+        item.className.trim().toLowerCase() === className.trim().toLowerCase()
+    );
+}
+
 function isJadwalPengampuExists(courseName, lecturerName, className, jumlahSks, jenisMatkul, kategoriKelas, fakultas) {
     return pengampu.some(
         (item) =>
@@ -1153,3 +1397,90 @@ savePengampuBtn.addEventListener("click", function(e) {
 
     new DataTable('#timetabling');
 });
+
+// penyesuaian form jadwal permintaan dosen
+const elemenSelectJenisMatkul = document.getElementById("inputPesananJenisMatkul");
+const elemenSelectKategoriKelas = document.getElementById("inputPesananKategoriKelas");
+const elemenSelectRuangan = document.getElementById("inputRuangan");
+const elemenSelectFakultas = document.getElementById("inputPesananFakultas");
+const elemenSelectHari = document.getElementById("inputHari");
+const elemenSelectWaktu = document.getElementById("inputWaktu");
+
+elemenSelectJenisMatkul.addEventListener("change", function(e) {
+    // Menghapus atribut disabled dari semua elemen option pada select ruangan
+    for (let i = 0; i < elemenSelectRuangan.options.length; i++) {
+        elemenSelectRuangan.options[i].removeAttribute("disabled");
+    }
+
+    if (e.target.value === "teori") {
+        elemenSelectRuangan.options[10].disabled = true;
+        elemenSelectRuangan.options[11].disabled = true;
+    } else {
+        elemenSelectRuangan.options[1].disabled = true;
+        elemenSelectRuangan.options[2].disabled = true;
+        elemenSelectRuangan.options[3].disabled = true;
+        elemenSelectRuangan.options[4].disabled = true;
+        elemenSelectRuangan.options[5].disabled = true;
+        elemenSelectRuangan.options[6].disabled = true;
+        elemenSelectRuangan.options[7].disabled = true;
+        elemenSelectRuangan.options[8].disabled = true;
+        elemenSelectRuangan.options[9].disabled = true;
+    }
+})
+
+elemenSelectKategoriKelas.addEventListener("change", function(e) {
+    for (let i = 0; i < elemenSelectHari.options.length; i++) {
+        elemenSelectHari.options[i].removeAttribute("disabled");
+    }
+
+    for (let i = 0; i < elemenSelectWaktu.options.length; i++) {
+        elemenSelectWaktu.options[i].removeAttribute("disabled");
+    }
+
+    if (e.target.value === "reguler") {
+        elemenSelectHari.options[6].disabled = true;
+        elemenSelectHari.options[7].disabled = true;
+        elemenSelectWaktu.options[5].disabled = true;
+        elemenSelectWaktu.options[6].disabled = true;
+    } else if (e.target.value === "malam") {
+        elemenSelectHari.options[6].disabled = true;
+        elemenSelectHari.options[7].disabled = true;
+        elemenSelectWaktu.options[1].disabled = true;
+        elemenSelectWaktu.options[2].disabled = true;
+        elemenSelectWaktu.options[3].disabled = true;
+        elemenSelectWaktu.options[4].disabled = true;
+    } else {
+        elemenSelectHari.options[1].disabled = true;
+        elemenSelectHari.options[2].disabled = true;
+        elemenSelectHari.options[3].disabled = true;
+        elemenSelectHari.options[4].disabled = true;
+        elemenSelectHari.options[5].disabled = true;
+    }
+})
+
+// elemenSelectFakultas.addEventListener("change", function(e) {
+//     for (let i = 0; i < elemenSelectHari.options.length; i++) {
+//         elemenSelectHari.options[i].removeAttribute("disabled");
+//     }
+
+//     for (let i = 0; i < elemenSelectWaktu.options.length; i++) {
+//         elemenSelectWaktu.options[i].removeAttribute("disabled");
+//     }
+
+//     if (e.target.value === "hukum") {
+//         elemenSelectHari.options[1].disabled = true;
+//         elemenSelectHari.options[2].disabled = true;
+//         elemenSelectHari.options[3].disabled = true;
+//         elemenSelectHari.options[4].disabled = true;
+//         elemenSelectHari.options[5].disabled = true;
+//         elemenSelectWaktu.options[6].disabled = true;
+//         elemenSelectRuangan.options[1].disabled = true;
+//         elemenSelectRuangan.options[2].disabled = true;
+//         elemenSelectRuangan.options[3].disabled = true;
+//         elemenSelectRuangan.options[4].disabled = true;
+//         elemenSelectRuangan.options[5].disabled = true;
+//         elemenSelectRuangan.options[6].disabled = true;
+//         elemenSelectRuangan.options[10].disabled = true;
+//         elemenSelectRuangan.options[11].disabled = true;
+//     }
+// })
