@@ -165,6 +165,48 @@
             </div>
         </section>
 
+        <section class="third-section">
+            <div class="pesanan-list-section">
+                <h3>Daftar Jadwal Tidak Bersedia Dosen</h3>
+                <div class="tabel-daftar-pengampu">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td scope="col">No</td>
+                                <td scope="col">Nama Dosen</td>
+                                <td scope="col">Hari Tidak Bersedia</td>
+                                <td scope="col">Aksi</td>
+                            </tr>
+                        </thead>
+                        <tbody class="daftar-pesanan-tidak-bersedia">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="input-pengampu-section">
+                <h3>Masukkan Jadwal <br>Tidak Bersedia Dosen</h3>
+                <form id="inputTidakBersedia" autocomplete="off">
+                    <div class="input">
+                        <input id="inputTidakBersediaLecturerName" type="text" placeholder="Dosen" required>
+                    </div>
+                    <div class="input">
+                        <select id="inputTidakBersediaHari" required>
+                            <option value="" selected disabled hidden>Hari Tidak Bersedia</option>
+                            <option value="1">Senin</option>
+                            <option value="2">Selasa</option>
+                            <option value="3">Rabu</option>
+                            <option value="4">Kamis</option>
+                            <option value="5">Jumat</option>
+                            <option value="6">Sabtu</option>
+                            <option value="7">Minggu</option>
+                        </select>
+                    </div>
+                    <button id="pesananTidakBersediaSubmitBtn" type="submit">Simpan</button>
+                </form>
+            </div>
+        </section>
+
         <hr>
 
         <div class="proses-jadwal-btn-container">
@@ -937,6 +979,39 @@
                             </div>
                             <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
                             <button type="submit" id="pesananEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal untuk edit pesanan tidak bersedia-->
+        <div class="modal fade" id="editPesananTidakBersediaModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="editModalLabel">Ubah Jadwal Tidak Bersedia Dosen</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editPesananTidakBersediaForm" autocomplete="off">
+                            <div class="input">
+                                <input id="inputPesananTidakBersediaLecturerNameModal" type="text" placeholder="Dosen" required>
+                            </div>
+                            <div class="input">
+                                <select id="inputTidakBersediaHariModal" required>
+                                    <option value="" selected disabled hidden>Hari</option>
+                                    <option value="1">Senin</option>
+                                    <option value="2">Selasa</option>
+                                    <option value="3">Rabu</option>
+                                    <option value="4">Kamis</option>
+                                    <option value="5">Jumat</option>
+                                    <option value="6">Sabtu</option>
+                                    <option value="7">Minggu</option>
+                                </select>
+                            </div>
+                            <!-- <button id="pengampuEditBtn" type="submit">Simpan Perubahan</button> -->
+                            <button type="submit" id="pesananTidakBersediaEditBtn" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
                         </form>
                     </div>
                 </div>
