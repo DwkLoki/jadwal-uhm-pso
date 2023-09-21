@@ -166,7 +166,7 @@ class Particle {
         
         for (let i = 0; i < swarm.length; i++) {
             const otherParticle = swarm[i];
-
+            
             if (currentParticle === otherParticle) continue; // Skip jika partikel sama
             
             // Mendapatkan slot waktu, hari, dan ruangan yang digunakan oleh particle lainnya
@@ -178,6 +178,7 @@ class Particle {
             // const otherSemester = otherParticle.pengampu.semester;
             const isCurrentClassTI = currentClass.startsWith('TI');
             const isOtherClassTI = otherClass.startsWith('TI');
+            // console.log(currentClass, otherClass);
             
             // Memeriksa apakah terdapat bentrok jadwal pada slot waktu, hari, atau ruangan
             if (
@@ -1359,9 +1360,9 @@ function isJadwalPesananPengampuEqual(courseName, lecturerName, className) {
     // Lakukan perulangan pada array data pengampu non-pesanan
     return pengampu.some(
         (item) =>
-        item.courseName.trim().toLowerCase() === courseName.trim().toLowerCase() &&
-        item.lecturerName.trim().toLowerCase() === lecturerName.trim().toLowerCase() &&
-        item.className.trim().toLowerCase() === className.trim().toLowerCase()
+        item.courseName.replace(/[^\w\s]/gi, '').toLowerCase().trim().replaceAll(' ','') === courseName.replace(/[^\w\s]/gi, '').toLowerCase().trim().replaceAll(' ','') &&
+        item.lecturerName.replace(/[^\w\s]/gi, '').toLowerCase().trim().replaceAll(' ','') === lecturerName.replace(/[^\w\s]/gi, '').toLowerCase().trim().replaceAll(' ','') &&
+        item.className.replace(/[^\w\s]/gi, '').toLowerCase().trim().replaceAll(' ','') === className.replace(/[^\w\s]/gi, '').toLowerCase().trim().replaceAll(' ','')
     );
 }
 
