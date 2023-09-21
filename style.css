@@ -154,7 +154,7 @@ main {
     margin-bottom: 80px;
 }
 
-.second-section {
+.second-section, .third-section {
     display: flex;
     margin-top: 60px;
 }
