@@ -1221,6 +1221,7 @@ function exportTableToPdf() {
     $('hr').css('display', 'none');
     $('.first-section').css('display', 'none');
     $('.second-section').css('display', 'none');
+    $('.third-section').css('display', 'none');
     $('.proses-jadwal-btn-container').css('display', 'none');
     $('.tabel-daftar-belum-optimal').css('display', 'none');
 
